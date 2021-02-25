@@ -812,6 +812,39 @@ namespace MyNetCore
 
         #endregion
 
+        #region Array
+
+        /// <summary>
+        /// 将 string[] 转换为 int[]
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static int[] ConvertIntArray(this string[] array)
+        {
+            if (array == null) return new int[] { };
+            if (array.Length == 0) return new int[] { };
+            try
+            {
+                return Array.ConvertAll(array, int.Parse);
+            }
+            catch
+            {
+                return new int[] { };
+            }
+        }
+
+        /// <summary>
+        /// 将 string[] 转换为 List<int>
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static List<int> ConvertIntList(this string[] array)
+        {
+            return array.ConvertIntArray().ToList();
+        }
+
+        #endregion
+
         #region List<T>
 
         /// <summary>
@@ -838,6 +871,26 @@ namespace MyNetCore
             if (list == null) return "";
             if (list.Count == 0) return "";
             return string.Join(separator, list);
+        }
+
+        /// <summary>
+        /// 判断List是否为Null
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool IsNull<T>(this List<T> list)
+        {
+            return list == null;
+        }
+
+        /// <summary>
+        /// 判断List是否不为Null
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool IsNotNull<T>(this List<T> list)
+        {
+            return list != null;
         }
 
         #endregion

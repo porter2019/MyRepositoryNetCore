@@ -10,4 +10,16 @@
     <DocumentationFile>..\MyNetCore.Web\bin\Debug\net5.0\MyNetCore.Model.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreeSql" Version="2.3.100" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyNetCore.Common\MyNetCore.Common.csproj" />
+  </ItemGroup>
+
 </Project>

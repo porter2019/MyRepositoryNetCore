@@ -27,18 +27,25 @@ namespace MyNetCore.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //初始化公共DI需要
+            services.AddHttpContextAccessor();
+
+
             services.AddScoped<IDemoRepository, DemoRepository>();
             services.AddScoped<IDemoServices, DemoServices>();
 
             //添加Swgger
             services.AddSwaggerSetup();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //获取所有注入的服务
+            ServiceLocator.Instance = app.ApplicationServices;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
