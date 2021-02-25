@@ -291,6 +291,16 @@ namespace MyNetCore
             return reval;
         }
 
+        /// <summary>
+        /// 获取当前环境名称
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string GetCurrentEnvironmentName(this object obj)
+        {
+            return Environment.GetEnvironmentVariable(GlobalVar.CurrentEnvironmentName)?.ToString();
+        }
+
         #endregion
 
         #region String

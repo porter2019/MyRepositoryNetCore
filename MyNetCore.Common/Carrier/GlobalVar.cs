@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore
+﻿namespace MyNetCore
 {
     /// <summary>
     /// 全局常量
@@ -15,6 +9,13 @@ namespace MyNetCore
         /// 跨域
         /// </summary>
         public const string AllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+        /// <summary>
+        /// Environment中当前环境的名称
+        /// <code>Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")</code>
+        /// </summary>
+        public const string CurrentEnvironmentName = "ASPNETCORE_ENVIRONMENT";
+
 
     }
 }

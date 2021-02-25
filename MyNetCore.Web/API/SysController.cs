@@ -22,13 +22,14 @@ namespace MyNetCore.Web.API
         }
 
         /// <summary>
-        /// 测试接口是否通顺
+        /// 测试接口是否已通
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("test")]
         public ApiResult Test()
         {
-            return ApiResult.OK();
+            _logger.LogInformation("OK");
+            return ApiResult.OK(AppSettings.Get<string>("DBContexts:SqlServer:ConnectionString"));//"DBContexts", "SqlServer", "LazyLoading"
         }
 
 

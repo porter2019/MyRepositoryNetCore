@@ -37,6 +37,9 @@ namespace MyNetCore.Web
             //添加Swgger
             services.AddSwaggerSetup();
 
+            //添加FreeSql
+            services.AddFreeSqlSetUp();
+
             services.AddControllersWithViews().AddNewtonsoftJson();
         }
 
@@ -45,6 +48,9 @@ namespace MyNetCore.Web
         {
             //获取所有注入的服务
             ServiceLocator.Instance = app.ApplicationServices;
+
+            System.Diagnostics.Trace.Listeners.Clear();
+            System.Diagnostics.Trace.Listeners.Add(new Common.Helper.NlogTraceListener());
 
             if (env.IsDevelopment())
             {
