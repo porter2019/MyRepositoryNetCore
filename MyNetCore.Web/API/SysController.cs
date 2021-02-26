@@ -36,11 +36,15 @@ namespace MyNetCore.Web.API
         /// <summary>
         /// 同步数据库结构
         /// </summary>
+        /// <param name="tableNames">同步指定表名，多个英文逗号分割，注意区分大小写，为空则全部同步</param>
         /// <returns></returns>
         [HttpGet, Route("db/sync")]
-        public ApiResult InitDB()
+        public ApiResult InitDB(string tableNames)
         {
             var projectMainName = AppDomain.CurrentDomain.GetProjectMainName();
+
+            //指定表明
+            var tableNameList = tableNames.SplitWithComma().ToList();
 
             //实体所在程序集名称
             string assemblies = $"{projectMainName}.Model";
@@ -61,7 +65,17 @@ namespace MyNetCore.Web.API
                     foreach (var nameSpace in syncNameSpaceArr)
                     {
                         if (initTypes.Contains(item)) continue;
-                        if (item.FullName.StartsWith(nameSpace)) initTypes.Add(item);
+                        if (item.FullName.StartsWith(nameSpace))
+                        {
+                            if (tableNameList.Count > 0)
+                            {
+                                if (tableNameList.Contains(item.Name)) initTypes.Add(item);
+                            }
+                            else
+                            {
+                                initTypes.Add(item);
+                            }
+                        }
                     }
                 }
                 //assembly.GetTypes().Where(p => p.IsSubclassOf(typeof(Entity.BaseEntity)) && !p.IsAbstract).ToList().ForEach(p => initTypes.Add(p));
