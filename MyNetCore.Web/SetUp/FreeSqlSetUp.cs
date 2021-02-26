@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -46,13 +48,28 @@ namespace MyNetCore.Web.SetUp
                 var logTxt = $"【{e.CurdType}】实体：{e.EntityType.FullName},耗时：{e.ElapsedMilliseconds},执行的SQL：{e.Sql}";
                 if (stringBuilder.Length > 0)
                     logTxt += "，参数：" + stringBuilder.ToString();
-                logTxt += "，返回值：" + e.ExecuteResult.ToString();
+                logTxt += "，返回值：" + JsonConvert.SerializeObject(e.ExecuteResult);
                 logger.Info(logTxt);
             };
+            freeSql.GlobalFilter.Apply<ISoftDelete>("SoftDelete", a => a.IsDeleted == false);
 
             //必须定义为单例模式
             services.AddSingleton(freeSql);
 
+            var repositoryAssmbly = System.Reflection.Assembly.Load("MyNetCore.Repository");
+            //注入仓储
+            services.AddFreeRepository(null, repositoryAssmbly);
         }
+
     }
+
+    /// <summary>
+    /// FreeSql软删除标记
+    /// </summary>
+    public interface ISoftDelete
+    {
+        bool IsDeleted { get; set; }
+    }
+
+
 }

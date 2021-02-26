@@ -24,7 +24,7 @@ namespace MyNetCore.Model
         /// </summary>
         [FsColumn("是否删除", Position = -2)]
         [Newtonsoft.Json.JsonIgnore]
-        public bool IsDelete { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
         /// <summary>
         /// 乐观锁

@@ -40,6 +40,8 @@ namespace MyNetCore.Web
             //添加FreeSql
             services.AddFreeSqlSetUp();
 
+            services.AddScoped<ISysUserServices, SysUserServices>();
+
             //使用小写的URL
             services.AddRouting(option => option.LowercaseUrls = true);
 

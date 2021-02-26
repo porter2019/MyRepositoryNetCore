@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using MyNetCore.IServices;
+using MyNetCore.IRepository;
 
 namespace MyNetCore.Web.API
 {
@@ -16,10 +18,12 @@ namespace MyNetCore.Web.API
     public class SysController : BaseOpenAPIController
     {
         private readonly ILogger<SysController> _logger;
+        private readonly ISysUserServices _sysUserServices;
 
-        public SysController(ILogger<SysController> logger)
+        public SysController(ILogger<SysController> logger, ISysUserServices sysUserServices)
         {
             _logger = logger;
+            _sysUserServices = sysUserServices;
         }
 
         /// <summary>
@@ -29,7 +33,7 @@ namespace MyNetCore.Web.API
         [HttpGet, Route("test")]
         public ApiResult Test()
         {
-            _logger.LogInformation("OK");
+            var entity = _sysUserServices.Login("a", "b");
             return ApiResult.OK(AppSettings.Get<string>("DBContexts:SqlServer:ConnectionString"));//"DBContexts", "SqlServer", "LazyLoading"
         }
 
