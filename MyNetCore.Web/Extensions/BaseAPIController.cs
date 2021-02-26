@@ -21,10 +21,13 @@ namespace MyNetCore.Web
         /// </summary>
         protected readonly IHostEnvironment _hostEnvironment;
 
+        protected readonly IFreeSql _freeSql;
+
         public BaseAPIController()
         {
             _hca = ServiceLocator.Instance.GetService<IHttpContextAccessor>();
             _hostEnvironment = _hca.HttpContext.RequestServices.GetService<IHostEnvironment>();
+            _freeSql = _hca.HttpContext.RequestServices.GetService<IFreeSql>();
         }
 
     }

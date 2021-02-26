@@ -89,11 +89,11 @@ namespace MyNetCore.Model
         /// <summary>
         /// 创建者ID
         /// </summary>
-        [FsColumn("创建者ID", CanUpdate = false, Position = -4)]
+        [FsColumn("创建者ID", CanUpdate = false, Position = -5)]
         [Newtonsoft.Json.JsonIgnore]
         public int? CreatedUserId { get; set; }
 
-        [FsColumn("创建者名称", CanUpdate = false, Position = -5, StringLength = 50)]
+        [FsColumn("创建者名称", CanUpdate = false, Position = -4, StringLength = 50)]
         public string CreatedUserName { get; set; } = "";
     }
 

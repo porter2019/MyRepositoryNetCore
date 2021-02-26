@@ -301,6 +301,18 @@ namespace MyNetCore
             return Environment.GetEnvironmentVariable(GlobalVar.CurrentEnvironmentName)?.ToString();
         }
 
+        /// <summary>
+        /// 获取当前项目名称(MyNetCore)
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string GetProjectMainName(this object obj)
+        {
+            var projectName = AppDomain.CurrentDomain.FriendlyName;
+            var projectMainName = projectName.Substring(0, projectName.LastIndexOf("."));
+            return projectMainName;
+        }
+
         #endregion
 
         #region String

@@ -11,8 +11,7 @@ namespace MyNetCore.Web.SetUp
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            var projectName = AppDomain.CurrentDomain.FriendlyName;
-            var projectMainName = projectName.Substring(0, projectName.LastIndexOf("."));
+            var projectMainName = AppDomain.CurrentDomain.GetProjectMainName();
 
             var apiName = projectMainName;
 

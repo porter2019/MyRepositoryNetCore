@@ -30,10 +30,5 @@ namespace MyNetCore.Model.Entity
         [FsColumn("用户Id", true)]
         public int UserId { set; get; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        [FsColumn("状态")]
-        public bool Status { get; set; } = true;
     }
 }

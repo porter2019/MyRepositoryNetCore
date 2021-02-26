@@ -30,10 +30,5 @@ namespace MyNetCore.Model.Entity
         [FsColumn("权限Id", true)]
         public int PermitId { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        [FsColumn("状态")]
-        public bool Status { get; set; } = true;
     }
 }
