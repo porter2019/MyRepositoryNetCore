@@ -1,5 +1,8 @@
 ﻿using FreeSql;
 using MyNetCore.IRepository;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MyNetCore.Repository
@@ -18,14 +21,76 @@ namespace MyNetCore.Repository
             _freeSql = fsql;
         }
 
+        #region 修改
+
+        /// <summary>
+        /// 修改数据(只更新变化的属性)
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public override int Update(TEntity entity)
+        {
+            var repo = _freeSql.GetRepository<TEntity>();
+            repo.AttachOnlyPrimary(entity);
+
+            return repo.Update(entity);
+        }
+
+        /// <summary>
+        /// 修改数据(只更新变化的属性)
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public Task<int> UpdateAsync(TEntity entity)
+        {
+            var repo = _freeSql.GetRepository<TEntity>();
+            repo.AttachOnlyPrimary(entity);
+
+            return repo.UpdateAsync(entity);
+        }
+
+        /// <summary>
+        /// 修改数据(设置新的实体)
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public int UpdateEntity(TEntity entity)
+        {
+            var runsql = _freeSql.Update<TEntity>().SetSource(entity);
+
+            return runsql.ExecuteAffrows();
+        }
+
+        /// <summary>
+        /// 修改数据(设置新的实体)
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public Task<int> UpdateEntityAsync(TEntity entity)
+        {
+            var runsql = _freeSql.Update<TEntity>().SetSource(entity);
+            return runsql.ExecuteAffrowsAsync();
+        }
+
+        #endregion
+
+        #region 删除
+
         /// <summary>
         /// 根据ids批量删除数据
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public int DeleteByIds(string ids)
+        public int DeleteByIds(object[] ids)
         {
-            return _freeSql.Delete<TEntity>(ids.SplitWithComma()).ExecuteAffrows();
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return _freeSql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrows();
+            }
+            else
+            {
+                return _freeSql.Delete<TEntity>(ids).ExecuteAffrows();
+            }
         }
 
         /// <summary>
@@ -33,9 +98,174 @@ namespace MyNetCore.Repository
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task<int> DeleteByIdsSync(string ids)
+        public async Task<int> DeleteByIdsAsync(object[] ids)
         {
-            return await _freeSql.Delete<TEntity>(ids.SplitWithComma()).ExecuteAffrowsAsync();
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return await _freeSql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrowsAsync();
+            }
+            else
+            {
+                return await _freeSql.Delete<TEntity>(ids).ExecuteAffrowsAsync();
+            }
         }
+
+        #endregion
+
+        #region 查询数量
+
+        /// <summary>
+        /// 查询数量
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public long GetCount(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().Where(where).Count();
+        }
+
+        /// <summary>
+        /// 查询数量
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<long> GetCountAsync(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().Where(where).CountAsync();
+        }
+
+        /// <summary>
+        /// 查询数量(原生sql语法条件，Where("id = @id", new { id = 1 }))
+        /// </summary>
+        /// <param name="sql">Sql语句 id = @id</param>
+        /// <param name="parms">参数 new { id = 1 }</param>
+        /// <returns></returns>
+        public long GetCount(string sql, object parms = null)
+        {
+            return _freeSql.Select<TEntity>().Where(sql, parms).Count();
+        }
+
+        /// <summary>
+        /// 查询数量(原生sql语法条件，Where("id = @id", new { id = 1 }))
+        /// </summary>
+        /// <param name="sql">Sql语句 id = @id</param>
+        /// <param name="parms">参数 new { id = 1 }</param>
+        /// <returns></returns>
+        public Task<long> GetCountAsync(string sql, object parms = null)
+        {
+            return _freeSql.Select<TEntity>().Where(sql, parms).CountAsync();
+        }
+
+        #endregion
+
+        #region 是否存在
+
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public bool Exists(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().Any(where);
+        }
+
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().AnyAsync(where);
+        }
+
+        #endregion
+
+        #region 查询单条数据
+
+        /// <summary>
+        /// 查询单条数据，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns></returns>
+        public TEntity GetModel(object dywhere)
+        {
+            return _freeSql.Select<TEntity>(dywhere).ToOne();
+        }
+
+        /// <summary>
+        /// 查询单条数据，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns></returns>
+        public Task<TEntity> GetModelAsync(object dywhere)
+        {
+            return _freeSql.Select<TEntity>(dywhere).ToOneAsync();
+        }
+
+        /// <summary>
+        /// 查询单条数据，返回ViewModel类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns></returns>
+        public REntity GetModel<REntity>(object dywhere)
+        {
+            return _freeSql.Select<TEntity>(dywhere).ToOne<REntity>();
+        }
+
+        /// <summary>
+        /// 查询单条数据，返回ViewModel类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns></returns>
+        public Task<REntity> GetModelAsync<REntity>(object dywhere)
+        {
+            return _freeSql.Select<TEntity>(dywhere).ToOneAsync<REntity>();
+        }
+
+        /// <summary>
+        /// 查询单条数据
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public TEntity GetModel(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().Where(where).ToOne();
+        }
+
+        /// <summary>
+        /// 查询单条数据
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<TEntity> GetModelAsync(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().Where(where).ToOneAsync();
+        }
+
+        /// <summary>
+        /// 查询单条数据，返回ViewModel类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public REntity GetModel<REntity>(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().Where(where).ToOne<REntity>();
+        }
+
+        /// <summary>
+        /// 查询单条数据，返回ViewModel类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<REntity> GetModelAsync<REntity>(Expression<Func<TEntity, bool>> where)
+        {
+            return _freeSql.Select<TEntity>().Where(where).ToOneAsync<REntity>();
+        }
+
+
+        #endregion
+
     }
 }

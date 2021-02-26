@@ -31,10 +31,16 @@ namespace MyNetCore.Web.API
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("test")]
-        public ApiResult Test()
+        public async Task<ApiResult> Test()
         {
-            var entity = _sysUserServices.Login("a", "b");
-            return ApiResult.OK(AppSettings.Get<string>("DBContexts:SqlServer:ConnectionString"));//"DBContexts", "SqlServer", "LazyLoading"
+            var entity = await _sysUserServices.Add(new Model.Entity.SysUser()
+            {
+                LoginName = "admin3",
+                CreatedUserName = "手动",
+                Password = "123",
+                UserName = "d是rrr哈哈",
+            });
+            return ApiResult.OK();
         }
 
         /// <summary>

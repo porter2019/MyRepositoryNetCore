@@ -10,20 +10,8 @@ namespace MyNetCore.IServices
     /// <summary>
     /// 系统用户业务类
     /// </summary>
-    public interface ISysUserServices
+    public interface ISysUserServices : IBaseServices<SysUser>
     {
-        /// <summary>
-        /// 注册用户
-        /// </summary>
-        Task Register();
-
-        /// <summary>
-        /// 根据用户名和密码获取信息
-        /// </summary>
-        /// <param name="loginName"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        Task<SysUser> Login(string loginName, string password);
 
     }
 }
