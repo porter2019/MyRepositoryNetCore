@@ -33,14 +33,18 @@ namespace MyNetCore.Web.API
         [HttpGet, Route("test")]
         public async Task<ApiResult> Test()
         {
-            var entity = await _sysUserServices.Add(new Model.Entity.SysUser()
-            {
-                LoginName = "admin3",
-                CreatedUserName = "手动",
-                Password = "123",
-                UserName = "d是rrr哈哈",
-            });
-            return ApiResult.OK();
+            //var entity = await _sysUserServices.Add(new Model.Entity.SysUser()
+            //{
+            //    LoginName = "admin3",
+            //    CreatedUserName = "手动",
+            //    Password = "123",
+            //    UserName = "d是rrr哈哈",
+            //});
+            var entity = await _sysUserServices.QueryByID(2);
+            var newEntity = entity.ShallowCopy<Model.Entity.SysUser>();
+            newEntity.UserName = "父类中返回子类对象";
+            int affrows = await _sysUserServices.UpdateOnlyChangeAsync(entity, newEntity);
+            return ApiResult.OK($"影响行数:{affrows}");
         }
 
         /// <summary>

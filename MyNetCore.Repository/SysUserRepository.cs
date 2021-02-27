@@ -24,9 +24,9 @@ namespace MyNetCore.Repository
         /// <summary>
         /// 注册
         /// </summary>
-        public async Task Register()
+        public Task Register()
         {
-            await Task.Run(() => System.Diagnostics.Trace.Write("用户仓储中数据库操作"));
+            return Task.Run(() => System.Diagnostics.Trace.Write("用户仓储中数据库操作"));
         }
 
         /// <summary>
@@ -35,9 +35,9 @@ namespace MyNetCore.Repository
         /// <param name="loginName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<SysUser> Login(string loginName, string password)
+        public Task<SysUser> Login(string loginName, string password)
         {
-            return await Task.Run(() => FindAsync(1));
+            return Task.Run(() => FindAsync(1));
         }
     }
 }

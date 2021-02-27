@@ -24,7 +24,7 @@ namespace MyNetCore.Repository
         #region 修改
 
         /// <summary>
-        /// 修改数据(只更新变化的属性)
+        /// 修改数据(用于不更新属性值为null或默认值的字段)
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -37,7 +37,7 @@ namespace MyNetCore.Repository
         }
 
         /// <summary>
-        /// 修改数据(只更新变化的属性)
+        /// 修改数据(用于不更新属性值为null或默认值的字段)
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -47,6 +47,34 @@ namespace MyNetCore.Repository
             repo.AttachOnlyPrimary(entity);
 
             return repo.UpdateAsync(entity);
+        }
+
+        /// <summary>
+        /// 修改数据(只更新变化的属性)
+        /// </summary>
+        /// <param name="oldEntity">修改前的实体</param>
+        /// <param name="newEntity">修改后的实体</param>
+        /// <remarks>【前提条件】需要该TEntity先调用TEntity newEntity = oldEntity.ShallowCopy&lt;TEntity&gt;()获得新对象，变更的值赋值给newEntity</remarks>
+        /// <returns></returns>
+        public int UpdateOnlyChange(TEntity oldEntity, TEntity newEntity)
+        {
+            var repo = _freeSql.GetRepository<TEntity>();
+            repo.Attach(oldEntity);
+            return repo.Update(newEntity);
+        }
+
+        /// <summary>
+        /// 修改数据(只更新变化的属性)
+        /// </summary>
+        /// <param name="oldEntity">修改前的实体</param>
+        /// <param name="newEntity">修改后的实体</param>
+        /// <remarks>【前提条件】需要该TEntity先调用TEntity newEntity = oldEntity.ShallowCopy&lt;TEntity&gt;()获得新对象，变更的值赋值给newEntity</remarks>
+        /// <returns></returns>
+        public Task<int> UpdateOnlyChangeAsync(TEntity oldEntity, TEntity newEntity)
+        {
+            var repo = _freeSql.GetRepository<TEntity>();
+            repo.Attach(oldEntity);
+            return repo.UpdateAsync(newEntity);
         }
 
         /// <summary>

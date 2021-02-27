@@ -42,10 +42,10 @@ namespace MyNetCore.Web.SetUp
                 foreach (var item in e.DbParms)
                 {
                     if (item == null) continue;
-                    stringBuilder.Append($"{item.ParameterName}-{ item.Value},");
+                    stringBuilder.Append($"[{item.ParameterName}] = [{ item.Value}],");
                 }
 
-                var logTxt = $"【{e.CurdType}】实体：{e.EntityType.FullName},耗时：{e.ElapsedMilliseconds},执行的SQL：{e.Sql}";
+                var logTxt = $"【{e.CurdType}】实体：{e.EntityType.FullName},耗时：{e.ElapsedMilliseconds}毫秒,执行的SQL：{e.Sql}";
                 if (stringBuilder.Length > 0)
                     logTxt += "，参数：" + stringBuilder.ToString();
                 logTxt += "，返回值：" + JsonConvert.SerializeObject(e.ExecuteResult);

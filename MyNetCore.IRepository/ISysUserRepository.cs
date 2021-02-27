@@ -13,6 +13,7 @@ namespace MyNetCore.IRepository
     /// </summary>
     public interface ISysUserRepository : IBaseMyRepository<SysUser>
     {
+
         /// <summary>
         /// 注册用户
         /// </summary>

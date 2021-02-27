@@ -116,7 +116,7 @@ namespace MyNetCore.Web
             {
                 Model.BaseEntityStandard crudModel = (Model.BaseEntityStandard)postModelValue;
 
-                if (crudModel.IdVal < 1)
+                if (crudModel.Id < 1)
                 {
                     crudModel.CreatedDate = DateTime.Now;
                     crudModel.CreatedUserId = controller.CurrentUserInfo.UserId;

@@ -30,10 +30,6 @@ namespace MyNetCore.Web
             //初始化公共DI需要
             services.AddHttpContextAccessor();
 
-
-            services.AddScoped<IDemoRepository, DemoRepository>();
-            services.AddScoped<IDemoServices, DemoServices>();
-
             //添加Swgger
             services.AddSwaggerSetup();
 

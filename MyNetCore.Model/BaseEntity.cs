@@ -30,13 +30,12 @@ namespace MyNetCore.Model
         /// 乐观锁
         /// </summary>
         [FsColumn("乐观锁", IsVersion = true, Position = -1)]
-        [Newtonsoft.Json.JsonIgnore]
         public int Version { get; set; }
 
         #region 只读属性
 
         [FsColumn("主键Id", IsIgnore = true)]
-        public int IdVal
+        public int Id
         {
             get
             {
@@ -95,6 +94,16 @@ namespace MyNetCore.Model
 
         [FsColumn("创建者名称", CanUpdate = false, Position = -4, StringLength = 50)]
         public string CreatedUserName { get; set; } = "";
+
+        /// <summary>
+        /// 浅复制
+        /// </summary>
+        /// <returns>新的实体对象</returns>
+        public TEntity ShallowCopy<TEntity>() where TEntity : BaseEntity
+        {
+            return MemberwiseClone() as TEntity;
+        }
+
     }
 
 }

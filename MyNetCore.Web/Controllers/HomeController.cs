@@ -13,19 +13,14 @@ namespace MyNetCore.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IDemoServices _demoServices;
 
-        public HomeController(ILogger<HomeController> logger, IDemoServices demoServices)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _demoServices = demoServices;
         }
 
         public IActionResult Index()
         {
-            //测试调用服务代码
-            var count = _demoServices.Sum(1, 2);
-
             var projectName = AppDomain.CurrentDomain.FriendlyName;
 
 
