@@ -22,14 +22,6 @@ namespace MyNetCore.Repository
         }
 
         /// <summary>
-        /// 注册
-        /// </summary>
-        public Task Register()
-        {
-            return Task.Run(() => System.Diagnostics.Trace.Write("用户仓储中数据库操作"));
-        }
-
-        /// <summary>
         /// 根据用户名和密码获取信息
         /// </summary>
         /// <param name="loginName"></param>
@@ -37,7 +29,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<SysUser> Login(string loginName, string password)
         {
-            return Task.Run(() => FindAsync(1));
+            return _freeSql.Select<SysUser>().Where(p => p.LoginName == loginName && p.Password == password).ToOneAsync();
         }
     }
 }

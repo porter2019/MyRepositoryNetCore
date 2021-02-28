@@ -30,21 +30,25 @@ namespace MyNetCore.Web.API
         /// 测试接口是否已通
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("test")]
-        public async Task<ApiResult> Test()
+        [HttpPost, Route("test")]
+        public async Task<ApiResult> Test(Model.RequestViewModel.SysUserPageModel model)
         {
-            //var entity = await _sysUserServices.Add(new Model.Entity.SysUser()
+            //var entity = await _sysUserServices.InsertAsync(new Model.Entity.SysUser()
             //{
             //    LoginName = "admin3",
             //    CreatedUserName = "手动",
             //    Password = "123",
             //    UserName = "d是rrr哈哈",
             //});
-            var entity = await _sysUserServices.QueryByID(2);
-            var newEntity = entity.ShallowCopy<Model.Entity.SysUser>();
-            newEntity.UserName = "父类中返回子类对象";
-            int affrows = await _sysUserServices.UpdateOnlyChangeAsync(entity, newEntity);
-            return ApiResult.OK($"影响行数:{affrows}");
+            //var entity = await _sysUserServices.GetModelAsync(p => p.UserId == 2);
+            //var newEntity = entity.ShallowCopy<Model.Entity.SysUser>();
+            //newEntity.UserName = "父类中返回子类对象";
+            //int affrows = await _sysUserServices.UpdateOnlyChangeAsync(entity, newEntity);
+            //return ApiResult.OK($"影响行数:{affrows}");
+
+            var list = await _sysUserServices.GetPageListAsync(model.PageOptions, out long total);
+
+            return ApiResult.OK(total, list);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using FreeSql;
 using MyNetCore.IRepository;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -292,6 +293,237 @@ namespace MyNetCore.Repository
             return _freeSql.Select<TEntity>().Where(where).ToOneAsync<REntity>();
         }
 
+
+        #endregion
+
+        #region 查询集合
+
+        /// <summary>
+        /// 查询列表，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public List<TEntity> GetList(Expression<Func<TEntity, bool>> exp)
+        {
+            return _freeSql.Select<TEntity>().Where(exp).ToList();
+        }
+
+        /// <summary>
+        /// 查询列表，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> exp)
+        {
+            return _freeSql.Select<TEntity>().Where(exp).ToListAsync();
+        }
+
+        /// <summary>
+        /// 查询列表，返回DTO对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public List<REntity> GetList<REntity>(Expression<Func<TEntity, bool>> exp)
+        {
+            return _freeSql.Select<TEntity>().Where(exp).ToList<REntity>();
+        }
+
+        /// <summary>
+        /// 查询列表，返回DTO对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<REntity>> GetListAsync<REntity>(Expression<Func<TEntity, bool>> exp)
+        {
+            return _freeSql.Select<TEntity>().Where(exp).ToListAsync<REntity>();
+        }
+
+        /// <summary>
+        /// 查询列表,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public List<TEntity> GetList(string where, object parms = null)
+        {
+            return _freeSql.Select<TEntity>().Where(where, parms).ToList();
+        }
+
+        /// <summary>
+        /// 查询列表,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<TEntity>> GetListAsync(string where, object parms = null)
+        {
+            return _freeSql.Select<TEntity>().Where(where, parms).ToListAsync();
+        }
+
+        /// <summary>
+        /// 查询列表，返回DTO对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public List<REntity> GetList<REntity>(string where, object parms = null)
+        {
+            return _freeSql.Select<TEntity>().Where(where, parms).ToList<REntity>();
+        }
+
+        /// <summary>
+        /// 查询列表，返回DTO对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<REntity>> GetListAsync<REntity>(string where, object parms = null)
+        {
+            return _freeSql.Select<TEntity>().Where(where, parms).ToListAsync<REntity>();
+        }
+
+        #endregion
+
+        #region 查询分页
+
+        #region PageOptions
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<TEntity> GetPageList(PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToList();
+        }
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<TEntity>> GetPageListAsync(PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToListAsync();
+        }
+
+        /// <summary>
+        /// 分页查询，返回DTO对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageList<REntity>(PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToList<REntity>();
+        }
+
+        /// <summary>
+        /// 分页查询，返回DTO对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListAsync<REntity>(PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToListAsync<REntity>();
+        }
+        #endregion
+
+        #region Sql
+
+        /// <summary>
+        /// 分页查询，使用sql
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<TEntity> GetPageList(string sql, PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WithSql(sql)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToList();
+        }
+
+        /// <summary>
+        /// 分页查询，使用sql
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<TEntity>> GetPageListAsync(string sql, PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WithSql(sql)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToListAsync();
+        }
+
+        /// <summary>
+        /// 分页查询，使用sql，返回DTO对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageList<REntity>(string sql, PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WithSql(sql)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToList<REntity>();
+        }
+
+        /// <summary>
+        /// 分页查询，使用sql，返回DTO对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListAsync<REntity>(string sql, PageOptions<TEntity> options, out long total)
+        {
+            return _freeSql.Select<TEntity>()
+                        .WithSql(sql)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToListAsync<REntity>();
+        }
+
+        #endregion
 
         #endregion
 

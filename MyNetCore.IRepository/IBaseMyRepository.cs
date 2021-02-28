@@ -1,7 +1,9 @@
 ﻿using FreeSql;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using MyNetCore.Model;
 
 namespace MyNetCore.IRepository
 {
@@ -9,9 +11,8 @@ namespace MyNetCore.IRepository
     /// 拓展FreeSql的IBaseRepository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public interface IBaseMyRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public interface IBaseMyRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
-
 
         #region 修改
 
@@ -196,6 +197,157 @@ namespace MyNetCore.IRepository
 
         #endregion
 
+        #region 查询集合
+
+        /// <summary>
+        /// 查询列表，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        List<TEntity> GetList(Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 查询列表，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 查询列表，返回DTO对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        List<REntity> GetList<REntity>(Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 查询列表，返回DTO对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        Task<List<REntity>> GetListAsync<REntity>(Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 查询列表,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        List<TEntity> GetList(string where, object parms = null);
+
+        /// <summary>
+        /// 查询列表,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        Task<List<TEntity>> GetListAsync(string where, object parms = null);
+
+        /// <summary>
+        /// 查询列表，返回DTO对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        List<REntity> GetList<REntity>(string where, object parms = null);
+
+        /// <summary>
+        /// 查询列表，返回DTO对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        Task<List<REntity>> GetListAsync<REntity>(string where, object parms = null);
+
+        #endregion
+
+        #region 查询分页
+
+        #region PageOptions
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        List<TEntity> GetPageList(PageOptions<TEntity> options, out long total);
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<TEntity>> GetPageListAsync(PageOptions<TEntity> options, out long total);
+
+        /// <summary>
+        /// 分页查询，返回DTO对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        List<REntity> GetPageList<REntity>(PageOptions<TEntity> options, out long total);
+
+        /// <summary>
+        /// 分页查询，返回DTO对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<REntity>> GetPageListAsync<REntity>(PageOptions<TEntity> options, out long total);
+
+        #endregion
+
+        #region Sql
+
+        /// <summary>
+        /// 分页查询，使用sql
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        List<TEntity> GetPageList(string sql, PageOptions<TEntity> options, out long total);
+
+        /// <summary>
+        /// 分页查询，使用sql
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<TEntity>> GetPageListAsync(string sql, PageOptions<TEntity> options, out long total);
+
+        /// <summary>
+        /// 分页查询，使用sql，返回DTO对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        List<REntity> GetPageList<REntity>(string sql, PageOptions<TEntity> options, out long total);
+
+        /// <summary>
+        /// 分页查询，使用sql，返回DTO对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<REntity>> GetPageListAsync<REntity>(string sql, PageOptions<TEntity> options, out long total);
+
+        #endregion
+
+        #endregion
 
     }
 }

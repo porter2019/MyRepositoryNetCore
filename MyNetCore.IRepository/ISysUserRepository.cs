@@ -15,11 +15,6 @@ namespace MyNetCore.IRepository
     {
 
         /// <summary>
-        /// 注册用户
-        /// </summary>
-        Task Register();
-
-        /// <summary>
         /// 根据用户名和密码获取信息
         /// </summary>
         /// <param name="loginName"></param>
