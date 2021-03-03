@@ -1,0 +1,35 @@
+﻿/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：{ModelDesc}业务逻辑接口                                                    
+*│　作    者：{Author}                                              
+*│　版    本：1.0   模板代码自动生成                                              
+*│　创建时间：{GeneratorTime}                            
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using {ProjectName}.IServices;
+using {ProjectName}.IRepository;
+using {ProjectName}.Repository;
+using {ProjectName}.Model.Entity;
+
+
+namespace {ProjectName}.Services
+{
+    /// <summary>
+    /// 系统功能业务实现类
+    /// </summary>
+    public class {ModelName}Services : BaseServices<{ModelName}, int>, I{ModelName}Services
+    {
+        private readonly I{ModelName}Repository _{ModelVariableName}Repository;
+
+        public {ModelName}Services({ModelName}Repository {ModelVariableName}Repository) : base({ModelVariableName}Repository)
+        {
+            _{ModelVariableName}Repository = {ModelVariableName}Repository;
+        }
+    }
+}

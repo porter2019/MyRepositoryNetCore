@@ -30,7 +30,7 @@ namespace MyNetCore
         /// <param name="key">节点名称，多节点以:分隔</param>
         public static string Get(string key)
         {
-            if (key.IsNull()) return "";
+            if (string.IsNullOrWhiteSpace(key)) return "";
             return _configuration[key];
         }
 
