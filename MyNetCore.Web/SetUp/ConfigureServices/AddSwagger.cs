@@ -5,11 +5,17 @@ using System.IO;
 
 namespace MyNetCore.Web.SetUp
 {
-    public static class SwaggerSetUp
+    public static class AddSwagger
     {
-        public static void AddSwaggerSetup(this IServiceCollection services)
+        /// <summary>
+        /// 注入Swagger
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddSwaggerServices(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
+
+            if (!AppSettings.Get<bool>("Swagger", "IsEnabled")) return;
 
             var projectMainName = AppDomain.CurrentDomain.GetProjectMainName();
 

@@ -31,17 +31,19 @@ namespace MyNetCore.Web
             services.AddHttpContextAccessor();
 
             //添加Swgger
-            services.AddSwaggerSetup();
+            services.AddSwaggerServices();
 
             //添加FreeSql
-            services.AddFreeSqlSetUp();
+            services.AddFreeSqlServices();
 
-            services.AddScoped<ISysUserServices, SysUserServices>();
+            //强制跳转https
+            services.AddHttpsRedirectionServices();
 
-            //使用小写的URL
-            services.AddRouting(option => option.LowercaseUrls = true);
+            //注入Services层中的业务
+            services.AddMyCustomServices();
 
-            services.AddControllersWithViews().AddNewtonsoftJson();
+            //添加MVC相关
+            services.AddWebMVCServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,9 +51,6 @@ namespace MyNetCore.Web
         {
             //获取所有注入的服务
             ServiceLocator.Instance = app.ApplicationServices;
-
-            System.Diagnostics.Trace.Listeners.Clear();
-            System.Diagnostics.Trace.Listeners.Add(new Common.Helper.NlogTraceListener());
 
             if (env.IsDevelopment())
             {
@@ -61,26 +60,18 @@ namespace MyNetCore.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
+
+            //静态文件
+            app.UseMyStaticFiles();
+
+            //程序启动/停止进行的操作
+            app.UseMyAppStartup();
 
             //Swagger
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint($"/swagger/V1/swagger.json", "接口文档 V1");
-                c.RoutePrefix = "doc";
-            });
+            app.UseMySwagger();
 
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            //MVC
+            app.UseMyWebMVC();
         }
     }
 }

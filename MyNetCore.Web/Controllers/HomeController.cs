@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyNetCore.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseWebController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -22,7 +22,6 @@ namespace MyNetCore.Web.Controllers
         public IActionResult Index()
         {
             var projectName = AppDomain.CurrentDomain.FriendlyName;
-
 
             return View();
         }

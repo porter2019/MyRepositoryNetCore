@@ -5,9 +5,13 @@ using Newtonsoft.Json.Converters;
 
 namespace MyNetCore.Web.SetUp
 {
-    public static class FreeSqlSetUp
+    public static class AddFreeSql
     {
-        public static void AddFreeSqlSetUp(this IServiceCollection services)
+        /// <summary>
+        /// 注入FreeSql
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddFreeSqlServices(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
@@ -56,7 +60,7 @@ namespace MyNetCore.Web.SetUp
             //必须定义为单例模式
             services.AddSingleton(freeSql);
 
-            var repositoryAssmbly = System.Reflection.Assembly.Load("MyNetCore.Repository");
+            var repositoryAssmbly = System.Reflection.Assembly.Load($"{services.GetProjectMainName()}.Repository");
             //注入仓储
             services.AddFreeRepository(null, repositoryAssmbly);
         }

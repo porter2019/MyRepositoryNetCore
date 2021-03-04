@@ -57,6 +57,7 @@ namespace MyNetCore.Web.API
         /// <param name="tableNames">同步指定表名，多个英文逗号分割，注意区分大小写，为空则全部同步</param>
         /// <returns></returns>
         [HttpGet, Route("db/sync")]
+        [Permission("迁移数据库", "MigrateDB")]
         public ApiResult InitDB(string tableNames)
         {
             var projectMainName = AppDomain.CurrentDomain.GetProjectMainName();
