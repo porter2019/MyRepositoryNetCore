@@ -36,6 +36,9 @@ namespace MyNetCore.Web
             //添加FreeSql
             services.AddFreeSqlServices();
 
+            //添加缓存
+            services.AddMyCache();
+
             //强制跳转https
             services.AddHttpsRedirectionServices();
 

@@ -19,11 +19,13 @@ namespace MyNetCore.Web.API
     {
         private readonly ILogger<SysController> _logger;
         private readonly ISysUserServices _sysUserServices;
+        private readonly ICacheServices _cache;
 
-        public SysController(ILogger<SysController> logger, ISysUserServices sysUserServices)
+        public SysController(ILogger<SysController> logger, ISysUserServices sysUserServices, ICacheServices cache)
         {
             _logger = logger;
             _sysUserServices = sysUserServices;
+            _cache = cache;
         }
 
         /// <summary>
@@ -103,6 +105,40 @@ namespace MyNetCore.Web.API
             _freeSql.CodeFirst.SyncStructure(initTypes.ToArray());
 
             return ApiResult.OK("同步数据库结构成功");
+        }
+
+        /// <summary>
+        /// 获取缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [HttpGet, Route("cache/get")]
+        public ApiResult CacheGet(string key)
+        {
+            return ApiResult.OK(_cache.Get(key));
+        }
+
+        /// <summary>
+        /// 添加缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpGet, Route("cache/add")]
+        public ApiResult CacheAdd(string key, string value)
+        {
+            return ApiResult.OK(_cache.Add(key, value, 10));
+        }
+
+        /// <summary>
+        /// 删除缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [HttpGet, Route("cache/del")]
+        public ApiResult CacheDel(string key)
+        {
+            return ApiResult.OK(_cache.Remove(key));
         }
 
     }

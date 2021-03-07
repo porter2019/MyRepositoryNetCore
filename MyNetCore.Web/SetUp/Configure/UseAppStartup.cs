@@ -13,7 +13,7 @@ namespace MyNetCore.Web.SetUp
         /// <summary>
         /// 程序启动/停止进行的操作
         /// </summary>
-        /// <param name="appBuilder"></param>
+        /// <param name="app"></param>
         /// <returns></returns>
         public static IApplicationBuilder UseMyAppStartup(this IApplicationBuilder app)
         {
