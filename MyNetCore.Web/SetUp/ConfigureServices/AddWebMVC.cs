@@ -47,9 +47,14 @@ namespace MyNetCore.Web.SetUp
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options =>
                     {
+                        ////使用默认方式，不更改元数据的key的大小写(变量首字母不转小写)
+                        //options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                        //忽略循环引用
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                        //string类型的值为NULL的改为空字符串
+                        options.SerializerSettings.ContractResolver = new Common.Config.NullToEmptyStringResolver();
+                        //设置时间格式
                         options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                        options.SerializerSettings.ContractResolver = new DefaultContractResolver();//变量首字母不转小写
                     });
 
             //处理DTO验证错误时的返回消息格式

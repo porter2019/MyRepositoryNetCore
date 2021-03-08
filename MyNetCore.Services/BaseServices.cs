@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 namespace MyNetCore.Services
 {
     /// <summary>
-    /// 
+    /// 数据库实体服务基础类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public class BaseServices<TEntity, TKey> : IBaseServices<TEntity> where TEntity : Model.BaseEntity, new()
