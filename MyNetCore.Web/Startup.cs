@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MyNetCore.Web.SetUp;
+using System.Reflection;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace MyNetCore.Web
 {
@@ -23,10 +26,12 @@ namespace MyNetCore.Web
         }
 
         public IConfiguration Configuration { get; }
+        private IServiceCollection _services;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            _services = services;
             //初始化公共DI需要
             services.AddHttpContextAccessor();
 
@@ -42,8 +47,11 @@ namespace MyNetCore.Web
             //强制跳转https
             services.AddHttpsRedirectionServices();
 
-            //注入Services层中的业务
-            services.AddMyCustomServices();
+            //批量注入Services层中数据库实体业务，注意给的baseType是公共基础业务泛型(BaseServices<,>)
+            services.BatchRegisterServices(new Assembly[] { Assembly.GetExecutingAssembly(), Assembly.Load($"{services.GetProjectMainName()}.Services") }, typeof(BaseServices<,>));
+
+            //批量注入Services层中普通业务，注意给的baseType是接口类型(IBatchDIServicesTag)
+            services.BatchRegisterServices(new Assembly[] { Assembly.Load($"{services.GetProjectMainName()}.Services") }, typeof(IBatchDIServicesTag));
 
             //添加MVC相关
             services.AddWebMVCServices();
@@ -57,6 +65,20 @@ namespace MyNetCore.Web
 
             if (env.IsDevelopment())
             {
+                app.Map("/allservices", builder => builder.Run(async context =>
+                {
+                    context.Response.ContentType = "text/html; charset=utf-8";
+                    await context.Response.WriteAsync($"<h1>所有服务{_services.Count}个</h1><table><thead><tr><th>类型</th><th>生命周期</th><th>实例</th></tr></thead><tbody>");
+                    foreach (var svc in _services)
+                    {
+                        await context.Response.WriteAsync("<tr>");
+                        await context.Response.WriteAsync($"<td>{svc.ServiceType.FullName}</td>");
+                        await context.Response.WriteAsync($"<td>{svc.Lifetime}</td>");
+                        await context.Response.WriteAsync($"<td>{svc.ImplementationType?.FullName}</td>");
+                        await context.Response.WriteAsync("</tr>");
+                    }
+                    await context.Response.WriteAsync("</tbody></table>");
+                }));
                 app.UseDeveloperExceptionPage();
             }
             else

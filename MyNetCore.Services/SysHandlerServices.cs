@@ -17,12 +17,12 @@ using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
 
-
 namespace MyNetCore.Services
 {
     /// <summary>
     /// 系统功能业务实现类
     /// </summary>
+    [ServiceLifetime()]
     public class SysHandlerServices : BaseServices<SysHandler, int>, ISysHandlerServices
     {
         private readonly ISysHandlerRepository _sysHandlerRepository;

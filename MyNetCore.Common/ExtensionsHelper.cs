@@ -313,6 +313,28 @@ namespace MyNetCore
             return projectMainName;
         }
 
+        /// <summary>
+        /// 判断泛型类型是否为继承关系
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="superType"></param>
+        /// <returns></returns>
+        public static bool IsGenericSubclassOf(this Type type, Type superType)
+        {
+            if (type.BaseType != null
+                && !type.BaseType.Equals(typeof(object))
+                && type.BaseType.IsGenericType)
+            {
+                if (type.BaseType.GetGenericTypeDefinition().Equals(superType))
+                {
+                    return true;
+                }
+                return type.BaseType.IsGenericSubclassOf(superType);
+            }
+
+            return false;
+        }
+
         #endregion
 
         #region String

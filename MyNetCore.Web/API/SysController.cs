@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using MyNetCore.IServices;
 using MyNetCore.IRepository;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 
 namespace MyNetCore.Web.API
 {
@@ -32,9 +34,10 @@ namespace MyNetCore.Web.API
         /// 测试接口是否已通
         /// </summary>
         /// <returns></returns>
-        [HttpPost, Route("test")]
-        public async Task<ApiResult> Test(Model.RequestViewModel.SysUserPageModel model)
+        [HttpGet, Route("test")]
+        public ApiResult Test()
         {
+            //Model.RequestViewModel.SysUserPageModel model
             //var entity = await _sysUserServices.InsertAsync(new Model.Entity.SysUser()
             //{
             //    LoginName = "admin3",
@@ -48,9 +51,10 @@ namespace MyNetCore.Web.API
             //int affrows = await _sysUserServices.UpdateOnlyChangeAsync(entity, newEntity);
             //return ApiResult.OK($"影响行数:{affrows}");
 
-            var list = await _sysUserServices.GetPageListAsync(model.PageOptions, out long total);
+            //var list = await _sysUserServices.GetPageListAsync(model.PageOptions, out long total);
 
-            return ApiResult.OK(total, list);
+            //return ApiResult.OK(total, list);
+            return ApiResult.OK();
         }
 
         /// <summary>

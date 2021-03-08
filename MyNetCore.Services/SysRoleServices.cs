@@ -17,12 +17,12 @@ using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
 
-
 namespace MyNetCore.Services
 {
     /// <summary>
-    /// 系统功能业务实现类
+    /// 用户组业务实现类
     /// </summary>
+    [ServiceLifetime()]
     public class SysRoleServices : BaseServices<SysRole, int>, ISysRoleServices
     {
         private readonly ISysRoleRepository _sysRoleRepository;

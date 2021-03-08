@@ -21,8 +21,9 @@ using {ProjectName}.Model.Entity;
 namespace {ProjectName}.Services
 {
     /// <summary>
-    /// 系统功能业务实现类
+    /// {ModelDesc}业务实现类
     /// </summary>
+    [ServiceLifetime()]
     public class {ModelName}Services : BaseServices<{ModelName}, int>, I{ModelName}Services
     {
         private readonly I{ModelName}Repository _{ModelVariableName}Repository;

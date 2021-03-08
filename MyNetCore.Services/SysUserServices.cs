@@ -11,8 +11,9 @@ using MyNetCore.Model.Entity;
 namespace MyNetCore.Services
 {
     /// <summary>
-    /// 系统用户业务逻辑
+    /// 系统用户业务实现类
     /// </summary>
+    [ServiceLifetime()]
     public class SysUserServices : BaseServices<SysUser, int>, ISysUserServices
     {
         private readonly ISysUserRepository _sysUserRepository;
@@ -22,6 +23,6 @@ namespace MyNetCore.Services
             _sysUserRepository = sysUserRepository;
         }
 
-        
+
     }
 }
