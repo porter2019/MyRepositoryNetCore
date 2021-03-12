@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FreeSql" Version="2.3.100" />
+    <PackageReference Include="FreeSql" Version="2.3.200" />
   </ItemGroup>
 
   <ItemGroup>

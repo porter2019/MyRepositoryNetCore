@@ -15,6 +15,7 @@ namespace MyNetCore
     public class ServiceLifetimeAttribute : Attribute
     {
         private ServiceLifetime _Lifetime;
+        private bool _IsEnabled;
 
         /// <summary>
         /// 默认Scoped
@@ -22,12 +23,27 @@ namespace MyNetCore
         public ServiceLifetimeAttribute()
         {
             this.Lifetime = ServiceLifetime.Scoped;
+            this.IsEnabled = true;
         }
 
         public ServiceLifetimeAttribute(ServiceLifetime serviceLifetime)
         {
             this.Lifetime = serviceLifetime;
+            this.IsEnabled = true;
         }
+
+        public ServiceLifetimeAttribute(bool isEnabled)
+        {
+            this.Lifetime = ServiceLifetime.Scoped;
+            this.IsEnabled = IsEnabled;
+        }
+
+        public ServiceLifetimeAttribute(ServiceLifetime serviceLifetime, bool isEnabled)
+        {
+            this.Lifetime = serviceLifetime;
+            this.IsEnabled = IsEnabled;
+        }
+
 
         /// <summary>
         /// 是否允许匿名访问
@@ -41,6 +57,21 @@ namespace MyNetCore
             set
             {
                 _Lifetime = value;
+            }
+        }
+
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool IsEnabled
+        {
+            get
+            {
+                return _IsEnabled;
+            }
+            set
+            {
+                _IsEnabled = value;
             }
         }
     }

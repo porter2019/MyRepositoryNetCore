@@ -70,6 +70,7 @@ namespace MyNetCore.Web.SetUp
             {
                 var serviceBatchTag = (instanceType.GetCustomAttributes(typeof(ServiceLifetimeAttribute), true)[0] as ServiceLifetimeAttribute);
                 if (serviceBatchTag == null) continue;
+                if (!serviceBatchTag.IsEnabled) continue;
 
                 foreach (var interfaceType in typeDic[instanceType])
                 {

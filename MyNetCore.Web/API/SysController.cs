@@ -54,7 +54,7 @@ namespace MyNetCore.Web.API
             //var list = await _sysUserServices.GetPageListAsync(model.PageOptions, out long total);
 
             //return ApiResult.OK(total, list);
-            return ApiResult.OK();
+            return ApiResult.OK(_hostEnvironment.ContentRootPath);
         }
 
         /// <summary>

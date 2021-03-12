@@ -38,6 +38,7 @@ namespace MyNetCore.Web.SetUp
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlList[i]);
                     c.IncludeXmlComments(xmlPath, i == 0);
                 }
+                c.DocumentFilter<HiddenApiFilter>();
             });
         }
     }
