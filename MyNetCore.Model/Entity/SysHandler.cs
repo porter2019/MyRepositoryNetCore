@@ -43,7 +43,7 @@ namespace MyNetCore.Model.Entity
         public string RefController { get; set; }
 
         /// <summary>
-        /// 排序数字
+        /// 排序数字，降序排列
         /// </summary>
         [FsColumn("排序数字", true)]
         public int OrderNo { get; set; }

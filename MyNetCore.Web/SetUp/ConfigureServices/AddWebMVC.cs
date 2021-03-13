@@ -70,10 +70,10 @@ namespace MyNetCore.Web.SetUp
             });
 
             //解除IIS文件上传大小限制
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.MaxRequestBodySize = int.MaxValue;
-            });
+            //services.Configure<IISServerOptions>(options =>
+            //{
+            //    options.MaxRequestBodySize = int.MaxValue;
+            //});
             //解除Form表单内容大小限制
             services.Configure<FormOptions>(options =>
             {

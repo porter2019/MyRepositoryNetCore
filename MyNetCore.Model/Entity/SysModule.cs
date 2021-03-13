@@ -12,6 +12,14 @@ namespace MyNetCore.Model.Entity
     [FsTable("模块")]
     public class SysModule : BaseEntity
     {
+        public SysModule() { }
+
+        public SysModule(string moduleName)
+        {
+
+            this.ModuleName = moduleName;
+        }
+
         /// <summary>
         /// 模块Id
         /// </summary>
@@ -23,6 +31,12 @@ namespace MyNetCore.Model.Entity
         /// </summary>
         [FsColumn("模块名称", true, 50)]
         public string ModuleName { get; set; }
+
+        /// <summary>
+        /// 排序数字，降序排列
+        /// </summary>
+        [FsColumn("排序数字", true)]
+        public int OrderNo { get; set; }
 
         /// <summary>
         /// 状态

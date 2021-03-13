@@ -9,16 +9,21 @@ namespace MyNetCore.Web
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class PermissionAttribute : ActionFilterAttribute
     {
-        public PermissionAttribute()
-        {
-            this.OperationName = "";
-        }
 
+        /// <summary>
+        /// 只指定操作名
+        /// </summary>
+        /// <param name="operationName"></param>
         public PermissionAttribute(string operationName)
         {
             this.OperationName = operationName;
         }
 
+        /// <summary>
+        /// 指定操作名和别名
+        /// </summary>
+        /// <param name="operationName"></param>
+        /// <param name="aliasName"></param>
         public PermissionAttribute(string operationName, string aliasName)
         {
             this.OperationName = operationName;

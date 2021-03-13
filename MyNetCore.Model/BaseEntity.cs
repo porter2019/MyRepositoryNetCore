@@ -64,17 +64,17 @@ namespace MyNetCore.Model
             }
         }
 
-        /// <summary>
-        /// 创建时间，MM-dd HH:mm
-        /// </summary>
-        [FsColumn("时间2", IsIgnore = true)]
-        public string CreateDate2
-        {
-            get
-            {
-                return CreatedDate.ToString("MM-dd HH:mm");
-            }
-        }
+        ///// <summary>
+        ///// 创建时间，MM-dd HH:mm
+        ///// </summary>
+        //[FsColumn("时间2", IsIgnore = true)]
+        //public string CreateDate2
+        //{
+        //    get
+        //    {
+        //        return CreatedDate.ToString("MM-dd HH:mm");
+        //    }
+        //}
 
         #endregion
 

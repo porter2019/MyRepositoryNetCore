@@ -21,13 +21,14 @@ namespace MyNetCore.Web
         /// </summary>
         protected readonly IHostEnvironment _hostEnvironment;
 
-        protected readonly IFreeSql _freeSql;
+        //规范！不能在控制器里直接拿数据库上下文了，所有业务操作都要使用Services业务实现层
+        //protected readonly IFreeSql _freeSql;
 
         public BaseAPIController()
         {
             _hca = ServiceLocator.Instance.GetService<IHttpContextAccessor>();
             _hostEnvironment = _hca.HttpContext.RequestServices.GetService<IHostEnvironment>();
-            _freeSql = _hca.HttpContext.RequestServices.GetService<IFreeSql>();
+            //_freeSql = _hca.HttpContext.RequestServices.GetService<IFreeSql>();
         }
 
     }
