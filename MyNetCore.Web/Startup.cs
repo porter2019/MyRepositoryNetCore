@@ -83,6 +83,8 @@ namespace MyNetCore.Web
             }
             else
             {
+                app.UseWebResponseStatus();
+                app.UseDefaultImage(defaultImagePath: Configuration.GetSection("DefaultImagePath").Value);
                 app.UseExceptionHandler("/Home/Error");
             }
 
