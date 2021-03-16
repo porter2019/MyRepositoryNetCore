@@ -26,6 +26,17 @@ namespace MyNetCore.Web.Controllers
             return View();
         }
 
+        public async Task<ContentResult> Test([FromServices] IViewRenderService _iView)
+        {
+            var model = new Model.Entity.SysUser()
+            {
+                UserName = "ABC",
+                LoginName = "EDFD"
+            };
+            var html = await _iView.RenderViewToStringAsync($"/Views/CodeGenerateTemplate/Test.cshtml", model);
+            return Content(html);
+        }
+
         public IActionResult Privacy()
         {
             return View();
