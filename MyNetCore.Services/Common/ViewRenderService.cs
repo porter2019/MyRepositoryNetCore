@@ -65,6 +65,12 @@ namespace MyNetCore.Services
             }
         }
 
+        /// <summary>
+        /// 查找视图文件
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="viewName"></param>
+        /// <returns></returns>
         private IView FindView(ActionContext actionContext, string viewName)
         {
             var getViewResult = _razorViewEngine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: true);

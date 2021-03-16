@@ -29,18 +29,6 @@ namespace MyNetCore.Web.API
             _cache = cache;
         }
 
-        [HttpGet, Route("code")]
-        public async Task<ContentResult> Te([FromServices] IViewRenderService _iView)
-        {
-            var model = new Model.Entity.SysUser()
-            {
-                UserName = "ABC",
-                LoginName = "EDFD"
-            };
-            var html = await _iView.RenderViewToStringAsync("CodeGenerateTemplate/Test", model);
-            return Content(html);
-        }
-
         /// <summary>
         /// 测试接口是否已通
         /// </summary>

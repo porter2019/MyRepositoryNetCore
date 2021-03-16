@@ -15,6 +15,9 @@ using MyNetCore.Web.SetUp;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.WebEncoders;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace MyNetCore.Web
 {
@@ -52,6 +55,9 @@ namespace MyNetCore.Web
 
             //批量注入Services层中普通业务，注意给的baseType是接口类型(IBatchDIServicesTag)
             services.BatchRegisterServices(new Assembly[] { Assembly.Load($"{services.GetProjectMainName()}.Services") }, typeof(IBatchDIServicesTag));
+
+            //解决Razor生成html时中文被转成Unicode码的问题
+            services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
 
             //添加MVC相关
             services.AddWebMVCServices();

@@ -1,0 +1,40 @@
+﻿@model MyNetCore.Model.CodeGenerate.BaseCode
+@{
+    Layout = null;
+}
+/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：@(Model.ModelDesc)业务逻辑接口                                                    
+*│　作    者：@Model.Author                                          
+*│　版    本：1.0 使用Razor引擎自动生成                                              
+*│　创建时间：@Model.GeneratorTime                            
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using @(Model.ProjectName).IServices;
+using @(Model.ProjectName).IRepository;
+using @(Model.ProjectName).Repository;
+using @(Model.ProjectName).Model.Entity;
+
+
+namespace @(Model.ProjectName).Services
+{
+    /// <summary>
+    /// @(Model.ModelDesc)业务实现类
+    /// </summary>
+    [ServiceLifetime()]
+    public class @(Model.ModelName)Services : BaseServices<@(Model.ModelName), int>, I@(Model.ModelName)Services
+    {
+        private readonly I@(Model.ModelName)Repository _@(Model.ModelVariableName)Repository;
+
+        public @(Model.ModelName)Services(@(Model.ModelName)Repository @(Model.ModelVariableName)Repository) : base(@(Model.ModelVariableName)Repository)
+        {
+            _@(Model.ModelVariableName)Repository = @(Model.ModelVariableName)Repository;
+        }
+    }
+}
