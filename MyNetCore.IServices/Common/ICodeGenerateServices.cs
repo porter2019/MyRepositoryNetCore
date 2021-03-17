@@ -17,5 +17,14 @@ namespace MyNetCore.IServices
         /// <param name="modelName">实体名称，类名而非文件名，MyNetCore.Model.Entity下</param>
         /// <returns></returns>
         Task<ApiResult> GenerateIIRSCodeFile(string modelName);
+
+        /// <summary>
+        /// 生成Api控制器文件
+        /// </summary>
+        /// <param name="name">类名/文件名</param>
+        /// <param name="desc">说明，如果为空，则表示name是Entity实体，该值自动反射从实体中取得</param>
+        /// <returns></returns>
+        Task<ApiResult> GenerateApiControllerFile(string name, string desc);
+
     }
 }

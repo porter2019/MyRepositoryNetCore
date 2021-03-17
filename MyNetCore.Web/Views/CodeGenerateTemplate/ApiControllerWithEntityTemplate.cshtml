@@ -1,0 +1,101 @@
+﻿@model MyNetCore.Model.CodeGenerate.BaseCode
+@{
+    Layout = null;
+}
+/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：@(Model.ModelDesc)仓储接口
+*│　作    者：@Model.Author
+*│　版    本：1.0 使用Razor引擎自动生成
+*│　创建时间：@Model.GeneratorTime
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using MyNetCore.IServices;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text;
+using @(Model.ProjectName).IServices;
+
+namespace @(Model.ProjectName).Web.API
+{
+    /// <summary>
+    /// @(Model.ModelDesc)管理
+    /// </summary>
+	[PermissionHandler("所属模块", "@(Model.ModelDesc)", "@(Model.ModelName)", 10)]
+	public class @(Model.ModelName)Controller : BaseOpenAPIController
+    {
+		private readonly ILogger<@(Model.ModelName)Controller> _logger;
+		private readonly I@(Model.ModelName)Services _@(Model.ModelVariableName)Services;
+		
+		public @(Model.ModelName)Controller(ILogger<@(Model.ModelName)Controller> logger, I@(Model.ModelName)Services @(Model.ModelVariableName)Services)
+        {
+            _logger = logger;
+			_@(Model.ModelVariableName)Services = @(Model.ModelVariableName)Services;
+        }
+		
+		/// <summary>
+        /// 查询分页
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost, Route("get/pagelist")]
+        [Permission("查看", "show")]
+        public async Task<ApiResult> GetPageList(Model.RequestViewModel.@(Model.ModelName)PageModel model)
+        {
+            var data = await _@(Model.ModelVariableName)Services.GetPageListAsync(model.PageOptions, out long total);
+
+            return ApiResult.OK(total, data);
+        }
+
+        /// <summary>
+        /// 获取详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet, Route("get/info")]
+        [Permission("查看", "show")]
+        public async Task<ApiResult> GetInfo(int id)
+        {
+            var data = await _@(Model.ModelVariableName)Services.GetModelAsync(id);
+
+            return ApiResult.OK(data);
+        }
+
+        /// <summary>
+        /// 添加或修改数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost, Route("modify")]
+        [Permission("编辑", "modify")]
+        public async Task<ApiResult> Post(Model.Entity.@(Model.ModelName) model)
+        {
+            var data = await _@(Model.ModelVariableName)Services.InsertOrUpdateAsync(model);
+
+            return ApiResult.OK(data);
+        }
+
+        /// <summary>
+        /// 根据ids批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpDelete, Route("delete")]
+        [Permission("删除", "delete")]
+        public async Task<ApiResult> Delete(string ids)
+        {
+            var affrows = await _@(Model.ModelVariableName)Services.DeleteByIdsAsync(ids.SplitWithComma());
+
+            return ApiResult.OK($"受影响的行数:{affrows}");
+        }
+		
+    }
+}

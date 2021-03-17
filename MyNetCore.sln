@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNetCore.Model", "MyNetCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNetCore.Web", "MyNetCore.Web\MyNetCore.Web.csproj", "{F8A715F0-B3C0-4BC8-9A0D-70F95F5B90A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNetCore.CodeGenerate", "MyNetCore.CodeGenerate\MyNetCore.CodeGenerate.csproj", "{640C1D9C-CF36-4571-836F-C2A191B33FF9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{F8A715F0-B3C0-4BC8-9A0D-70F95F5B90A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8A715F0-B3C0-4BC8-9A0D-70F95F5B90A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8A715F0-B3C0-4BC8-9A0D-70F95F5B90A8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{640C1D9C-CF36-4571-836F-C2A191B33FF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{640C1D9C-CF36-4571-836F-C2A191B33FF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{640C1D9C-CF36-4571-836F-C2A191B33FF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{640C1D9C-CF36-4571-836F-C2A191B33FF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

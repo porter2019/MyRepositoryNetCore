@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -31,31 +32,78 @@ namespace MyNetCore.Services
         {
             var model = new BaseCode(modelName, GetModelDesc(modelName));
             //IRepository
-            var html = await _viewRender.RenderViewToStringAsync("/Views/CodeGenerateTemplate/IRepositoryTemplate.cshtml", model);
-            WriteCodeToFile(html, $"I{modelName}Repository.cs", "IRepository\\");
+            var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("IRepositoryTemplate"), model);
+            SaveCodeToFile(html, $"I{modelName}Repository.cs", "IRepository");
             //IServices
-            html = await _viewRender.RenderViewToStringAsync("/Views/CodeGenerateTemplate/IServicesTemplate.cshtml", model);
-            WriteCodeToFile(html, $"I{modelName}Services.cs", "IServices\\");
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("IServicesTemplate"), model);
+            SaveCodeToFile(html, $"I{modelName}Services.cs", "IServices");
             //Repository
-            html = await _viewRender.RenderViewToStringAsync("/Views/CodeGenerateTemplate/RepositoryTemplate.cshtml", model);
-            WriteCodeToFile(html, $"{modelName}Repository.cs", "Repository\\");
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("RepositoryTemplate"), model);
+            SaveCodeToFile(html, $"{modelName}Repository.cs", "Repository");
             //Services
-            html = await _viewRender.RenderViewToStringAsync("/Views/CodeGenerateTemplate/ServicesTemplate.cshtml", model);
-            WriteCodeToFile(html, $"{modelName}Services.cs", "Services\\");
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("ServicesTemplate"), model);
+            SaveCodeToFile(html, $"{modelName}Services.cs", "Services");
 
             return ApiResult.OK();
         }
+
+        /// <summary>
+        /// 生成Api控制器文件
+        /// </summary>
+        /// <param name="name">类名/文件名</param>
+        /// <param name="desc">说明，如果为空，则表示name是Entity实体，该值自动反射从实体中取得</param>
+        /// <returns></returns>
+        public async Task<ApiResult> GenerateApiControllerFile(string name, string desc)
+        {
+            var remark = desc;
+            var templateName = "ApiControllerTemplate";
+            if (remark.IsNull())
+            {
+                //生成带实体的控制器
+                remark = GetModelDesc(name);
+                templateName = "ApiControllerWithEntityTemplate";
+
+            }
+            var model = new BaseCode(name, remark);
+            var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath(templateName), model);
+            SaveCodeToFile(html, $"{name}Controller.cs", "Web\\API");
+
+            return ApiResult.OK();
+        }
+
+        #region 私有方法
 
         /// <summary>
         /// 保存文件到指定的目录
         /// </summary>
         /// <param name="content"></param>
         /// <param name="fileName"></param>
-        /// <param name="projectLastName"></param>
+        /// <param name="targetProject">指定项目名</param>
+        /// <param name="targetRelativePath">保存的目录，默认为\\，放在项目根目录，否则填写\\Common\\</param>
         /// <returns></returns>
-        private void WriteCodeToFile(string content, string fileName, string projectLastName)
+        private void SaveCodeToFile(string content, string fileName, string targetProject, string targetRelativePath = "\\")
         {
-            throw new Exception("待完成");
+            if (content.IsNull()) throw new ArgumentNullException("Content内容为空");
+            if (fileName.IsNull()) throw new ArgumentNullException("文件名不明确");
+            if (targetProject.IsNull()) throw new ArgumentNullException("目标项目名不明确");
+
+            var projectName = content.GetProjectMainName();//MyNetCore
+            var domainDir = AppDomain.CurrentDomain.BaseDirectory;//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web\bin\Debug\net5.0\
+            var baseDir = domainDir.Substring(0, domainDir.LastIndexOf("\\bin"));//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web
+            //当前解决方案目录
+            var solutionPath = baseDir.Replace($"{AppDomain.CurrentDomain.FriendlyName}", "");//C:\WorkSpace\GitHub\MyRepositoryNetCore\
+            var targetFolder = solutionPath + projectName + "." + targetProject + targetRelativePath; //C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.IRepository\
+            if (!Directory.Exists(targetFolder)) Directory.CreateDirectory(targetFolder);
+            var targetFilePath = targetFolder + fileName;
+            if (File.Exists(targetFilePath)) return;//如果文件存在则不生成
+
+            using (var targetFileInfo = File.Create(targetFilePath))
+            {
+                var writer = new StreamWriter(targetFileInfo, Encoding.UTF8);
+                writer.Write(content);
+                writer.Dispose();
+            }
+
         }
 
         /// <summary>
@@ -72,6 +120,18 @@ namespace MyNetCore.Services
             if (fsTableInfo == null) throw new NullReferenceException($"指定类未指定【FsTable】标识");
             return fsTableInfo.DisplayName;
         }
+
+        /// <summary>
+        /// 获取试图相对路径
+        /// </summary>
+        /// <param name="lastPath"></param>
+        /// <returns></returns>
+        private string GetViewTemplateRelativePath(string lastPath)
+        {
+            return "/Views/CodeGenerateTemplate/" + lastPath + ".cshtml";
+        }
+
+        #endregion
 
     }
 }
