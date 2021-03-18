@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyNetCore.Model.RequestViewModel
+namespace MyNetCore.Model.RequestModel
 {
     /// <summary>
     /// 查询系统用户分页列表所需参数

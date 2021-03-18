@@ -13,5 +13,12 @@ namespace MyNetCore.IServices
     public interface ISysUserServices : IBaseServices<SysUser>
     {
 
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<ApiResult> UserLogin(Model.RequestModel.SysUserLoginModel model);
+
     }
 }
