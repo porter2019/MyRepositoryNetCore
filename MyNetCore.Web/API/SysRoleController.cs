@@ -15,7 +15,7 @@ namespace MyNetCore.Web.API
     /// <summary>
     /// 用户组管理
     /// </summary>
-    [PermissionHandler("系统管理", "用户组", "SysRole", 20)]
+    [PermissionHandler("系统管理", "用户组", "sysRole", 20)]
     public class SysRoleController : BaseOpenAPIController
     {
         private readonly ILogger<SysRoleController> _logger;
