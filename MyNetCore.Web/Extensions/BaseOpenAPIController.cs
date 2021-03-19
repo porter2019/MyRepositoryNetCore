@@ -11,7 +11,7 @@ namespace MyNetCore.Web
     /// </summary>
     [TypeFilter(typeof(OpenApiActionFilterAttribute))]
     [Route("api/open/[controller]")]
-    public class BaseOpenAPIController : BaseAPIController
+    public class BaseOpenApiController : BaseApiController
     {
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace MyNetCore.Web
         /// </summary>
         public CurrentUserTickInfo CurrentUserInfo;
 
-        public BaseOpenAPIController()
+        public BaseOpenApiController()
         {
             
         }

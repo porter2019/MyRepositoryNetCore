@@ -22,8 +22,8 @@ namespace MyNetCore.Web.Controllers
         public IActionResult Index()
         {
             var projectName = AppDomain.CurrentDomain.FriendlyName;
-
-            return View();
+            return Content("OK");
+            //return View();
         }
 
         public IActionResult Privacy()

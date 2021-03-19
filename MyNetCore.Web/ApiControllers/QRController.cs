@@ -11,13 +11,13 @@ using MyNetCore.IRepository;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace MyNetCore.Web.API
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 二维码生成
     /// </summary>
     [HiddenApi]
-    public class QRController : BaseOpenAPIController
+    public class QRController : BaseOpenApiController
     {
         private readonly ILogger<QRController> _logger;
 

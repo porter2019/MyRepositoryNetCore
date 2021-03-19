@@ -19,12 +19,12 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace MyNetCore.Web.API
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 账号相关管理
     /// </summary>
-	public class AccountController : BaseOpenAPIController
+	public class AccountController : BaseOpenApiController
     {
         private readonly ILogger<AccountController> _logger;
         private readonly ISysUserServices _sysUserServices;

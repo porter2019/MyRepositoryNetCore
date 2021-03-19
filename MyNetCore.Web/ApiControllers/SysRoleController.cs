@@ -10,13 +10,13 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace MyNetCore.Web.API
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 用户组管理
     /// </summary>
     [PermissionHandler("系统管理", "用户组", "sysRole", 20)]
-    public class SysRoleController : BaseOpenAPIController
+    public class SysRoleController : BaseOpenApiController
     {
         private readonly ILogger<SysRoleController> _logger;
         private readonly ISysRoleServices _sysRoleServices;

@@ -10,13 +10,13 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace MyNetCore.Web.API
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 系统接口
     /// </summary>
     [PermissionHandler("系统管理", "系统配置", "Sys", 10)]
-    public class SysController : BaseOpenAPIController
+    public class SysController : BaseOpenApiController
     {
         private readonly ILogger<SysController> _logger;
         private readonly ISysUserServices _sysUserServices;

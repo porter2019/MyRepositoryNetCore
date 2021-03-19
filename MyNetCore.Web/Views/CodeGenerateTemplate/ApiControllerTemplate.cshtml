@@ -23,13 +23,13 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace @(Model.ProjectName).Web.API
+namespace @(Model.ProjectName).Web.ApiControllers
 {
     /// <summary>
     /// @(Model.ModelDesc)管理
     /// </summary>
 	[PermissionHandler("所属模块", "所属功能", "功能英文别名", 10)]
-	public class @(Model.ModelName)Controller : BaseOpenAPIController
+	public class @(Model.ModelName)Controller : BaseOpenApiController
     {
 		private readonly ILogger<@(Model.ModelName)Controller> _logger;
 		

@@ -54,7 +54,7 @@ namespace MyNetCore.Web
 
             #region 将用户信息附加到上下文中
 
-            var controller = context.Controller as BaseOpenAPIController;
+            var controller = context.Controller as BaseOpenApiController;
             //获取JWT中用户的信息
             controller.CurrentUserInfo = new CurrentUserTickInfo() { UserId = 1, UserName = "开发中", LoginName = "admin", ExpireTime = DateTime.Now.AddDays(3) };
 

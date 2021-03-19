@@ -10,12 +10,12 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace MyNetCore.Web.API
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 代码生成器
     /// </summary>
-    public class CodeGenerateController : BaseOpenAPIController
+    public class CodeGenerateController : BaseOpenApiController
     {
         public ILogger<CodeGenerateController> _logger;
         public ICodeGenerateServices _codeGenerateServices;

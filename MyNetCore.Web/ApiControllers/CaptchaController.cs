@@ -11,12 +11,12 @@ using MyNetCore.IRepository;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace MyNetCore.Web.API
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 验证码演示
     /// </summary>
-    public class CaptchaController : BaseOpenAPIController
+    public class CaptchaController : BaseOpenApiController
     {
         private readonly ILogger<CaptchaController> _logger;
 
