@@ -18,13 +18,13 @@ namespace MyNetCore.Model.Entity
         /// <summary>
         /// 登录名
         /// </summary>
-        [FsColumn("登录名", false, 200)]
+        [FsColumn("登录名", false, 200), ValidateRule(VerRequired = true, LengthRange = "2-20", ValidateType = ValidateType.AccountName)]
         public string LoginName { get; set; }
 
         /// <summary>
         /// 用户名
         /// </summary>
-        [FsColumn("用户名", false, 200)]
+        [FsColumn("用户名", false, 200), ValidateRule(VerRequired = true, LengthRange = "2-30")]
         public string UserName { get; set; }
 
         /// <summary>

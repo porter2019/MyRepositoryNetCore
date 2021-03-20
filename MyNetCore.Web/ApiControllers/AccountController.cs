@@ -40,9 +40,17 @@ namespace MyNetCore.Web.ApiControllers
         /// </summary>
         /// <returns></returns>
         [HttpPost, Route("login"), Permission("登录", Anonymous = true)]
-        public Task<ApiResult> SignIn(Model.RequestModel.SysUserLoginModel model)
+        public async Task<ApiResult> SignIn(Model.RequestModel.SysUserLoginModel model)
         {
-            return _sysUserServices.UserLogin(model);
+            try
+            {
+                var data = await _sysUserServices.UserLogin(model);
+                return ApiResult.OK(data);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.Failed(ex.Message);
+            }
         }
 
         /// <summary>

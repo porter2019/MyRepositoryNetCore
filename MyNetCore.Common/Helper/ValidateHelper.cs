@@ -10,11 +10,11 @@ namespace MyNetCore.Common.Helper
     public class ValidateHelper
     {
         /// <summary>
-        /// 是否为用户名,只能数字、字母、下划线组成
+        /// 是否为账户名,只能数字、字母、下划线组成
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static bool IsUserName(string s)
+        public static bool IsAccountName(string s)
         {
             return Regex.IsMatch(s, @"^[a-zA-Z0-9_]*$");
         }

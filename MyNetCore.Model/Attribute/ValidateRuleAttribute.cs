@@ -161,8 +161,8 @@ namespace MyNetCore
                 case ValidateType.WebURL:
                     if (!Common.Helper.ValidateHelper.IsWebUrl(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的网址", new[] { valName });
                     break;
-                case ValidateType.UserName:
-                    if (!Common.Helper.ValidateHelper.IsUserName(inputText)) return new ValidationResult($"{valDisplayName}只能由数字、字母、下划线组成", new[] { valName });
+                case ValidateType.AccountName:
+                    if (!Common.Helper.ValidateHelper.IsAccountName(inputText)) return new ValidationResult($"{valDisplayName}只能由数字、字母、下划线组成", new[] { valName });
                     break;
                 default:
                     break;
@@ -234,8 +234,8 @@ namespace MyNetCore
         /// </summary>
         WebURL,
         /// <summary>
-        /// 网站用户名
+        /// 网站账户名，字母数字下划线组成
         /// </summary>
-        UserName
+        AccountName
     }
 }

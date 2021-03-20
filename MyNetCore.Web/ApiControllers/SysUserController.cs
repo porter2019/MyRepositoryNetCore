@@ -25,18 +25,18 @@ namespace MyNetCore.Web.ApiControllers
     /// 系统用户管理
     /// </summary>
 	[PermissionHandler("所属模块", "系统用户", "sysUser", 10)]
-	public class SysUserController : BaseOpenApiController
+    public class SysUserController : BaseOpenApiController
     {
-		private readonly ILogger<SysUserController> _logger;
-		private readonly ISysUserServices _sysUserServices;
-		
-		public SysUserController(ILogger<SysUserController> logger, ISysUserServices sysUserServices)
+        private readonly ILogger<SysUserController> _logger;
+        private readonly ISysUserServices _sysUserServices;
+
+        public SysUserController(ILogger<SysUserController> logger, ISysUserServices sysUserServices)
         {
             _logger = logger;
-			_sysUserServices = sysUserServices;
+            _sysUserServices = sysUserServices;
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// 查询分页
         /// </summary>
         /// <param name="model"></param>
@@ -45,7 +45,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetPageList(Model.RequestModel.SysUserPageModel model)
         {
-            var data = await _sysUserServices.GetPageListAsync(model.PageOptions, out long total);
+            var data = await _sysUserServices.GetPageListAsync(model, out long total);
 
             return ApiResult.OK(total, data);
         }
@@ -60,8 +60,23 @@ namespace MyNetCore.Web.ApiControllers
         public async Task<ApiResult> GetInfo(int id)
         {
             var data = await _sysUserServices.GetModelAsync(id);
-
+            if (data == null) data = new Model.Entity.SysUser();
+            else data.Password = "@@**@@";
             return ApiResult.OK(data);
+        }
+
+        /// <summary>
+        /// 判断登录名是否存在
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="loginName">登录名</param>
+        /// <returns></returns>
+        [HttpGet, Route("exists/loginName")]
+        [Permission("编辑", "modify")]
+        public async Task<ApiResult> CheckLoginNameExists(int userId, string loginName)
+        {
+            var exists = await _sysUserServices.CheckLoginNameExists(userId, loginName);
+            return ApiResult.OK(exists);
         }
 
         /// <summary>
@@ -73,7 +88,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("编辑", "modify")]
         public async Task<ApiResult> Post(Model.Entity.SysUser model)
         {
-            var data = await _sysUserServices.InsertOrUpdateAsync(model);
+            var data = await _sysUserServices.Modify(model);
 
             return ApiResult.OK(data);
         }
@@ -91,6 +106,6 @@ namespace MyNetCore.Web.ApiControllers
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }
-		
+
     }
 }
