@@ -66,7 +66,7 @@ namespace MyNetCore.Services
             }
             var model = new BaseCode(name, remark);
             var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath(templateName), model);
-            SaveCodeToFile(html, $"{name}Controller.cs", "Web\\API");
+            SaveCodeToFile(html, $"{name}Controller.cs", "Web\\ApiControllers");
 
             return ApiResult.OK();
         }

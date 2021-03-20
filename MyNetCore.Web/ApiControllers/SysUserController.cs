@@ -1,13 +1,9 @@
-﻿@model MyNetCore.Model.CodeGenerate.BaseCode
-@{
-    Layout = null;
-}
-/**
+﻿/**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：@(Model.ModelDesc)接口控制器
-*│　作    者：@Model.Author
+*│　描    述：系统用户接口控制器
+*│　作    者：杨习友
 *│　版    本：1.0 使用Razor引擎自动生成
-*│　创建时间：@Model.GeneratorTime
+*│　创建时间：2021-03-19 20:03:38
 *└──────────────────────────────────────────────────────────────┘
 */
 
@@ -23,21 +19,21 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace @(Model.ProjectName).Web.ApiControllers
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
-    /// @(Model.ModelDesc)管理
+    /// 系统用户管理
     /// </summary>
-	[PermissionHandler("所属模块", "@(Model.ModelDesc)", "@(Model.ModelName)", 10)]
-	public class @(Model.ModelName)Controller : BaseOpenApiController
+	[PermissionHandler("所属模块", "系统用户", "sysUser", 10)]
+	public class SysUserController : BaseOpenApiController
     {
-		private readonly ILogger<@(Model.ModelName)Controller> _logger;
-		private readonly I@(Model.ModelName)Services _@(Model.ModelVariableName)Services;
+		private readonly ILogger<SysUserController> _logger;
+		private readonly ISysUserServices _sysUserServices;
 		
-		public @(Model.ModelName)Controller(ILogger<@(Model.ModelName)Controller> logger, I@(Model.ModelName)Services @(Model.ModelVariableName)Services)
+		public SysUserController(ILogger<SysUserController> logger, ISysUserServices sysUserServices)
         {
             _logger = logger;
-			_@(Model.ModelVariableName)Services = @(Model.ModelVariableName)Services;
+			_sysUserServices = sysUserServices;
         }
 		
 		/// <summary>
@@ -47,9 +43,9 @@ namespace @(Model.ProjectName).Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("get/pagelist")]
         [Permission("查看", "show")]
-        public async Task<ApiResult> GetPageList(Model.RequestModel.@(Model.ModelName)PageModel model)
+        public async Task<ApiResult> GetPageList(Model.RequestModel.SysUserPageModel model)
         {
-            var data = await _@(Model.ModelVariableName)Services.GetPageListAsync(model.PageOptions, out long total);
+            var data = await _sysUserServices.GetPageListAsync(model.PageOptions, out long total);
 
             return ApiResult.OK(total, data);
         }
@@ -63,7 +59,7 @@ namespace @(Model.ProjectName).Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
-            var data = await _@(Model.ModelVariableName)Services.GetModelAsync(id);
+            var data = await _sysUserServices.GetModelAsync(id);
 
             return ApiResult.OK(data);
         }
@@ -75,9 +71,9 @@ namespace @(Model.ProjectName).Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("modify")]
         [Permission("编辑", "modify")]
-        public async Task<ApiResult> Post(Model.Entity.@(Model.ModelName) model)
+        public async Task<ApiResult> Post(Model.Entity.SysUser model)
         {
-            var data = await _@(Model.ModelVariableName)Services.InsertOrUpdateAsync(model);
+            var data = await _sysUserServices.InsertOrUpdateAsync(model);
 
             return ApiResult.OK(data);
         }
@@ -91,7 +87,7 @@ namespace @(Model.ProjectName).Web.ApiControllers
         [Permission("删除", "delete")]
         public async Task<ApiResult> Delete(string ids)
         {
-            var affrows = await _@(Model.ModelVariableName)Services.DeleteByIdsAsync(ids.SplitWithComma());
+            var affrows = await _sysUserServices.DeleteByIdsAsync(ids.SplitWithComma());
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }
