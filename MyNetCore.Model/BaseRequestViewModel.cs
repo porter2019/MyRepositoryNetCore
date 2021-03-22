@@ -23,5 +23,68 @@ namespace MyNetCore.Model
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public string CurrentUserName { get; set; }
+
+        public virtual string BuildPageSearchWhere()
+        {
+            var currentType = this.GetType();
+
+            StringBuilder sbWhere = new StringBuilder();
+
+            foreach (var itemType in currentType.GetProperties())
+            {
+                var quarrAttrArray = itemType.GetCustomAttributes(typeof(PageQueryAttribute), true);
+                if (!quarrAttrArray.Any()) continue;
+                var queryAttr = quarrAttrArray[0] as PageQueryAttribute;
+                if (queryAttr.IsIgnore) continue;
+
+                var filedName = itemType.Name;
+                var filedValue = itemType.GetValue(this, null);
+                if (filedValue == null) continue;
+                if (filedValue.ToString().IsNull()) continue;
+                var fileValueChar = "";
+
+                var columnName = queryAttr.ColumnName.IsNull() ? $"[{filedName}]" : $"[{queryAttr.ColumnName}]";
+                var sqlColumnName = queryAttr.PrefixName.IsNull() ? columnName : queryAttr.PrefixName + "." + columnName;
+
+                //String类型
+                if (itemType.PropertyType == typeof(System.String))
+                {
+                    fileValueChar = "'";
+                }
+
+                switch (queryAttr.OperatoryType)
+                {
+                    case PageQueryColumnMatchType.Equal:
+                        sbWhere.Append($" and {sqlColumnName} = {fileValueChar}{filedValue}{fileValueChar}");
+                        break;
+                    case PageQueryColumnMatchType.NotEqual:
+                        sbWhere.Append($" and {sqlColumnName} != {fileValueChar}{filedValue}{fileValueChar}");
+                        break;
+                    case PageQueryColumnMatchType.Like:
+                        sbWhere.Append($" and {sqlColumnName} like '%{filedValue}%'");
+                        break;
+                    case PageQueryColumnMatchType.CharIndex:
+                        sbWhere.Append($" and CharIndex('{filedValue}',{sqlColumnName}) > 0");
+                        break;
+                    case PageQueryColumnMatchType.BetweenNumber:
+                        var tempArr = filedValue.ToString().SplitWithSemicolon();
+                        if (tempArr.Length != 2) throw new Exception("Between条件下值的格式必须使用英文分号分割");
+                        sbWhere.Append($" and {sqlColumnName} between {tempArr[0]} and {tempArr[1]}");
+                        break;
+                    case PageQueryColumnMatchType.BetweenDate:
+                        var tempArr2 = filedValue.ToString().SplitWithSemicolon();
+                        if (tempArr2.Length != 2) throw new Exception("Between条件下值的格式必须使用英文分号分割");
+                        sbWhere.Append($" and {sqlColumnName} between '{tempArr2[0]}' and '{tempArr2[1]} 23:59:59'");
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            return sbWhere.ToString();
+
+        }
+
     }
 }

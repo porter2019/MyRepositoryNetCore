@@ -21,6 +21,8 @@ namespace MyNetCore.Web.SetUp
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             if (AppSettings.Get<bool>("Session", "IsEnabled"))
             {
                 services.AddSession();
@@ -44,11 +46,11 @@ namespace MyNetCore.Web.SetUp
             //使用小写的URL
             services.AddRouting(option => option.LowercaseUrls = true);
 
-            services.AddControllersWithViews()
-                    .AddNewtonsoftJson(options =>
+            services.AddControllersWithViews(options =>
                     {
-                        ////使用默认方式，不更改元数据的key的大小写(变量首字母不转小写)
-                        //options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                        options.Filters.Add(typeof(GlobalExceptionFilter));
+                    }).AddNewtonsoftJson(options =>
+                    {
                         //忽略循环引用
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                         //string类型的值为NULL的改为空字符串

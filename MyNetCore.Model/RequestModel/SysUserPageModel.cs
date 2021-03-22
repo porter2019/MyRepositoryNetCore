@@ -14,27 +14,32 @@ namespace MyNetCore.Model.RequestModel
         /// <summary>
         /// 分页数据
         /// </summary>
-        public PageOptions<Entity.SysUser> PageOptions { get; set; }
+        public PageOptions<Entity.SysUser> PageInfo { get; set; }
 
         /// <summary>
         /// 登录名
         /// </summary>
+        [PageQuery(PageQueryColumnMatchType.CharIndex)]
         public string LoginName { get; set; }
 
         /// <summary>
         /// 用户名
         /// </summary>
+        [PageQuery(PageQueryColumnMatchType.CharIndex)]
         public string UserName { get; set; }
 
         /// <summary>
-        /// 开始时间
+        /// 创建时间
         /// </summary>
-        public DateTime? StartDate { get; set; }
+        [PageQuery(PageQueryColumnMatchType.BetweenDate)]
+        public string CreatedDate { get; set; }
 
-        /// <summary>
-        /// 结束时间
-        /// </summary>
-        public DateTime? EndDate { get; set; }
+        public override string BuildPageSearchWhere()
+        {
+            var sqlWhere = base.BuildPageSearchWhere();
+
+            return sqlWhere;
+        }
 
     }
 }

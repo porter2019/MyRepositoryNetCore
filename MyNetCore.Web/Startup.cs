@@ -85,7 +85,7 @@ namespace MyNetCore.Web
                     }
                     await context.Response.WriteAsync("</tbody></table>");
                 }));
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
             }
             else
             {

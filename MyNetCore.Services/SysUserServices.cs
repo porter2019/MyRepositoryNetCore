@@ -75,10 +75,9 @@ namespace MyNetCore.Services
         /// <returns></returns>
         public Task<List<SysUser>> GetPageListAsync(Model.RequestModel.SysUserPageModel model, out long total)
         {
-            if (model.LoginName.IsNotNull()) model.PageOptions.Where += $" and CHARINDEX('{model.LoginName}',LoginName) > 0";
-            if (model.UserName.IsNotNull()) model.PageOptions.Where += $" and CHARINDEX('{model.UserName}',UserName) > 0";
-            if (model.StartDate != null && model.EndDate != null) model.PageOptions.Where += $" and CreatedDate between '{model.StartDate.ObjToDate().ToShortDateString()}' and '{model.EndDate.ObjToDate().ToShortDateString()} 23:59:59'";
-            return _sysUserRepository.GetPageListAsync(model.PageOptions, out total);
+            model.PageInfo.Where = model.BuildPageSearchWhere();
+
+            return _sysUserRepository.GetPageListAsync(model.PageInfo, out total);
         }
 
         /// <summary>

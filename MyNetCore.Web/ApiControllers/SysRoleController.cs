@@ -36,7 +36,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetPageList(Model.RequestModel.SysRolePageModel model)
         {
-            var data = await _sysRoleServices.GetPageListAsync(model.PageOptions, out long total);
+            var data = await _sysRoleServices.GetPageListAsync(model.PageInfo, out long total);
 
             return ApiResult.OK(total, data);
         }

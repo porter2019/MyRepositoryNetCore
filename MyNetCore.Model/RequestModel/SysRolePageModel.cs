@@ -14,7 +14,7 @@ namespace MyNetCore.Model.RequestModel
         /// <summary>
         /// 分页数据
         /// </summary>
-        public PageOptions<Entity.SysRole> PageOptions { get; set; }
+        public PageOptions<Entity.SysRole> PageInfo { get; set; }
 
         /// <summary>
         /// 其他参数

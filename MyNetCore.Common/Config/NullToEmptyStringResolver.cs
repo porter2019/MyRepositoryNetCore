@@ -22,6 +22,8 @@ namespace MyNetCore.Common.Config
         /// <returns></returns>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
+            //首字母禁止转小写
+            this.NamingStrategy = null;
             return type.GetProperties().Select(c =>
             {
                 var jsonProperty = base.CreateProperty(c, memberSerialization);

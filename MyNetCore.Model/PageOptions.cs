@@ -100,10 +100,5 @@ namespace MyNetCore
             }
         }
 
-        public virtual void BuildWhere()
-        {
-
-        }
-
     }
 }
