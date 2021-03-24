@@ -21,6 +21,12 @@ namespace MyNetCore.IServices
     /// </summary>
     public interface ISysRoleServices : IBaseServices<SysRole>
     {
-
+        /// <summary>
+        /// 判断登录组名是否存在
+        /// </summary>
+        /// <param name="roleId">组id</param>
+        /// <param name="roleName">组名</param>
+        /// <returns></returns>
+        Task<bool> CheckRoleNameExists(int roleId, string roleName);
     }
 }

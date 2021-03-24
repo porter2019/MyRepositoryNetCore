@@ -59,6 +59,10 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
+            if (id < 1)
+            {
+                return ApiResult.OK(new Model.Entity.SysUser());
+            }
             var data = await _sysUserServices.GetModelAsync(id);
             if (data == null) data = new Model.Entity.SysUser();
             else data.Password = "@@**@@";

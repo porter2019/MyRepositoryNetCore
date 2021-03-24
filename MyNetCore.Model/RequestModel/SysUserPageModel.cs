@@ -34,12 +34,5 @@ namespace MyNetCore.Model.RequestModel
         [PageQuery(PageQueryColumnMatchType.BetweenDate)]
         public string CreatedDate { get; set; }
 
-        public override string BuildPageSearchWhere()
-        {
-            var sqlWhere = base.BuildPageSearchWhere();
-
-            return sqlWhere;
-        }
-
     }
 }

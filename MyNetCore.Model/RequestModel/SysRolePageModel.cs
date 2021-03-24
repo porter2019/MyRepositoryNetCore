@@ -17,9 +17,16 @@ namespace MyNetCore.Model.RequestModel
         public PageOptions<Entity.SysRole> PageInfo { get; set; }
 
         /// <summary>
-        /// 其他参数
+        /// 用户组名
         /// </summary>
-        public int Type { get; set; }
+        [PageQuery(PageQueryColumnMatchType.CharIndex)]
+        public string RoleName { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [PageQuery(PageQueryColumnMatchType.BetweenDate)]
+        public string CreatedDate { get; set; }
 
     }
 }

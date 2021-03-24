@@ -50,9 +50,28 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
+            if (id < 1)
+            {
+                return ApiResult.OK(new Model.Entity.SysRole());
+            }
+
             var data = await _sysRoleServices.GetModelAsync(id);
 
             return ApiResult.OK(data);
+        }
+
+        /// <summary>
+        /// 判断组名是否存在
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="roleName">组名</param>
+        /// <returns></returns>
+        [HttpGet, Route("exists/rolename")]
+        [Permission("编辑", "modify")]
+        public async Task<ApiResult> CheckLoginNameExists(int roleId, string roleName)
+        {
+            var exists = await _sysRoleServices.CheckRoleNameExists(roleId, roleName);
+            return ApiResult.OK(exists);
         }
 
         /// <summary>
