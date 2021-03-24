@@ -102,5 +102,18 @@ namespace MyNetCore.Web.ApiControllers
             return ApiResult.OK($"受影响的行数:{affrows}");
         }
 
+        /// <summary>
+        /// 获取用户组的权限配置列表
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet, Route("get/permit/list")]
+        public async Task<ApiResult> GetRolePermitList(int roleId)
+        {
+            var data = await _sysRoleServices.GetPermitListByRoleId(roleId);
+
+            return ApiResult.OK(data);
+        }
+
     }
 }

@@ -33,16 +33,16 @@ namespace MyNetCore.Web
             //开发环境抛出全部异常
             //if (_hostEnvironment.IsDevelopment()) return;
 
-            var contentType = context.HttpContext.Request.Headers["Content-Type"].FirstOrDefault()?.ToLower() ?? "";
-            var accept = context.HttpContext.Request.Headers["accept"].FirstOrDefault()?.ToLower() ?? "";
-            if (contentType.Equals("application/json") || accept.Equals("application/json"))
-            {
-                context.Result = new ObjectResult(ApiResult.Error(context.Exception.Message));
-            }
-            else
-            {
-                context.Result = new ObjectResult("服务器出现异常");
-            }
+            context.Result = new ObjectResult(ApiResult.Error(context.Exception.Message));
+            //var contentType = context.HttpContext.Request.Headers["Content-Type"].FirstOrDefault()?.ToLower() ?? "";
+            //var accept = context.HttpContext.Request.Headers["accept"].FirstOrDefault()?.ToLower() ?? "";
+            //if (contentType.Equals("application/json") || accept.Equals("application/json"))
+            //{
+            //}
+            //else
+            //{
+            //    context.Result = new ObjectResult("服务器出现异常");
+            //}
 
             context.ExceptionHandled = true;
         }

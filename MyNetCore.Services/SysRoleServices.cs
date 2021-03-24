@@ -53,5 +53,19 @@ namespace MyNetCore.Services
             return Task.FromResult(false);
         }
 
+        /// <summary>
+        /// 获取用户组的权限信息
+        /// </summary>
+        /// <param name="roleId">用户组id</param>
+        /// <returns></returns>
+        public async Task<List<Model.Dto.SysRoleModuleGroupModel>> GetPermitListByRoleId(int roleId)
+        {
+            var roleEntity = await _sysRoleRepository.GetModelAsync(p => p.RoleId == roleId);
+            if (roleEntity == null) throw new NullReferenceException("用户组不存在");
+            if (roleEntity.IsSuper) throw new Exception("超级管理组无需配置权限");
+
+            return await _sysRoleRepository.GetPermitListByRoleId(roleId);
+        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace MyNetCore.Web.ApiControllers
     /// <summary>
     /// 系统用户管理
     /// </summary>
-	[PermissionHandler("所属模块", "系统用户", "sysUser", 10)]
+	[PermissionHandler("系统管理", "系统用户", "sysUser", 10)]
     public class SysUserController : BaseOpenApiController
     {
         private readonly ILogger<SysUserController> _logger;

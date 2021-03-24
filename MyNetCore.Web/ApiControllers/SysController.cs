@@ -15,7 +15,7 @@ namespace MyNetCore.Web.ApiControllers
     /// <summary>
     /// 系统接口
     /// </summary>
-    [PermissionHandler("系统管理", "系统配置", "Sys", 10)]
+    [PermissionHandler("系统管理", "系统配置", "sys", 10)]
     public class SysController : BaseOpenApiController
     {
         private readonly ILogger<SysController> _logger;
@@ -116,6 +116,7 @@ namespace MyNetCore.Web.ApiControllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("permission/sync")]
+        [Permission("同步权限", "PermissionAsync")]
         public ApiResult SyncPermissionHandler([FromServices] IFreeSql _freeSql)
         {
             //当前运行程序集

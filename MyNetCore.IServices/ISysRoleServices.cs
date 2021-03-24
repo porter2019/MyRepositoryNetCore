@@ -28,5 +28,13 @@ namespace MyNetCore.IServices
         /// <param name="roleName">组名</param>
         /// <returns></returns>
         Task<bool> CheckRoleNameExists(int roleId, string roleName);
+
+        /// <summary>
+        /// 获取用户组的权限信息
+        /// </summary>
+        /// <param name="roleId">用户组id</param>
+        /// <returns></returns>
+        Task<List<Model.Dto.SysRoleModuleGroupModel>> GetPermitListByRoleId(int roleId);
+
     }
 }

@@ -31,7 +31,7 @@ namespace MyNetCore.Model.Entity
         /// 是否超级管理组
         /// </summary>
         [FsColumn("是否超级管理组")]
-        public bool? IsSuper { get; set; }
+        public bool IsSuper { get; set; }
 
         /// <summary>
         /// 状态
