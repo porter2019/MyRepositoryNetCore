@@ -115,5 +115,19 @@ namespace MyNetCore.Web.ApiControllers
             return ApiResult.OK(data);
         }
 
+        /// <summary>
+        /// 更新用户组的权限信息
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="permits"></param>
+        /// <returns></returns>
+        [HttpPost, Route("modify/permit")]
+        public async Task<ApiResult> GetRolePermitList(int roleId, string permits)
+        {
+            var data = await _sysRoleServices.SetRolePermit(roleId, permits);
+
+            return ApiResult.OK(data);
+        }
+
     }
 }

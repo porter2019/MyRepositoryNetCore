@@ -70,5 +70,30 @@ namespace MyNetCore.Repository
             return resultList;
 
         }
+
+        /// <summary>
+        /// 设置用户组权限
+        /// </summary>
+        /// <param name="roleId">组id</param>
+        /// <param name="permits">权限id组</param>
+        /// <returns></returns>
+        public Task<bool> SetRolePermit(int roleId, string permits)
+        {
+            var rolePermitList = new List<SysRolePermit>();
+            foreach (var item in permits.SplitWithComma())
+            {
+                rolePermitList.Add(new SysRolePermit()
+                {
+                    PermitId = item.ObjToInt(),
+                    RoleId = roleId,
+                });
+            }
+            _freeSql.Transaction(() =>
+            {
+                _freeSql.Delete<SysRolePermit>().Where(p => p.RoleId == roleId).ExecuteAffrowsAsync();
+                _freeSql.Insert(rolePermitList).ExecuteAffrowsAsync();
+            });
+            return Task.FromResult(true);
+        }
     }
 }

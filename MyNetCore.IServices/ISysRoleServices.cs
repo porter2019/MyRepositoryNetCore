@@ -36,5 +36,13 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<List<Model.Dto.SysRoleModuleGroupModel>> GetPermitListByRoleId(int roleId);
 
+        /// <summary>
+        /// 设置用户组权限
+        /// </summary>
+        /// <param name="roleId">用户组id</param>
+        /// <param name="permits">权限id组</param>
+        /// <returns></returns>
+        Task<bool> SetRolePermit(int roleId, string permits);
+
     }
 }
