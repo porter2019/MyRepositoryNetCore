@@ -17,10 +17,12 @@ namespace MyNetCore.Services
     public class SysUserServices : BaseServices<SysUser, int>, ISysUserServices
     {
         private readonly ISysUserRepository _sysUserRepository;
+        private readonly IFreeSql _fsq;
 
-        public SysUserServices(SysUserRepository sysUserRepository) : base(sysUserRepository)
+        public SysUserServices(SysUserRepository sysUserRepository, IFreeSql fsq) : base(sysUserRepository)
         {
             _sysUserRepository = sysUserRepository;
+            _fsq = fsq;
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param entity=""></param>
         /// <returns></returns>
-        public async Task<SysUser> Modify(SysUser entity)
+        public async Task<SysUser> Modify(SysUserView entity)
         {
             if (await CheckLoginNameExists(entity.UserId, entity.LoginName))
                 throw new Exception($"登录名：【{entity.LoginName}】已存在");
@@ -64,20 +66,36 @@ namespace MyNetCore.Services
             {
                 entity.Password = entity.Password.EncryptMD5Encode();
             }
-            return await _sysUserRepository.InsertOrUpdateAsync(entity);
-        }
+            //工作单元
+            using (var uow = _fsq.CreateUnitOfWork())
+            {
+                var userRepo = uow.GetRepository<SysUser>();
+                userRepo.UnitOfWork = uow;
+                var userRoleRepo = uow.GetRepository<SysRoleUser>();
+                userRoleRepo.UnitOfWork = uow;
 
-        /// <summary>
-        /// 分页查询
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="total"></param>
-        /// <returns></returns>
-        public Task<List<SysUser>> GetPageListAsync(Model.RequestModel.SysUserPageModel model, out long total)
-        {
-            model.PageInfo.Where = model.BuildPageSearchWhere();
+                var newEntity = await userRepo.InsertOrUpdateAsync(entity);
+                var insertRoleList = new List<SysRoleUser>();
+                //处理用户组
+                if (entity.RoleIdArray != null)
+                {
+                    foreach (var roleId in entity.RoleIdArray)
+                    {
+                        insertRoleList.Add(new SysRoleUser()
+                        {
+                            RoleId = roleId,
+                            UserId = newEntity.UserId,
+                        });
+                    }
+                }
+                //删除之前的
+                await userRoleRepo.DeleteAsync(p => p.UserId == newEntity.Id);
+                await userRoleRepo.InsertAsync(insertRoleList);
 
-            return _sysUserRepository.GetPageListAsync(model.PageInfo, out total);
+                uow.Commit();
+            }
+            entity.Password = "@@**@@";
+            return entity;
         }
 
         /// <summary>

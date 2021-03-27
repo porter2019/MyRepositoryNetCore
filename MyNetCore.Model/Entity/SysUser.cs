@@ -40,4 +40,46 @@ namespace MyNetCore.Model.Entity
         public bool Status { get; set; } = true;
 
     }
+
+    /// <summary>
+    /// 系统用户视图，包含所属组信息
+    /// </summary>
+    [FsTable("系统用户视图", Name = "SysUserView", DisableSyncStructure = true)]
+    public class SysUserView : SysUser
+    {
+        /// <summary>
+        /// 组信息
+        /// </summary>
+        [FsColumn("组信息", false, 255)]
+        public string RoleInfo { get; set; }
+
+        private int[] roleIdArray;
+        /// <summary>
+        /// 组id，用于前端还原显示
+        /// </summary>
+        public int[] RoleIdArray
+        {
+            get
+            {
+                if (RoleInfo.IsNull()) return roleIdArray;
+                var tempArrList = new List<int>();
+                foreach (var item in RoleInfo.SplitWithComma())
+                {
+                    var roleArr = item.SplitWithSemicolon();
+                    if (roleArr.Length == 2)
+                    {
+                        var roleId = roleArr[0].ObjToInt(-1);
+                        if (roleId != -1)
+                            tempArrList.Add(roleId);
+                    }
+                }
+                return tempArrList.ToArray();
+            }
+            set
+            {
+                roleIdArray = value;
+            }
+        }
+
+    }
 }

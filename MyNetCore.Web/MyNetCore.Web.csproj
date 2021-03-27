@@ -2,12 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>9986cfd6-ba91-44cc-b63e-f38c113a2dc2</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
     <DocumentationFile>..\MyNetCore.Web\bin\Debug\net5.0\MyNetCore.Web.xml</DocumentationFile>
   </PropertyGroup>
+
+  <!--发布时包含Content目录-->
+  <ItemGroup>
+    <Content Include="Content\**" CopyToPublishDirectory="PreserveNewest"></Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyNetCore.Common\MyNetCore.Common.csproj" />

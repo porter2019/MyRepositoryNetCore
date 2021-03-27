@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
+using System.IO;
 
 namespace MyNetCore.Web.ApiControllers
 {
@@ -109,6 +110,71 @@ namespace MyNetCore.Web.ApiControllers
             _freeSql.CodeFirst.SyncStructure(initTypes.ToArray());
 
             return ApiResult.OK("同步数据库结构成功");
+        }
+
+        /// <summary>
+        /// 同步数据库视图
+        /// 执行Model\ViewSQL目录下的sql文件
+        /// </summary>
+        /// <param name="_freeSql"></param>
+        /// <returns></returns>
+        [HttpGet, Route("view/sync")]
+        public ApiResult InitView([FromServices] IFreeSql _freeSql)
+        {
+            var projectMainName = AppDomain.CurrentDomain.GetProjectMainName();
+
+            //刷新视图
+            string sql = "select TABLE_NAME from INFORMATION_SCHEMA.VIEWS order by TABLE_NAME";
+            var viewList = _freeSql.Ado.Query<string>(sql);
+            foreach (var viewName in viewList)
+            {
+                sql = String.Format("exec sp_refreshview {0}", viewName);
+                _freeSql.Ado.ExecuteNonQuery(sql);
+            }
+
+            //更新视图
+            var domainDir = AppDomain.CurrentDomain.BaseDirectory;//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web\bin\Debug\net5.0\
+            var baseDir = domainDir.Substring(0, domainDir.LastIndexOf("\\bin"));//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web
+            //当前解决方案目录
+            //var solutionPath = baseDir.Replace($"{AppDomain.CurrentDomain.FriendlyName}", "");//C:\WorkSpace\GitHub\MyRepositoryNetCore\
+            var viewSqlRootDir = baseDir + "\\Content\\ViewSQL\\";//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web\Content\ViewSQL\
+            if (!Directory.Exists(viewSqlRootDir)) return ApiResult.OK("视图根目录不存在，此次仅刷新已有的视图");
+
+            var sqlFileList = Directory.GetFiles(viewSqlRootDir, "*.sql", SearchOption.AllDirectories);
+            foreach (var sqlFilePath in sqlFileList)
+            {
+                var sqlViewText = System.IO.File.ReadAllText(sqlFilePath);
+                if (sqlViewText.IsNull()) continue;
+
+                var arrSqlView = sqlViewText.Split(new string[2]{
+                                        "\r\ngo\r\n",
+                                        "\r\nGO\r\n"
+                                    }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var sqlItem in arrSqlView)
+                {
+                    if (string.IsNullOrEmpty(sqlItem)) continue;
+                    string execSql = sqlItem;
+
+                    try
+                    {
+                        if (sqlItem.EndsWith("go") || sqlItem.EndsWith("GO"))
+                        {
+                            execSql = sqlItem.Substring(0, sqlItem.Length - 2);
+                        }
+
+                        _freeSql.Ado.ExecuteNonQuery(execSql);
+                    }
+
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"执行ViewSql文件出错，文件：{sqlFilePath}，错误信息：{e.Message}");
+                        continue;
+                    }
+                }
+            }
+
+            return ApiResult.OK();
         }
 
         /// <summary>

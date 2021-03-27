@@ -13,7 +13,7 @@ namespace MyNetCore.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class BaseMyRepository<TEntity, TKey> : BaseRepository<TEntity, TKey>, IBaseMyRepository<TEntity> where TEntity : Model.BaseEntity
+    public class BaseMyRepository<TEntity, TKey> : BaseRepository<TEntity, TKey>, IBaseMyRepository<TEntity> where TEntity : class, new() //Model.BaseEntity
     {
         private readonly IFreeSql _freeSql;
 
@@ -293,6 +293,49 @@ namespace MyNetCore.Repository
             return _freeSql.Select<TEntity>().Where(where).ToOneAsync<REntity>();
         }
 
+        #region 视图
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns>REntity</returns>
+        public REntity GetModelView<REntity>(object dywhere) where REntity : class
+        {
+            return _freeSql.Select<REntity>(dywhere).ToOne();
+        }
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns>REntity</returns>
+        public Task<REntity> GetModelViewAsync<REntity>(object dywhere) where REntity : class
+        {
+            return _freeSql.Select<REntity>(dywhere).ToOneAsync();
+        }
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns>REntity</returns>
+        public REntity GetModelView<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>().Where(where).ToOne();
+        }
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns>REntity</returns>
+        public Task<REntity> GetModelViewAsync<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>().Where(where).ToOneAsync();
+        }
+
+        #endregion
 
         #endregion
 
@@ -390,6 +433,56 @@ namespace MyNetCore.Repository
             return _freeSql.Select<TEntity>().Where(where, parms).ToListAsync<REntity>();
         }
 
+        #region 视图
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public List<REntity> GetListView<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>().Where(exp).ToList();
+        }
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<REntity>> GetListViewAsync<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>().Where(exp).ToListAsync();
+        }
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public List<REntity> GetListView<REntity>(string where, object parms = null) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>().Where(where, parms).ToList();
+        }
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<REntity>> GetListViewAsync<REntity>(string where, object parms = null) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>().Where(where, parms).ToListAsync();
+        }
+
+        #endregion
+
         #endregion
 
         #region 查询分页
@@ -405,7 +498,8 @@ namespace MyNetCore.Repository
         public List<TEntity> GetPageList(PageOptions<TEntity> options, out long total)
         {
             return _freeSql.Select<TEntity>()
-                        .WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
+                        //.WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
+                        .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToList();
@@ -420,7 +514,8 @@ namespace MyNetCore.Repository
         public Task<List<TEntity>> GetPageListAsync(PageOptions<TEntity> options, out long total)
         {
             return _freeSql.Select<TEntity>()
-                        .WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
+                        //.WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
+                        .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToListAsync();
@@ -435,7 +530,8 @@ namespace MyNetCore.Repository
         public List<REntity> GetPageList<REntity>(PageOptions<TEntity> options, out long total)
         {
             return _freeSql.Select<TEntity>()
-                        .WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
+                        //.WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
+                        .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToList<REntity>();
@@ -450,7 +546,8 @@ namespace MyNetCore.Repository
         public Task<List<REntity>> GetPageListAsync<REntity>(PageOptions<TEntity> options, out long total)
         {
             return _freeSql.Select<TEntity>()
-                        .WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
+                        //.WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
+                        .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToListAsync<REntity>();
@@ -521,6 +618,73 @@ namespace MyNetCore.Repository
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToListAsync<REntity>();
+        }
+
+        #endregion
+
+        #region 视图
+
+        /// <summary>
+        /// 视图分页查询，返回视图对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageListView<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>()
+                        .Where("1=1 " + options.Where)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToList();
+        }
+
+        /// <summary>
+        /// 视图分页查询，返回视图对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListViewAsync<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>()
+                        //.WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
+                        .Where("1=1 " + options.Where)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToListAsync();
+        }
+
+        /// <summary>
+        /// 视图分页查询，使用sql，返回视图对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageListView<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>()
+                        .WithSql(sql)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToList();
+        }
+
+        /// <summary>
+        /// 视图分页查询，使用sql，返回视图对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListViewAsync<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _freeSql.Select<REntity>()
+                        .WithSql(sql)
+                        .Count(out total).Page(options.PageIndex, options.PageSize)
+                        .OrderBy(options.OrderBy)
+                        .ToListAsync();
         }
 
         #endregion

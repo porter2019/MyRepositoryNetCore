@@ -43,9 +43,9 @@ namespace MyNetCore.Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("get/pagelist")]
         [Permission("查看", "show")]
-        public async Task<ApiResult> GetPageList(Model.RequestModel.SysUserPageModel model)
+        public async Task<ApiResult> GetPageList(Model.RequestModel.SysUserViewPageModel model)
         {
-            var data = await _sysUserServices.GetPageListAsync(model, out long total);
+            var data = await _sysUserServices.GetPageListViewBasicAsync(model, out long total);
 
             return ApiResult.OK(total, data);
         }
@@ -61,10 +61,11 @@ namespace MyNetCore.Web.ApiControllers
         {
             if (id < 1)
             {
-                return ApiResult.OK(new Model.Entity.SysUser());
+                return ApiResult.OK(new Model.Entity.SysUserView());
             }
-            var data = await _sysUserServices.GetModelAsync(id);
-            if (data == null) data = new Model.Entity.SysUser();
+
+            var data = await _sysUserServices.GetModelViewAsync<Model.Entity.SysUserView>(id);
+            if (data == null) data = new Model.Entity.SysUserView();
             else data.Password = "@@**@@";
             return ApiResult.OK(data);
         }
@@ -90,7 +91,7 @@ namespace MyNetCore.Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("modify")]
         [Permission("编辑", "modify")]
-        public async Task<ApiResult> Post(Model.Entity.SysUser model)
+        public async Task<ApiResult> Post(Model.Entity.SysUserView model)
         {
             var data = await _sysUserServices.Modify(model);
 

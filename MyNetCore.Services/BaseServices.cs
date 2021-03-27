@@ -14,7 +14,7 @@ namespace MyNetCore.Services
     /// 数据库实体服务基础类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public class BaseServices<TEntity, TKey> : IBaseServices<TEntity> where TEntity : Model.BaseEntity, new()
+    public class BaseServices<TEntity, TKey> : IBaseServices<TEntity> where TEntity : class, new() //Model.BaseEntity, new()
     {
         private IBaseMyRepository<TEntity> _baseRepo;
 
@@ -331,6 +331,49 @@ namespace MyNetCore.Services
             return _baseRepo.GetModelAsync<REntity>(where);
         }
 
+        #region 视图
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns>REntity</returns>
+        public REntity GetModelView<REntity>(object dywhere) where REntity : class
+        {
+            return _baseRepo.GetModelView<REntity>(dywhere);
+        }
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns>REntity</returns>
+        public Task<REntity> GetModelViewAsync<REntity>(object dywhere) where REntity : class
+        {
+            return _baseRepo.GetModelViewAsync<REntity>(dywhere);
+        }
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns>REntity</returns>
+        public REntity GetModelView<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new()
+        {
+            return _baseRepo.GetModelView(where);
+        }
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns>REntity</returns>
+        public Task<REntity> GetModelViewAsync<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new()
+        {
+            return _baseRepo.GetModelViewAsync(where);
+        }
+
+        #endregion
 
         #endregion
 
@@ -428,6 +471,56 @@ namespace MyNetCore.Services
             return _baseRepo.GetListAsync<REntity>(where, parms);
         }
 
+        #region 视图
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public List<REntity> GetListView<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new()
+        {
+            return _baseRepo.GetListView(exp);
+        }
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<REntity>> GetListViewAsync<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new()
+        {
+            return _baseRepo.GetListViewAsync(exp);
+        }
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public List<REntity> GetListView<REntity>(string where, object parms = null) where REntity : class, new()
+        {
+            return _baseRepo.GetListView<REntity>(where, parms);
+        }
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<REntity>> GetListViewAsync<REntity>(string where, object parms = null) where REntity : class, new()
+        {
+            return _baseRepo.GetListViewAsync<REntity>(where, parms);
+        }
+
+        #endregion
+
         #endregion
 
         #region 查询分页
@@ -457,6 +550,30 @@ namespace MyNetCore.Services
         }
 
         /// <summary>
+        /// 分页查询，自动构建where查询条件
+        /// </summary>
+        /// <param name="baseOption"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<TEntity> GetPageListBasic(Model.BaseRequestPageViewModel<TEntity> baseOption, out long total)
+        {
+            baseOption.PageInfo.Where = baseOption.BuildPageSearchWhere();
+            return GetPageList(baseOption.PageInfo, out total);
+        }
+
+        /// <summary>
+        /// 分页查询，自动构建where查询条件
+        /// </summary>
+        /// <param name="baseOption"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<TEntity>> GetPageListBasicAsync(Model.BaseRequestPageViewModel<TEntity> baseOption, out long total)
+        {
+            baseOption.PageInfo.Where = baseOption.BuildPageSearchWhere();
+            return GetPageListAsync(baseOption.PageInfo, out total);
+        }
+
+        /// <summary>
         /// 分页查询，返回DTO对象
         /// </summary>
         /// <param name="options"></param>
@@ -477,6 +594,32 @@ namespace MyNetCore.Services
         {
             return _baseRepo.GetPageListAsync<REntity>(options, out total);
         }
+
+        /// <summary>
+        /// 分页查询，返回DTO对象，自动构建where查询条件
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageBasicList<REntity>(Model.BaseRequestPageViewModel<TEntity> options, out long total)
+        {
+            options.PageInfo.Where = options.BuildPageSearchWhere();
+            return GetPageList<REntity>(options.PageInfo, out total);
+        }
+
+        /// <summary>
+        /// 分页查询，返回DTO对象，自动构建where查询条件
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListBasicAsync<REntity>(Model.BaseRequestPageViewModel<TEntity> options, out long total)
+        {
+            options.PageInfo.Where = options.BuildPageSearchWhere();
+            return GetPageListAsync<REntity>(options.PageInfo, out total);
+        }
+
+
         #endregion
 
         #region Sql
@@ -506,6 +649,32 @@ namespace MyNetCore.Services
         }
 
         /// <summary>
+        /// 分页查询，使用sql，自动构建where查询条件
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<TEntity> GetPageBasicList(string sql, Model.BaseRequestPageViewModel<TEntity> options, out long total)
+        {
+            options.PageInfo.Where = options.BuildPageSearchWhere();
+            return GetPageList(sql, options.PageInfo, out total);
+        }
+
+        /// <summary>
+        /// 分页查询，使用sql，自动构建where查询条件
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<TEntity>> GetPageListBasicAsync(string sql, Model.BaseRequestPageViewModel<TEntity> options, out long total)
+        {
+            options.PageInfo.Where = options.BuildPageSearchWhere();
+            return GetPageListAsync(sql, options.PageInfo, out total);
+        }
+
+        /// <summary>
         /// 分页查询，使用sql，返回DTO对象
         /// </summary>
         /// <param name="sql">完整sql查询</param>
@@ -527,6 +696,106 @@ namespace MyNetCore.Services
         public Task<List<REntity>> GetPageListAsync<REntity>(string sql, PageOptions<TEntity> options, out long total)
         {
             return _baseRepo.GetPageListAsync<REntity>(sql, options, out total);
+        }
+
+        /// <summary>
+        /// 分页查询，使用sql，返回DTO对象，自动构建where查询条件
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageBasicList<REntity>(string sql, Model.BaseRequestPageViewModel<TEntity> options, out long total)
+        {
+            options.PageInfo.Where = options.BuildPageSearchWhere();
+            return GetPageList<REntity>(options.PageInfo, out total);
+        }
+
+        /// <summary>
+        /// 分页查询，使用sql，返回DTO对象，自动构建where查询条件
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListBasicAsync<REntity>(string sql, Model.BaseRequestPageViewModel<TEntity> options, out long total)
+        {
+            options.PageInfo.Where = options.BuildPageSearchWhere();
+            return GetPageListAsync<REntity>(options.PageInfo, out total);
+        }
+
+        #endregion
+
+        #region 视图
+
+        /// <summary>
+        /// 视图分页查询，返回视图对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageListView<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _baseRepo.GetPageListView(options, out total);
+        }
+
+        /// <summary>
+        /// 视图分页查询，返回视图对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListViewAsync<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _baseRepo.GetPageListViewAsync(options, out total);
+        }
+
+        /// <summary>
+        /// 视图分页查询，使用sql，返回视图对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageListView<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _baseRepo.GetPageListView(sql, options, out total);
+        }
+
+        /// <summary>
+        /// 视图分页查询，使用sql，返回视图对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListViewAsync<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new()
+        {
+            return _baseRepo.GetPageListViewAsync(sql, options, out total);
+        }
+
+        /// <summary>
+        /// 分页查询，自动构建where查询条件
+        /// </summary>
+        /// <param name="baseOption"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public List<REntity> GetPageListViewBasic<REntity>(Model.BaseRequestPageViewModel<REntity> baseOption, out long total) where REntity : class, new()
+        {
+            baseOption.PageInfo.Where = baseOption.BuildPageSearchWhere();
+            return GetPageListView<REntity>(baseOption.PageInfo, out total);
+        }
+
+        /// <summary>
+        /// 分页查询，自动构建where查询条件
+        /// </summary>
+        /// <param name="baseOption"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public Task<List<REntity>> GetPageListViewBasicAsync<REntity>(Model.BaseRequestPageViewModel<REntity> baseOption, out long total) where REntity : class, new()
+        {
+            baseOption.PageInfo.Where = baseOption.BuildPageSearchWhere();
+            return GetPageListViewAsync<REntity>(baseOption.PageInfo, out total);
         }
 
         #endregion

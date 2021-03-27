@@ -11,7 +11,7 @@ namespace MyNetCore.IRepository
     /// 拓展FreeSql的IBaseRepository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public interface IBaseMyRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
+    public interface IBaseMyRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, new() //BaseEntity
     {
 
         #region 修改
@@ -194,6 +194,37 @@ namespace MyNetCore.IRepository
         /// <returns>REntity</returns>
         Task<REntity> GetModelAsync<REntity>(Expression<Func<TEntity, bool>> where);
 
+        #region 视图
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns>REntity</returns>
+        REntity GetModelView<REntity>(object dywhere) where REntity : class;
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型，传入动态条件，如：主键值 | new[]{主键值1,主键值2} | TEntity1 | new[]{TEntity1,TEntity2} | new{id=1}
+        /// </summary>
+        /// <param name="dywhere">主键值、主键值集合、实体、实体集合、匿名对象、匿名对象集合</param>
+        /// <returns>REntity</returns>
+        Task<REntity> GetModelViewAsync<REntity>(object dywhere) where REntity : class;
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns>REntity</returns>
+        REntity GetModelView<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new();
+
+        /// <summary>
+        /// 查询单条视图数据，返回视图类型
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns>REntity</returns>
+        Task<REntity> GetModelViewAsync<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new();
+
+        #endregion
 
         #endregion
 
@@ -266,6 +297,45 @@ namespace MyNetCore.IRepository
         /// <param name="parms">参数</param>
         /// <returns>List<TEntity></returns>
         Task<List<REntity>> GetListAsync<REntity>(string where, object parms = null);
+
+
+        #region 视图
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        List<REntity> GetListView<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new();
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <returns>List<TEntity></returns>
+        Task<List<REntity>> GetListViewAsync<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new();
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        List<REntity> GetListView<REntity>(string where, object parms = null) where REntity : class, new();
+
+        /// <summary>
+        /// 查询视图列表，返回视图对象,原生sql语法条件，Where("id = @id", new { id = 1 })
+        /// 提示：parms 参数还可以传 Dictionary<string, object>
+        /// </summary>
+        /// <param name="where">sql语法条件</param>
+        /// <param name="parms">参数</param>
+        /// <returns>List<TEntity></returns>
+        Task<List<REntity>> GetListViewAsync<REntity>(string where, object parms = null) where REntity : class, new();
+
+        #endregion
 
         #endregion
 
@@ -344,6 +414,44 @@ namespace MyNetCore.IRepository
         /// <param name="total"></param>
         /// <returns></returns>
         Task<List<REntity>> GetPageListAsync<REntity>(string sql, PageOptions<TEntity> options, out long total);
+
+        #endregion
+
+        #region 视图
+
+        /// <summary>
+        /// 视图分页查询，返回视图对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        List<REntity> GetPageListView<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new();
+
+        /// <summary>
+        /// 视图分页查询，返回视图对象
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<REntity>> GetPageListViewAsync<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new();
+
+        /// <summary>
+        /// 视图分页查询，使用sql，返回视图对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        List<REntity> GetPageListView<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new();
+
+        /// <summary>
+        /// 视图分页查询，使用sql，返回视图对象
+        /// </summary>
+        /// <param name="sql">完整sql查询</param>
+        /// <param name="options"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<REntity>> GetPageListViewAsync<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new();
 
         #endregion
 

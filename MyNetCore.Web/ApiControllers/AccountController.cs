@@ -56,11 +56,10 @@ namespace MyNetCore.Web.ApiControllers
         /// <summary>
         /// 获取用户的权限列表
         /// </summary>
-        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost, Route("permissions")]
         [Permission("")]
-        public Task<ApiResult> GetPermissions(Model.BaseRequestViewModel model)
+        public Task<ApiResult> GetPermissions()
         {
             return Task.FromResult(ApiResult.OK("OK", new List<string>() { "permission.browse", "permission.create", "permission.edit", "permission.remove", "sysRole.show", "sysRole.index" }));
         }

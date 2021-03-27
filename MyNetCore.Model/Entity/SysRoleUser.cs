@@ -25,10 +25,19 @@ namespace MyNetCore.Model.Entity
         public int RoleId { set; get; }
 
         /// <summary>
+        /// 用户组信息
+        /// </summary>
+        public virtual SysRole SysRole { get; set; }
+
+        /// <summary>
         /// 用户Id
         /// </summary>
         [FsColumn("用户Id", true)]
         public int UserId { set; get; }
 
+        /// <summary>
+        /// 用户信息
+        /// </summary>
+        public virtual SysUser SysUser { get; set; }
     }
 }

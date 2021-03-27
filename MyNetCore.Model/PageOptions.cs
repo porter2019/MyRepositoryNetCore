@@ -10,7 +10,7 @@ namespace MyNetCore
     /// <summary>
     /// 分页条件
     /// </summary>
-    public class PageOptions<TEntity> where TEntity : Model.BaseEntity
+    public class PageOptions<TEntity> //where TEntity : class//Model.BaseEntity
     {
         private int _pageIndex = 1;
         /// <summary>

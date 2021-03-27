@@ -9,13 +9,8 @@ namespace MyNetCore.Model.RequestModel
     /// <summary>
     /// 查询系统用户分页列表所需参数
     /// </summary>
-    public class SysUserPageModel : BaseRequestViewModel
+    public class SysUserViewPageModel : BaseRequestPageViewModel<Entity.SysUserView>
     {
-        /// <summary>
-        /// 分页数据
-        /// </summary>
-        public PageOptions<Entity.SysUser> PageInfo { get; set; }
-
         /// <summary>
         /// 登录名
         /// </summary>
@@ -27,6 +22,24 @@ namespace MyNetCore.Model.RequestModel
         /// </summary>
         [PageQuery(PageQueryColumnMatchType.CharIndex)]
         public string UserName { get; set; }
+
+        private string roleId = "";
+        /// <summary>
+        /// 用户组
+        /// </summary>
+        [PageQuery(PageQueryColumnMatchType.CharIndex, ColumnName = "RoleInfo")]
+        public string RoleId
+        {
+            get
+            {
+                if (roleId.IsNotNull()) return $",{roleId};";
+                else return roleId;
+            }
+            set
+            {
+                roleId = value;
+            }
+        }
 
         /// <summary>
         /// 创建时间

@@ -39,6 +39,5 @@ namespace MyNetCore.Model.Entity
         [FsColumn("状态")]
         public bool Status { get; set; } = true;
 
-
     }
 }

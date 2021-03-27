@@ -9,19 +9,13 @@ namespace MyNetCore.Model.RequestModel
     /// <summary>
     /// 查询系统用户组分页列表所需参数
     /// </summary>
-    public class SysRolePageModel : BaseRequestViewModel
+    public class SysRolePageModel : BaseRequestPageViewModel<Entity.SysRole>
     {
-        /// <summary>
-        /// 分页数据
-        /// </summary>
-        public PageOptions<Entity.SysRole> PageInfo { get; set; }
-
         /// <summary>
         /// 用户组名
         /// </summary>
         [PageQuery(PageQueryColumnMatchType.CharIndex)]
         public string RoleName { get; set; }
-
         /// <summary>
         /// 创建时间
         /// </summary>
