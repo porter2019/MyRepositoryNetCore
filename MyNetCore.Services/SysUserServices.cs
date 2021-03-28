@@ -18,11 +18,13 @@ namespace MyNetCore.Services
     {
         private readonly ISysUserRepository _sysUserRepository;
         private readonly IFreeSql _fsq;
+        private readonly ISysRoleRepository _sysRoleRepository;
 
-        public SysUserServices(SysUserRepository sysUserRepository, IFreeSql fsq) : base(sysUserRepository)
+        public SysUserServices(SysUserRepository sysUserRepository, IFreeSql fsq, SysRoleRepository sysRoleRepository) : base(sysUserRepository)
         {
             _sysUserRepository = sysUserRepository;
             _fsq = fsq;
+            _sysRoleRepository = sysRoleRepository;
         }
 
         /// <summary>
@@ -117,6 +119,25 @@ namespace MyNetCore.Services
             };
             responseModel.Token = $"{entity.LoginName}-{responseModel.FailureTime}";
             return responseModel;
+        }
+
+        /// <summary>
+        /// 根据用户id获取所有的权限
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<string>> GetPermissionsByUserId(int userId)
+        {
+            var entityUser = GetModel(userId);
+            if (entityUser == null) throw new NullReferenceException("用户不存在");
+            if (!entityUser.Status) throw new NullReferenceException("该用户已被禁用");
+
+            List<SysRole> roleList = await _sysRoleRepository.GetRoleListByUserId(userId);
+            if (!roleList.Any()) throw new Exception("该用户没有归属的用户组");
+
+            if (roleList.Any(p => p.IsSuper)) return new List<string>() { "ALL" };
+            var roleIds = roleList.Select(p => p.RoleId).ToList().Join();
+            return await _sysRoleRepository.GetPermissionsByRoleIds(roleIds);
         }
 
     }

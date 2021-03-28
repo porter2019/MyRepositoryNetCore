@@ -16,6 +16,9 @@
         /// </summary>
         public const string CurrentEnvironmentName = "ASPNETCORE_ENVIRONMENT";
 
-
+        /// <summary>
+        /// token在报文头中的键名
+        /// </summary>
+        public const string AuthenticationTokenKey = "x-auth-token";
     }
 }

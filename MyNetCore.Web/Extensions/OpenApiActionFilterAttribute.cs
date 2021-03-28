@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MyNetCore.IServices;
 
 namespace MyNetCore.Web
 {
@@ -16,11 +17,13 @@ namespace MyNetCore.Web
     {
         private readonly IHostEnvironment _hostEnvironment;
         private readonly ILogger<OpenApiActionFilterAttribute> _logger;
+        private readonly ISysUserServices _sysUserServices;
 
-        public OpenApiActionFilterAttribute(IHostEnvironment hostEnvironment, ILogger<OpenApiActionFilterAttribute> logger)
+        public OpenApiActionFilterAttribute(IHostEnvironment hostEnvironment, ILogger<OpenApiActionFilterAttribute> logger, ISysUserServices sysUserServices)
         {
             _hostEnvironment = hostEnvironment;
             _logger = logger;
+            _sysUserServices = sysUserServices;
         }
 
         /// <summary>
@@ -56,7 +59,27 @@ namespace MyNetCore.Web
 
             var controller = context.Controller as BaseOpenApiController;
             //获取JWT中用户的信息
-            controller.CurrentUserInfo = new CurrentUserTickInfo() { UserId = 2, UserName = "管理员", LoginName = "admin", ExpireTime = DateTime.Now.AddDays(3) };
+            //controller.CurrentUserInfo = new CurrentUserTickInfo() { UserId = 2, UserName = "管理员", LoginName = "admin", ExpireTime = DateTime.Now.AddDays(3) };
+            var tokenValue = context.HttpContext.Request.Headers[GlobalVar.AuthenticationTokenKey].FirstOrDefault()?.ToString() ?? "";
+            if(tokenValue.IsNull())
+            {
+                context.Result = new ObjectResult(ApiResult.Anonymous());
+                return;
+            }
+
+            var loginName = tokenValue.Split("-")[0];
+            var userEntity = _sysUserServices.GetModel(p => p.LoginName == loginName);
+            if(userEntity == null)
+            {
+                context.Result = new ObjectResult(ApiResult.Anonymous());
+                return;
+            }
+            if (!userEntity.Status)
+            {
+                context.Result = new ObjectResult(ApiResult.Anonymous());
+                return;
+            }
+            controller.CurrentUserInfo = new CurrentUserTickInfo() { UserId = userEntity.Id, UserName = userEntity.UserName, LoginName = userEntity.LoginName, ExpireTime = DateTime.Now.AddDays(3) };
 
             if (controller.CurrentUserInfo == null)
             {

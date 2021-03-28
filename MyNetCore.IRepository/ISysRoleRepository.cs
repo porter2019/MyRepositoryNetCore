@@ -37,5 +37,19 @@ namespace MyNetCore.IRepository
         /// <returns></returns>
         Task<bool> SetRolePermit(int roleId, string permits);
 
+        /// <summary>
+        /// 根据用户id获取所属的用户组
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<List<SysRole>> GetRoleListByUserId(int userId);
+
+        /// <summary>
+        /// 根据组id获取所拥有的权限
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        Task<List<string>> GetPermissionsByRoleIds(string roleIds);
+
     }
 }

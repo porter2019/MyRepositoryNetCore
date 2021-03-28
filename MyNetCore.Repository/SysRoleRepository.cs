@@ -95,5 +95,31 @@ namespace MyNetCore.Repository
             });
             return Task.FromResult(true);
         }
+
+        /// <summary>
+        /// 根据用户id获取所属的用户组
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public Task<List<SysRole>> GetRoleListByUserId(int userId)
+        {
+            string sql = string.Format(@"select b.* from SysRoleUser as a inner join SysRole as b on a.RoleId = b.RoleId and a.UserId = {0} and b.IsDeleted = 0 and b.[Status] = 1", userId);
+            return _freeSql.Select<SysRole>().WithSql(sql).ToListAsync();
+        }
+
+        /// <summary>
+        /// 根据组id获取所拥有的权限
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public Task<List<string>> GetPermissionsByRoleIds(string roleIds)
+        {
+            string sql = string.Format(@"select DISTINCT (c.AliasName + '.' + b.AliasName) as auth from 
+                                            SysRolePermit as a left join SysPermit as b on a.PermitId = b.PermitId and a.IsDeleted = 0 and a.RoleId in({0}) 
+                                            left join SysHandler as c on b.HandlerId = c.HandlerId and c.IsDeleted=0", roleIds);
+
+            return _freeSql.Ado.QueryAsync<string>(sql);
+        }
+
     }
 }

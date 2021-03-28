@@ -29,6 +29,13 @@ namespace MyNetCore.IServices
         Task<Model.ResponseModel.LoginUserInfo> UserLogin(Model.RequestModel.SysUserLoginModel model);
 
         /// <summary>
+        /// 根据用户id获取所有的权限
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<List<string>> GetPermissionsByUserId(int userId);
+
+        /// <summary>
         /// 添加或修改用户
         /// </summary>
         /// <param name="entity"></param>

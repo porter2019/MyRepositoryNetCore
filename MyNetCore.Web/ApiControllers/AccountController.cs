@@ -59,9 +59,10 @@ namespace MyNetCore.Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("permissions")]
         [Permission("")]
-        public Task<ApiResult> GetPermissions()
+        public async Task<ApiResult> GetPermissions()
         {
-            return Task.FromResult(ApiResult.OK("OK", new List<string>() { "permission.browse", "permission.create", "permission.edit", "permission.remove", "sysRole.show", "sysRole.index" }));
+            var data = await _sysUserServices.GetPermissionsByUserId(CurrentUserInfo.UserId);
+            return ApiResult.OK(data);
         }
 
     }
