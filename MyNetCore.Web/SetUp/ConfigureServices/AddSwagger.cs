@@ -30,6 +30,27 @@ namespace MyNetCore.Web.SetUp
                     Description = $"{apiName} Http API V1",
                 });
                 c.OrderActionsBy(o => o.RelativePath);
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Description = "Token值",
+                    Name = GlobalVar.AuthenticationTokenKey,
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
+                        }
+                    });
 
                 var xmlList = new[] { $"{projectMainName}.Web.xml", $"{projectMainName}.Model.xml" };
                 for (int i = 0; i < xmlList.Length; i++)
@@ -39,6 +60,7 @@ namespace MyNetCore.Web.SetUp
                     c.IncludeXmlComments(xmlPath, i == 0);
                 }
                 c.DocumentFilter<HiddenApiFilter>();
+                c.SchemaFilter<HiddenApiSchemaFilter>();
             });
         }
     }

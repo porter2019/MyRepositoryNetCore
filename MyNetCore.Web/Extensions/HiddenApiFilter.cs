@@ -44,4 +44,19 @@ namespace MyNetCore.Web
 
         }
     }
+
+    /// <summary>
+    /// 自定义Swagger隐藏参数过滤器
+    /// </summary>
+    public class HiddenApiSchemaFilter : ISchemaFilter
+    {
+        public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+        {
+            var excludeProperties = new[] { "currentUserId", "currentUserName", "where", "orderBy" };
+
+            foreach (var prop in excludeProperties)
+                if (schema.Properties.ContainsKey(prop))
+                    schema.Properties.Remove(prop);
+        }
+    }
 }

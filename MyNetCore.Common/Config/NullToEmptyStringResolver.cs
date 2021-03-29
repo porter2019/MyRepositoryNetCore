@@ -55,6 +55,7 @@ namespace MyNetCore.Common.Config
             var result = _memberInfo.GetValue(target);
             if (_memberInfo.PropertyType == typeof(string) && result == null)
                 result = string.Empty;
+
             return result;
         }
 

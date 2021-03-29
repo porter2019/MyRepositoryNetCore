@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace MyNetCore.Common.Helper
+namespace MyNetCore
 {
     /// <summary>
     /// Json序列化
@@ -15,7 +10,7 @@ namespace MyNetCore.Common.Helper
         private static JsonSerializerSettings jsonSetting = new JsonSerializerSettings()
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            ContractResolver = new Config.NullToEmptyStringResolver(),
+            ContractResolver = new Common.Config.NullToEmptyStringResolver(),
             DateFormatString = "yyyy-MM-dd HH:mm:ss",
         };
 

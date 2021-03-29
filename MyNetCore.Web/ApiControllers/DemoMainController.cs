@@ -1,13 +1,9 @@
-﻿@model MyNetCore.Model.CodeGenerate.BaseCode
-@{
-    Layout = null;
-}
-/**
+﻿/**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：@(Model.ModelDesc)接口控制器
-*│　作    者：@Model.Author
+*│　描    述：演示主体接口控制器
+*│　作    者：杨习友
 *│　版    本：1.0 使用Razor引擎自动生成
-*│　创建时间：@Model.GeneratorTime
+*│　创建时间：2021-03-28 16:06:58
 *└──────────────────────────────────────────────────────────────┘
 */
 
@@ -23,33 +19,35 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace @(Model.ProjectName).Web.ApiControllers
+namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
-    /// @(Model.ModelDesc)管理
+    /// 演示主体管理
     /// </summary>
-	[PermissionHandler("所属模块", "@(Model.ModelDesc)", "@(Model.ModelVariableName)", 10)]
-	public class @(Model.ModelName)Controller : BaseOpenApiController
+	[PermissionHandler("演示", "演示主体", "demoMain", 10)]
+    public class DemoMainController : BaseOpenApiController
     {
-		private readonly ILogger<@(Model.ModelName)Controller> _logger;
-		private readonly I@(Model.ModelName)Services _@(Model.ModelVariableName)Services;
-		
-		public @(Model.ModelName)Controller(ILogger<@(Model.ModelName)Controller> logger, I@(Model.ModelName)Services @(Model.ModelVariableName)Services)
+        private readonly ILogger<DemoMainController> _logger;
+        private readonly IDemoMainServices _demoMainServices;
+        private readonly ICommonAttachServices _commonAttachServices;
+
+        public DemoMainController(ILogger<DemoMainController> logger, IDemoMainServices demoMainServices, ICommonAttachServices commonAttachServices)
         {
             _logger = logger;
-			_@(Model.ModelVariableName)Services = @(Model.ModelVariableName)Services;
+            _demoMainServices = demoMainServices;
+            _commonAttachServices = commonAttachServices;
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// 查询分页
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost, Route("get/pagelist")]
         [Permission("查看", "show")]
-        public async Task<ApiResult> GetPageList(Model.RequestModel.@(Model.ModelName)PageModel model)
+        public async Task<ApiResult> GetPageList(Model.RequestModel.DemoMainPageModel model)
         {
-            var data = await _@(Model.ModelVariableName)Services.GetPageListBasicAsync(model, out long total);
+            var data = await _demoMainServices.GetPageListBasicAsync(model, out long total);
 
             return ApiResult.OK(total, data);
         }
@@ -63,11 +61,19 @@ namespace @(Model.ProjectName).Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
-            if (id < 1) return ApiResult.OK( @("new Model.Entity."+ Model.ModelName)());
+            if (id < 1) return ApiResult.OK(new Model.Entity.DemoMain());
 
-            var data = await @('_')@(Model.ModelVariableName)Services.GetModelAsync(id);
-			
-			if (data == null) data = new Model.Entity.@(Model.ModelName)();
+            var data = await _demoMainServices.GetModelAsync(id);
+
+            if (data == null)
+            {
+                data = new Model.Entity.DemoMain();
+            }
+            else
+            {
+                data.Attachs = await _commonAttachServices.GetAttachList(id, typeof(Model.Entity.DemoMain));
+                data.ImageList = await _commonAttachServices.GetAttachList(id, typeof(Model.Entity.DemoMain), "ImageList");
+            }
 
             return ApiResult.OK(data);
         }
@@ -79,9 +85,9 @@ namespace @(Model.ProjectName).Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("modify")]
         [Permission("编辑", "modify")]
-        public async Task<ApiResult> Post(Model.Entity.@(Model.ModelName) model)
+        public async Task<ApiResult> Post(Model.Entity.DemoMain model)
         {
-            var data = await _@(Model.ModelVariableName)Services.InsertOrUpdateAsync(model);
+            var data = await _demoMainServices.Modify(model);
 
             return ApiResult.OK(data);
         }
@@ -95,10 +101,10 @@ namespace @(Model.ProjectName).Web.ApiControllers
         [Permission("删除", "delete")]
         public async Task<ApiResult> Delete(string ids)
         {
-            var affrows = await _@(Model.ModelVariableName)Services.DeleteByIdsAsync(ids.SplitWithComma());
+            var affrows = await _demoMainServices.DeleteByIdsAsync(ids.SplitWithComma());
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }
-		
+
     }
 }

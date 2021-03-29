@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -56,7 +57,7 @@ namespace MyNetCore.Model
         /// 创建时间，yyyy-MM-dd HH:mm
         /// </summary>
         [FsColumn("时间1", IsIgnore = true)]
-        public string CreateDate1
+        public string CreatedDate1
         {
             get
             {
@@ -75,6 +76,11 @@ namespace MyNetCore.Model
         //        return CreatedDate.ToString("MM-dd HH:mm");
         //    }
         //}
+
+        /// <summary>
+        /// 附件列表
+        /// </summary>
+        public List<Entity.CommonAttach> Attachs { get; set; } = new List<Entity.CommonAttach>();
 
         #endregion
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -1247,5 +1248,140 @@ namespace MyNetCore
         //}
 
         #endregion
+
+        #region 文件上传
+
+        /// <summary>
+        /// 保存附件
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public static List<UploadFileInfo> SaveAttach(this Microsoft.AspNetCore.Http.IFormFileCollection files, string tag)
+        {
+            if (files == null) return default;
+
+            if (string.IsNullOrWhiteSpace(tag)) tag = "attach";
+            var baseIODirectory = AppSettings.Get(GlobalVar.StaticFilesDirectoryKey);
+            var domain = AppSettings.Get("SysInfo:DomainName");
+            var baseRootFolder = "uploads";
+            var saveFolder = baseRootFolder + "/" + tag;   // 保存的相对目录 /uploads/attach
+
+            List<UploadFileInfo> fileList = new();
+            foreach (var file in files)
+            {
+                var fileExt = Path.GetExtension(file.FileName).ToLower(); //文件后缀名  .jpg
+                if (string.IsNullOrWhiteSpace(fileExt) && file.FileName == "blob") fileExt = ".jpg";
+                var tempFileIOFolder = Path.Combine(baseIODirectory, baseRootFolder, tag);
+                if (!Directory.Exists(tempFileIOFolder)) Directory.CreateDirectory(tempFileIOFolder);
+                var tempFileIOPath = tempFileIOFolder + Guid.NewGuid().ToString("N") + fileExt;
+                //保存
+                using (FileStream fs = new(tempFileIOPath, FileMode.Create))
+                {
+                    file.CopyTo(fs);
+                    fs.Flush();
+                    fs.Close();
+                }
+
+                var fileMD5 = FileHelper.GetMD5HashFromFile(tempFileIOPath);
+                var md5CR32 = CRC32.GetCRC32Str(fileMD5);//使用CR32是为了缩短用md5做文件名太长
+
+                var finalFileIOPath = Path.Combine(baseIODirectory, baseRootFolder, tag, md5CR32 + fileExt);
+                if (File.Exists(finalFileIOPath))
+                {
+                    File.Delete(tempFileIOPath);
+                }
+                else
+                {
+                    File.Move(tempFileIOPath, finalFileIOPath, true);
+                }
+
+                var finalFilePath = "/" + saveFolder + "/" + md5CR32 + fileExt;
+
+                fileList.Add(new UploadFileInfo()
+                {
+                    FileExt = fileExt,
+                    FilePath = finalFilePath,
+                    FileSourceName = file.FileName,
+                    FileSize = file.Length,
+                    FileType = file.ContentType,
+                    FileName = file.FileName,//md5CR32 + fileExt,
+                    FileWebPath = domain + finalFilePath
+                });
+
+            }
+
+            return fileList;
+        }
+
+
+        /// <summary>
+        /// 保存图片附件(图片会压缩，暂未实现)
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public static List<UploadFileInfo> SaveImageAttach(this Microsoft.AspNetCore.Http.IFormFileCollection files, string tag)
+        {
+            if (files == null) return default;
+
+            if (string.IsNullOrWhiteSpace(tag)) tag = "images";
+            var baseIODirectory = AppSettings.Get(GlobalVar.StaticFilesDirectoryKey);
+            var domain = AppSettings.Get("SysInfo:DomainName");
+            var baseRootFolder = "uploads";
+            var saveFolder = baseRootFolder + "/" + tag;   // 保存的相对目录 /uploads/attach
+
+            List<UploadFileInfo> fileList = new();
+            foreach (var file in files)
+            {
+                var fileExt = Path.GetExtension(file.FileName).ToLower(); //文件后缀名  .jpg
+                if (!FileHelper.IsImage(fileExt.Substring(1, fileExt.Length - 1))) continue;
+
+                var tempFileIOFolder = Path.Combine(baseIODirectory, baseRootFolder, tag);
+                if (!Directory.Exists(tempFileIOFolder)) Directory.CreateDirectory(tempFileIOFolder);
+                var tempFileIOPath = tempFileIOFolder + Guid.NewGuid().ToString("N") + fileExt;
+                //保存
+                using (FileStream fs = new(tempFileIOPath, FileMode.Create))
+                {
+                    file.CopyTo(fs);
+                    fs.Flush();
+                    fs.Close();
+                }
+
+                var fileMD5 = FileHelper.GetMD5HashFromFile(tempFileIOPath);
+                var md5CR32 = CRC32.GetCRC32Str(fileMD5);//使用CR32是为了缩短用md5做文件名太长
+
+                var finalFileIOPath = Path.Combine(baseIODirectory, baseRootFolder, tag, md5CR32 + fileExt);
+                if (File.Exists(finalFileIOPath))
+                {
+                    File.Delete(tempFileIOPath);
+                }
+                else
+                {
+                    File.Move(tempFileIOPath, finalFileIOPath, true);
+                }
+
+                //对图片进行压缩、调整图片尺寸等，使用Magick组件
+
+                var finalFilePath = "/" + saveFolder + "/" + md5CR32 + fileExt;
+
+                fileList.Add(new UploadFileInfo()
+                {
+                    FileExt = fileExt,
+                    FilePath = finalFilePath,
+                    FileSourceName = file.FileName,
+                    FileSize = file.Length,
+                    FileType = file.ContentType,
+                    FileName = file.FileName,//md5CR32 + fileExt,
+                    FileWebPath = domain + finalFilePath
+                });
+
+            }
+
+            return fileList;
+        }
+
+        #endregion
+
     }
 }

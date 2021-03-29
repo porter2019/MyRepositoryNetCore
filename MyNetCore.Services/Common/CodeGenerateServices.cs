@@ -43,7 +43,9 @@ namespace MyNetCore.Services
             //Services
             html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("ServicesTemplate"), model);
             SaveCodeToFile(html, $"{modelName}Services.cs", "Services");
-
+            //Model ReqeustPageQueryModel
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("ModelRequestPageModel"), model);
+            SaveCodeToFile(html, $"{modelName}PageModel.cs", "Model\\RequestModel");
             return ApiResult.OK();
         }
 

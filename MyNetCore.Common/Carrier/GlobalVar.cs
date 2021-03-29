@@ -17,6 +17,16 @@
         public const string CurrentEnvironmentName = "ASPNETCORE_ENVIRONMENT";
 
         /// <summary>
+        /// 配置文件中静态文件根目录key
+        /// </summary>
+        public const string StaticFilesDirectoryKey = "StaticFilesDirectory";
+
+        /// <summary>
+        /// 主站域名配置文件key
+        /// </summary>
+        public const string DomainUrlKey = "SysInfo:DomainName";
+
+        /// <summary>
         /// token在报文头中的键名
         /// </summary>
         public const string AuthenticationTokenKey = "x-auth-token";

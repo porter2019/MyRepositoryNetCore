@@ -32,12 +32,12 @@ namespace MyNetCore.Web.SetUp
                 if (context.Response.StatusCode == 404)
                 {
                     context.Response.StatusCode = 200;
-                    await context.Response.WriteAsync(Common.Helper.JsonHelper.Serialize(ApiResult.NotFound()), System.Text.Encoding.UTF8);
+                    await context.Response.WriteAsync(JsonHelper.Serialize(ApiResult.NotFound()), System.Text.Encoding.UTF8);
                 }
                 else if (context.Response.StatusCode == 401)
                 {
                     context.Response.StatusCode = 200;
-                    await context.Response.WriteAsync(Common.Helper.JsonHelper.Serialize(ApiResult.Anonymous()), System.Text.Encoding.UTF8);
+                    await context.Response.WriteAsync(JsonHelper.Serialize(ApiResult.Anonymous()), System.Text.Encoding.UTF8);
 
                 }
             }
