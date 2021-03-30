@@ -29,5 +29,16 @@ namespace MyNetCore.Repository
         {
             _freeSql = fsql;
         }
+
+        /// <summary>
+        /// 根据外键id获取明细列表
+        /// </summary>
+        /// <param name="mainId"></param>
+        /// <returns></returns>
+        public Task<List<DemoMainItem>> GetDemoMainItems(int mainId)
+        {
+            return _freeSql.Select<DemoMainItem>().Where(p => p.MainId == mainId).ToListAsync();
+        }
+
     }
 }

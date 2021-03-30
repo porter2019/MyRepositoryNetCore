@@ -27,12 +27,34 @@ namespace MyNetCore.Services
     public class DemoMainServices : BaseServices<DemoMain, int>, IDemoMainServices
     {
         private readonly IDemoMainRepository _demoMainRepository;
+        private readonly ICommonAttachServices _commonAttachServices;
         private readonly IFreeSql _fsq;
 
-        public DemoMainServices(DemoMainRepository demoMainRepository, IFreeSql fsq) : base(demoMainRepository)
+        public DemoMainServices(DemoMainRepository demoMainRepository, IFreeSql fsq, ICommonAttachServices commonAttachServices) : base(demoMainRepository)
         {
             _demoMainRepository = demoMainRepository;
+            _commonAttachServices = commonAttachServices;
             _fsq = fsq;
+        }
+
+        /// <summary>
+        /// 获取完整的model信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DemoMain> GetModelFull(int id)
+        {
+            if (id < 0) return new DemoMain();
+
+            var entity = await _demoMainRepository.GetModelAsync(id);
+            if (entity == null) return new DemoMain();
+
+            entity.Items = await _demoMainRepository.GetDemoMainItems(id);
+            entity.ImageList = await _commonAttachServices.GetAttachList(id, typeof(DemoMain), "ImageList");
+            entity.Attachs = await _commonAttachServices.GetAttachList(id, typeof(DemoMain));
+
+            return entity;
+
         }
 
         /// <summary>
@@ -50,9 +72,25 @@ namespace MyNetCore.Services
                 var attachRepo = uow.GetRepository<CommonAttach>();
                 attachRepo.UnitOfWork = uow;
 
+                var itemRepo = uow.GetRepository<DemoMainItem>();
+                itemRepo.UnitOfWork = uow;
+
                 var newEntity = await demoMainRepo.InsertOrUpdateAsync(entity);
                 var refModel = typeof(DemoMain).FullName;
 
+                //明细
+                await itemRepo.DeleteAsync(p => p.MainId == newEntity.MainId);
+                if (entity.Items != null)
+                {
+                    entity.Items.ForEach(item =>
+                    {
+                        item.MainId = newEntity.MainId;
+                        item.ItemId = 0;
+                    });
+                    await itemRepo.InsertAsync(entity.Items);
+                }
+
+                //附件
                 string[] fields = { "Attach", "ImageList" };
                 await attachRepo.DeleteAsync(p => p.RefId == newEntity.Id && p.RefModel == refModel && fields.Contains(p.Field));
 

@@ -22,6 +22,11 @@ namespace MyNetCore.IRepository
     /// </summary>
     public interface IDemoMainRepository : IBaseMyRepository<DemoMain>
     {
-
+        /// <summary>
+        /// 根据外键id获取明细列表
+        /// </summary>
+        /// <param name="mainId"></param>
+        /// <returns></returns>
+        Task<List<DemoMainItem>> GetDemoMainItems(int mainId);
     }
 }

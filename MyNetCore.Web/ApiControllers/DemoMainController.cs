@@ -61,19 +61,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
-            if (id < 1) return ApiResult.OK(new Model.Entity.DemoMain());
-
-            var data = await _demoMainServices.GetModelAsync(id);
-
-            if (data == null)
-            {
-                data = new Model.Entity.DemoMain();
-            }
-            else
-            {
-                data.Attachs = await _commonAttachServices.GetAttachList(id, typeof(Model.Entity.DemoMain));
-                data.ImageList = await _commonAttachServices.GetAttachList(id, typeof(Model.Entity.DemoMain), "ImageList");
-            }
+            var data = await _demoMainServices.GetModelFull(id);
 
             return ApiResult.OK(data);
         }

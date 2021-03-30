@@ -179,6 +179,12 @@ namespace MyNetCore.Model.Entity
         public decimal ValueDe { get; set; }
 
         /// <summary>
+        /// 总金额
+        /// </summary>
+        [FsColumn("总金额")]
+        public decimal TotalValue { get; set; }
+
+        /// <summary>
         /// 日期格式
         /// </summary>
         [FsColumn("日期格式"), ValidateRule(ValidateType = ValidateType.Date)]
