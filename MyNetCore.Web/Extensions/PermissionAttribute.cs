@@ -9,6 +9,10 @@ namespace MyNetCore.Web
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class PermissionAttribute : ActionFilterAttribute
     {
+        /// <summary>
+        /// 权限操作标识
+        /// </summary>
+        public PermissionAttribute() { }
 
         /// <summary>
         /// 只指定操作名

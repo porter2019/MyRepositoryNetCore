@@ -44,6 +44,9 @@ namespace MyNetCore.Web
             //添加FreeSql
             services.AddFreeSqlServices();
 
+            //Excel导入导出
+            //services.AddMagicodesIEServices();
+
             //添加缓存
             services.AddMyCache();
 
