@@ -1,9 +1,9 @@
 ﻿/**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：系统模块仓储实现                                                    
-*│　作    者：litdev                                              
-*│　版    本：1.0   模板代码自动生成                                              
-*│　创建时间：2021-03-03 17:10:42                            
+*│　描    述：经典父子分类仓储实现                                                    
+*│　作    者：杨习友                                             
+*│　版    本：1.0 使用Razor引擎自动生成                                              
+*│　创建时间：2021-04-04 17:30:04                            
 *└──────────────────────────────────────────────────────────────┘
 */
 
@@ -19,13 +19,13 @@ using MyNetCore.Model.Entity;
 namespace MyNetCore.Repository
 {
     /// <summary>
-    /// 系统模块仓储实现
+    /// 经典父子分类仓储实现
     /// </summary>
-    public class SysModuleRepository : BaseMyRepository<SysModule, int>, ISysModuleRepository
+    public class BookCategoryRepository : BaseMyRepository<BookCategory, int>, IBookCategoryRepository
     {
         private readonly IFreeSql _freeSql;
 
-        public SysModuleRepository(IFreeSql fsql) : base(fsql)
+        public BookCategoryRepository(IFreeSql fsql) : base(fsql)
         {
             _freeSql = fsql;
         }
