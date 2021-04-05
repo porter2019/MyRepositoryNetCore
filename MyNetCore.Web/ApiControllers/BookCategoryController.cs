@@ -96,13 +96,13 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("编辑", "modify")]
         public async Task<ApiResult> Post(Model.Entity.BookCategory model)
         {
-            var data = await _bookCategoryServices.InsertOrUpdateAsync(model);
+            var data = await _bookCategoryServices.Modify(model);
 
             return ApiResult.OK(data);
         }
 
         /// <summary>
-        /// 根据ids批量删除
+        /// 根据id删除
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

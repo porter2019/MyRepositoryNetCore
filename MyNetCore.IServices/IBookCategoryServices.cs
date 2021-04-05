@@ -22,6 +22,13 @@ namespace MyNetCore.IServices
     public interface IBookCategoryServices : IBaseServices<BookCategory>
     {
         /// <summary>
+        /// 添加或修改实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        Task<BookCategory> Modify(BookCategory entity);
+
+        /// <summary>
         /// 获取树形列表
         /// </summary>
         /// <param name="title"></param>
@@ -35,6 +42,12 @@ namespace MyNetCore.IServices
         /// <param name="isParent"></param>
         /// <returns></returns>
         Task<string> GetParentOrChildIds(int id, bool isParent);
+
+        /// <summary>
+        /// 执行更新层级关系的存储过程
+        /// </summary>
+        /// <returns></returns>
+        Task<int> ExecUpdateLayerProc();
 
         /// <summary>
         /// 根据id删除所有数据，包括子数据
