@@ -38,11 +38,11 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<BookCategory> Modify(BookCategory entity)
+        public async Task<BookCategory> ModifyAsync(BookCategory entity)
         {
             var resultData = await _bookCategoryRepository.InsertOrUpdateAsync(entity);
             //更新层级结构数据
-            await ExecUpdateLayerProc();
+            await ExecUpdateLayerProcAsync();
 
             return resultData;
         }
@@ -52,7 +52,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
-        public Task<List<BookCategory>> GetTreeList(string title)
+        public Task<List<BookCategory>> GetTreeListAsync(string title)
         {
             return _bookCategoryRepository.Select.WhereIf(title.IsNotNull(), p => p.Title.Contains(title)).OrderBy(p => p.OrderNo).ToTreeListAsync();
         }
@@ -63,7 +63,7 @@ namespace MyNetCore.Services
         /// <param name="id"></param>
         /// <param name="isParent"></param>
         /// <returns></returns>
-        public Task<string> GetParentOrChildIds(int id, bool isParent)
+        public Task<string> GetParentOrChildIdsAsync(int id, bool isParent)
         {
             var fnName = isParent ? "fn_GetCategoryParentIds" : "fn_GetCategoryChildIds";
             string sql = $"select dbo.{fnName}({id})";
@@ -74,7 +74,7 @@ namespace MyNetCore.Services
         /// 执行更新层级关系的存储过程
         /// </summary>
         /// <returns></returns>
-        public Task<int> ExecUpdateLayerProc()
+        public Task<int> ExecUpdateLayerProcAsync()
         {
             return _bookCategoryRepository.Orm.Ado.ExecuteNonQueryAsync(System.Data.CommandType.StoredProcedure, "dbo.sp_update_book_category_layer", null);
         }
@@ -84,7 +84,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<int> DeleteIncludeChilds(int id)
+        public async Task<int> DeleteIncludeChildsAsync(int id)
         {
             ////软删除
             //return _bookCategoryRepository.Select.Where(p => p.CategoryId == id)
@@ -99,7 +99,7 @@ namespace MyNetCore.Services
                                                  .ExecuteAffrowsAsync();
 
             //更新层级关系
-            return await ExecUpdateLayerProc();
+            return await ExecUpdateLayerProcAsync();
 
         }
 

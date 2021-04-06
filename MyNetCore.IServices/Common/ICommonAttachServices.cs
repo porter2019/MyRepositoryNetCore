@@ -28,6 +28,6 @@ namespace MyNetCore.IServices
         /// <param name="refType"></param>
         /// <param name="field">关联字段</param>
         /// <returns></returns>
-        Task<List<CommonAttach>> GetAttachList(int refId, Type refType, string field = "Attach");
+        Task<List<CommonAttach>> GetAttachListAsync(int refId, Type refType, string field = "Attach");
     }
 }

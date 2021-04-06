@@ -93,7 +93,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("编辑", "modify")]
         public async Task<ApiResult> Post(Model.Entity.SysUserView model)
         {
-            var data = await _sysUserServices.Modify(model);
+            var data = await _sysUserServices.ModifyAsync(model);
 
             return ApiResult.OK(data);
         }

@@ -25,6 +25,19 @@ namespace @(Model.ProjectName).IServices
     /// </summary>
     public interface I@(Model.ModelName)Services : IBaseServices<@(Model.ModelName)>
     {
+        /// <summary>
+        /// 获取完整的model信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<@(Model.HasView? Model.ViewClassName : Model.ModelName)> GetModelFullAsync(int id);
 
+
+        /// <summary>
+        /// 添加或修改数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<@(Model.HasView? Model.ViewClassName : Model.ModelName)> ModifyAsync(@(Model.HasView? Model.ViewClassName : Model.ModelName) model);
     }
 }

@@ -30,7 +30,7 @@ namespace MyNetCore.Services
         /// <returns></returns>
         public async Task<ApiResult> GenerateIIRSCodeFile(string modelName)
         {
-            var model = new BaseCode(modelName, GetModelDesc(modelName));
+            var model = loadEntityInfo(modelName);
             //IRepository
             var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("IRepositoryTemplate"), model);
             SaveCodeToFile(html, $"I{modelName}Repository.cs", "IRepository");
@@ -61,12 +61,10 @@ namespace MyNetCore.Services
             var templateName = "ApiControllerTemplate";
             if (remark.IsNull())
             {
-                //生成带实体的控制器
-                remark = GetModelDesc(name);
                 templateName = "ApiControllerWithEntityTemplate";
 
             }
-            var model = new BaseCode(name, remark);
+            var model = loadEntityInfo(name, remark);
             var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath(templateName), model);
             SaveCodeToFile(html, $"{name}Controller.cs", "Web\\ApiControllers");
 
@@ -109,22 +107,42 @@ namespace MyNetCore.Services
         }
 
         /// <summary>
-        /// 反射获取实体类的备注
+        /// 获取实体的信息
         /// </summary>
-        /// <param name="modelName"></param>
+        /// <param name="entityName">实体名称</param>
+        /// <param name="entityDesc">实体说明，为空则反射获取</param>
         /// <returns></returns>
-        private string GetModelDesc(string modelName)
+        private BaseCode loadEntityInfo(string entityName, string entityDesc = "")
         {
-            var fristNameSpace = $"{modelName.GetProjectMainName()}.Model";
-            var entityType = Assembly.Load(fristNameSpace).GetType($"{fristNameSpace}.Entity.{modelName}");
-            if (entityType == null) throw new NullReferenceException($"找不到指定类:{fristNameSpace}.Entity.{modelName}");
+            if (entityDesc.IsNotNull())
+            {
+                return new BaseCode(entityName, entityDesc);
+            }
+
+            var resultModel = new BaseCode(entityName);
+
+            var fristNameSpace = $"{entityName.GetProjectMainName()}.Model";
+            var entityType = Assembly.Load(fristNameSpace).GetType($"{fristNameSpace}.Entity.{entityName}");
+            if (entityType == null) throw new NullReferenceException($"找不到指定类:{fristNameSpace}.Entity.{entityName}");
             var fsTableInfo = entityType.GetCustomAttributes(typeof(Model.FsTableAttribute), true)[0] as Model.FsTableAttribute;
             if (fsTableInfo == null) throw new NullReferenceException($"指定类未指定【FsTable】标识");
-            return fsTableInfo.DisplayName;
+            if (fsTableInfo.ViewClassName != null)
+            {
+                var viewClassInfo = fsTableInfo.ViewClassName.GetCustomAttributes(typeof(Model.FsTableAttribute), true)[0] as Model.FsTableAttribute;
+                if (viewClassInfo.Name.IsNull()) throw new NullReferenceException($"视图查询类：【{fsTableInfo.ViewClassName.Name}】未指定视图名称");
+                if (!viewClassInfo.DisableSyncStructure) throw new Exception($"视图查询类：【{fsTableInfo.ViewClassName.Name}】未禁用迁移(DisableSyncStructure=true)");
+                //设置视图属性
+                resultModel.HasView = true;
+                resultModel.ViewClassName = fsTableInfo.ViewClassName.Name;
+            }
+
+            resultModel.ModelDesc = fsTableInfo.DisplayName;
+
+            return resultModel;
         }
 
         /// <summary>
-        /// 获取试图相对路径
+        /// 获取视图相对路径
         /// </summary>
         /// <param name="lastPath"></param>
         /// <returns></returns>

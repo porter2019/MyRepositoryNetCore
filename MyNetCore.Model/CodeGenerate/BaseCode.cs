@@ -13,6 +13,11 @@ namespace MyNetCore.Model.CodeGenerate
     {
         public BaseCode() { }
 
+        public BaseCode(string modelName)
+        {
+            this.ModelName = modelName;
+        }
+
         public BaseCode(string modelName, string modelDesc)
         {
             this.ModelName = modelName;
@@ -55,6 +60,16 @@ namespace MyNetCore.Model.CodeGenerate
 
             }
         }
+
+        /// <summary>
+        /// 该实体是否使用了视图
+        /// </summary>
+        public bool HasView { get; set; } = false;
+
+        /// <summary>
+        /// 指定视图查询的类名
+        /// </summary>
+        public string ViewClassName { get; set; }
 
         /// <summary>
         /// 实体中文名称

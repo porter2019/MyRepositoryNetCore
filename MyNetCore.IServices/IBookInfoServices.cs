@@ -26,7 +26,7 @@ namespace MyNetCore.IServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<BookInfoView> GetModelFull(int id);
+        Task<BookInfoView> GetModelFullAsync(int id);
 
 
         /// <summary>
@@ -34,6 +34,6 @@ namespace MyNetCore.IServices
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<BookInfoView> Modify(BookInfoView entity);
+        Task<BookInfoView> ModifyAsync(BookInfoView entity);
     }
 }

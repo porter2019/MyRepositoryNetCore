@@ -40,8 +40,11 @@ namespace MyNetCore.Services
         /// <param name="refType"></param>
         /// <param name="field">关联字段</param>
         /// <returns></returns>
-        public Task<List<CommonAttach>> GetAttachList(int refId, Type refType, string field = "Attach")
+        public Task<List<CommonAttach>> GetAttachListAsync(int refId, Type refType, string field = "Attach")
         {
+            //var classInfo = refType.GetCustomAttributes(typeof(Model.FsTableAttribute), true)[0] as Model.FsTableAttribute;
+            //if (classInfo.DisableSyncStructure) throw new Exception("视图类型的Class不能用作引用标识");
+
             return _commonAttachRepository.GetListAsync(p => p.RefId == refId && p.RefModel == refType.FullName && p.Field == field);
         }
 

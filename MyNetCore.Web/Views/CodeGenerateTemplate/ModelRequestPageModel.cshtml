@@ -22,7 +22,7 @@ namespace @(Model.ProjectName).Model.RequestModel
     /// <summary>
     /// 查询@(Model.ModelDesc)分页列表所需参数
     /// </summary>
-    public class @(Model.ModelName)PageModel : BaseRequestPageViewModel<Entity.@(Model.ModelName)>
+    public class @(Model.ModelName)PageModel : BaseRequestPageViewModel<Entity.@(Model.HasView ? Model.ViewClassName : Model.ModelName)>
     {
 	    
 		/// <summary>

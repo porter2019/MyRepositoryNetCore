@@ -42,14 +42,14 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<BookInfoView> GetModelFull(int id)
+        public async Task<BookInfoView> GetModelFullAsync(int id)
         {
             if (id < 0) return new BookInfoView();
 
             var entity = await _bookInfoRepository.GetModelViewAsync<BookInfoView>(id);
             if (entity == null) return new BookInfoView();
 
-            entity.Attachs = await _commonAttachServices.GetAttachList(id, typeof(BookInfo));
+            entity.Attachs = await _commonAttachServices.GetAttachListAsync(id, typeof(BookInfo));
 
             return entity;
 
@@ -60,7 +60,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<BookInfoView> Modify(BookInfoView entity)
+        public async Task<BookInfoView> ModifyAsync(BookInfoView entity)
         {
             using (var uow = _fsq.CreateUnitOfWork())
             {

@@ -53,7 +53,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param entity=""></param>
         /// <returns></returns>
-        public async Task<SysUser> Modify(SysUserView entity)
+        public async Task<SysUser> ModifyAsync(SysUserView entity)
         {
             if (await CheckLoginNameExists(entity.UserId, entity.LoginName))
                 throw new Exception($"登录名：【{entity.LoginName}】已存在");

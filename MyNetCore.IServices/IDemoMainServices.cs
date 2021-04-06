@@ -26,14 +26,14 @@ namespace MyNetCore.IServices
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<DemoMain> Modify(DemoMain entity);
+        Task<DemoMain> ModifyAsync(DemoMain entity);
 
         /// <summary>
         /// 获取完整的model信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<DemoMain> GetModelFull(int id);
+        Task<DemoMain> GetModelFullAsync(int id);
 
     }
 }

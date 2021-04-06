@@ -42,7 +42,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DemoMain> GetModelFull(int id)
+        public async Task<DemoMain> GetModelFullAsync(int id)
         {
             if (id < 0) return new DemoMain();
 
@@ -50,8 +50,8 @@ namespace MyNetCore.Services
             if (entity == null) return new DemoMain();
 
             entity.Items = await _demoMainRepository.GetDemoMainItems(id);
-            entity.ImageList = await _commonAttachServices.GetAttachList(id, typeof(DemoMain), "ImageList");
-            entity.Attachs = await _commonAttachServices.GetAttachList(id, typeof(DemoMain));
+            entity.ImageList = await _commonAttachServices.GetAttachListAsync(id, typeof(DemoMain), "ImageList");
+            entity.Attachs = await _commonAttachServices.GetAttachListAsync(id, typeof(DemoMain));
 
             return entity;
 
@@ -62,7 +62,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<DemoMain> Modify(DemoMain entity)
+        public async Task<DemoMain> ModifyAsync(DemoMain entity)
         {
             using (var uow = _fsq.CreateUnitOfWork())
             {

@@ -45,7 +45,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetTreeList(string title)
         {
-            var data = await _bookCategoryServices.GetTreeList(title);
+            var data = await _bookCategoryServices.GetTreeListAsync(title);
 
             return ApiResult.OK(data);
         }
@@ -59,7 +59,7 @@ namespace MyNetCore.Web.ApiControllers
         [HttpGet, Route("get/layer/ids")]
         public async Task<ApiResult> GetParentOrChildIds(int id, bool isParent)
         {
-            var data = await _bookCategoryServices.GetParentOrChildIds(id, isParent);
+            var data = await _bookCategoryServices.GetParentOrChildIdsAsync(id, isParent);
 
             return ApiResult.OK("OK", data);
         }
@@ -96,7 +96,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("编辑", "modify")]
         public async Task<ApiResult> Post(Model.Entity.BookCategory model)
         {
-            var data = await _bookCategoryServices.Modify(model);
+            var data = await _bookCategoryServices.ModifyAsync(model);
 
             return ApiResult.OK(data);
         }
@@ -110,7 +110,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("删除", "delete")]
         public async Task<ApiResult> Delete(int id)
         {
-            var affrows = await _bookCategoryServices.DeleteIncludeChilds(id);
+            var affrows = await _bookCategoryServices.DeleteIncludeChildsAsync(id);
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }

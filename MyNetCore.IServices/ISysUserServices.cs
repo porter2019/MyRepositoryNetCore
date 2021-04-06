@@ -40,6 +40,6 @@ namespace MyNetCore.IServices
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<SysUser> Modify(SysUserView entity);
+        Task<SysUser> ModifyAsync(SysUserView entity);
     }
 }

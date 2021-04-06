@@ -29,13 +29,11 @@ namespace MyNetCore.Web.ApiControllers
     {
         private readonly ILogger<DemoMainController> _logger;
         private readonly IDemoMainServices _demoMainServices;
-        private readonly ICommonAttachServices _commonAttachServices;
 
-        public DemoMainController(ILogger<DemoMainController> logger, IDemoMainServices demoMainServices, ICommonAttachServices commonAttachServices)
+        public DemoMainController(ILogger<DemoMainController> logger, IDemoMainServices demoMainServices)
         {
             _logger = logger;
             _demoMainServices = demoMainServices;
-            _commonAttachServices = commonAttachServices;
         }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
-            var data = await _demoMainServices.GetModelFull(id);
+            var data = await _demoMainServices.GetModelFullAsync(id);
 
             return ApiResult.OK(data);
         }
@@ -75,7 +73,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("编辑", "modify")]
         public async Task<ApiResult> Post(Model.Entity.DemoMain model)
         {
-            var data = await _demoMainServices.Modify(model);
+            var data = await _demoMainServices.ModifyAsync(model);
 
             return ApiResult.OK(data);
         }

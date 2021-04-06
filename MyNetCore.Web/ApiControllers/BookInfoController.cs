@@ -59,11 +59,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
-            if (id < 1) return ApiResult.OK( new Model.Entity.BookInfoView());
-
-            var data = await _bookInfoServices.GetModelFull(id);
-			
-			if (data == null) data = new Model.Entity.BookInfoView();
+            var data = await _bookInfoServices.GetModelFullAsync(id);
 
             return ApiResult.OK(data);
         }
@@ -77,7 +73,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("编辑", "modify")]
         public async Task<ApiResult> Post(Model.Entity.BookInfoView model)
         {
-            var data = await _bookInfoServices.Modify(model);
+            var data = await _bookInfoServices.ModifyAsync(model);
 
             return ApiResult.OK(data);
         }

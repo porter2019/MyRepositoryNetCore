@@ -49,8 +49,8 @@ namespace @(Model.ProjectName).Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetPageList(Model.RequestModel.@(Model.ModelName)PageModel model)
         {
-            var data = await _@(Model.ModelVariableName)Services.GetPageListBasicAsync(model, out long total);
-
+            var data = await _@(Model.ModelVariableName)Services.@(Model.HasView? "GetPageListViewBasicAsync" : "GetPageListBasicAsync")(model, out long total);
+           
             return ApiResult.OK(total, data);
         }
 
@@ -63,11 +63,7 @@ namespace @(Model.ProjectName).Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
-            if (id < 1) return ApiResult.OK( @("new Model.Entity."+ Model.ModelName)());
-
-            var data = await @('_')@(Model.ModelVariableName)Services.GetModelAsync(id);
-			
-			if (data == null) data = new Model.Entity.@(Model.ModelName)();
+            var data = await @('_')@(Model.ModelVariableName)Services.GetModelFullAsync(id);
 
             return ApiResult.OK(data);
         }
@@ -79,9 +75,9 @@ namespace @(Model.ProjectName).Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("modify")]
         [Permission("编辑", "modify")]
-        public async Task<ApiResult> Post(Model.Entity.@(Model.ModelName) model)
+        public async Task<ApiResult> Post(Model.Entity.@(Model.HasView ? Model.ViewClassName : Model.ModelName) model)
         {
-            var data = await _@(Model.ModelVariableName)Services.InsertOrUpdateAsync(model);
+            var data = await _@(Model.ModelVariableName)Services.ModifyAsync(model);
 
             return ApiResult.OK(data);
         }
