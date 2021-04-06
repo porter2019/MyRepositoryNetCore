@@ -19,5 +19,11 @@ namespace MyNetCore.Model
         /// 显示名称
         /// </summary>
         public string DisplayName { get; set; }
+
+        /// <summary>
+        /// 视图类，用于代码生成器
+        /// </summary>
+        public Type ViewClassName { get; set; }
+
     }
 }

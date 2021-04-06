@@ -63,6 +63,16 @@ namespace MyNetCore.Model
         Like,
 
         /// <summary>
+        /// like '参数%'
+        /// </summary>
+        LikeLeft,
+
+        /// <summary>
+        /// like '%参数'
+        /// </summary>
+        LikeRight,
+
+        /// <summary>
         /// CHARINDEX('参数',UserName) > 0
         /// </summary>
         CharIndex,

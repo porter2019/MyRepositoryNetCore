@@ -61,6 +61,12 @@ namespace MyNetCore.Model
                     case PageQueryColumnMatchType.Like:
                         sbWhere.Append($" and {sqlColumnName} like '%{filedValue}%'");
                         break;
+                    case PageQueryColumnMatchType.LikeLeft:
+                        sbWhere.Append($" and {sqlColumnName} like '{filedValue}%'");
+                        break;
+                    case PageQueryColumnMatchType.LikeRight:
+                        sbWhere.Append($" and {sqlColumnName} like '%{filedValue}'");
+                        break;
                     case PageQueryColumnMatchType.CharIndex:
                         sbWhere.Append($" and CharIndex('{filedValue}',{sqlColumnName}) > 0");
                         break;

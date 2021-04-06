@@ -17,6 +17,7 @@
   <ItemGroup>
     <None Remove="Content\ViewSQL\BookCategory\Function.sql" />
     <None Remove="Content\ViewSQL\BookCategory\PROC.sql" />
+    <None Remove="Content\ViewSQL\BookInfo\View.sql" />
   </ItemGroup>
 
   <ItemGroup>
