@@ -668,7 +668,7 @@ namespace MyNetCore
         #region long
 
         /// <summary>
-        /// 时间戳转换为日期（时间戳单位秒）
+        /// 时间戳转换为日期（时间戳单位毫秒）
         /// </summary>
         /// <param name="timeStamp"></param>
         /// <returns></returns>
@@ -802,7 +802,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 转时间戳
+        /// 转时间戳(毫秒)
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
