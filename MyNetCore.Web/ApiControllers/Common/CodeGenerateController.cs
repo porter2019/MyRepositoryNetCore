@@ -50,5 +50,19 @@ namespace MyNetCore.Web.ApiControllers
 
         }
 
+        /// <summary>
+        /// 生成前端Vue页面代码，包括api、route、pages
+        /// </summary>
+        /// <param name="name">类名/文件名</param>
+        /// <param name="desc">说明，如果为空，则表示name是Entity实体，该值自动反射从实体中取得</param>
+        /// <returns></returns>
+        [HttpGet, Route("vue/all")]
+        public Task<ApiResult> GenerateVueFiles(string name, string desc)
+        {
+            return _codeGenerateServices.GenerateVuePageFile(name, desc);
+
+
+        }
+
     }
 }

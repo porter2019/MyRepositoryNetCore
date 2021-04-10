@@ -1,0 +1,61 @@
+﻿@model MyNetCore.Model.CodeGenerate.EntityPropertys
+@{
+    Layout = null;
+}
+/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：@(Model.ModelDesc)路由
+*│　作    者：@Model.Author
+*│　版    本：1.0 使用Razor引擎自动生成
+*│　创建时间：@Model.GeneratorTime
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+import Layout from '@@/layout'
+
+export default {
+    path: '/模块名称',
+    component: Layout,
+    name: '模块名称',
+    redirect: '/模块名称/@(Model.ModelVariableName)/index',
+    meta: {
+        title: '待填写的模块名',
+        auth: ['模块名称.show'],
+        icon: 'sidebar-demo',
+    },
+    children: [
+        //用户
+        {
+            path: '@(Model.ModelVariableName)/index',
+            name: '@(Model.ModelVariableName) Index',
+            component: () => import(/* webpackChunkName: '模块名称' */ '@@/views/模块名称/@(Model.ModelVariableName)/index'),
+            meta: {
+                title: "@(Model.ModelDesc)列表",
+                auth: ['@(Model.ModelVariableName).show'],
+                icon: 'sidebar-form',
+            }
+        },
+        {
+            path: '@(Model.ModelVariableName)/show',
+            name: '@(Model.ModelVariableName) Show',
+            component: () => import(/* webpackChunkName: '模块名称' */ '@@/views/模块名称/@(Model.ModelVariableName)/show'),
+            meta: {
+                title: '@(Model.ModelDesc)详情',
+                auth: ['@(Model.ModelVariableName).show'],
+                sidebar: false,
+                activeMenu: '/模块名称/@(Model.ModelVariableName)/index'
+            }
+        },
+        {
+            path: '@(Model.ModelVariableName)/edit',
+            name: '@(Model.ModelVariableName) Edit',
+            component: () => import(/* webpackChunkName: '模块名称' */ '@@/views/模块名称/@(Model.ModelVariableName)/edit'),
+            meta: {
+                title: '@(Model.ModelDesc)编辑',
+                auth: ['@(Model.ModelVariableName).modify'],
+                sidebar: false,
+                activeMenu: '/模块名称/@(Model.ModelVariableName)/index'
+            }
+        },
+    ]
+}

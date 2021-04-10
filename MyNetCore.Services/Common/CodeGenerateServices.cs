@@ -71,6 +71,50 @@ namespace MyNetCore.Services
             return ApiResult.OK();
         }
 
+        /// <summary>
+        /// 生成前端Vue页面代码
+        /// </summary>
+        /// <param name="name">类名/文件名</param>
+        /// <param name="desc">说明，如果为空，则表示name是Entity实体，该值自动反射从实体中取得，否则生成基础前端模板</param>
+        /// <returns></returns>
+        public async Task<ApiResult> GenerateVuePageFile(string name, string desc)
+        {
+
+            var remark = desc;
+            var routeTemplateName = "Route";
+            var apiTemplateName = "Api";
+            var indexTemplateName = "Index";
+            var editTemplateName = "Edit";
+            var showTemplateName = "Show";
+            if (remark.IsNull())
+            {
+                routeTemplateName = "RouteWithEntity";
+                apiTemplateName = "ApiWithEntity";
+                indexTemplateName = "IndexWithEntity";
+                editTemplateName = "EditWithEntity";
+                showTemplateName = "ShowWithEntity";
+            }
+            var entityInfo = loadEntityIncludeProperty(name, desc);
+            var ss = entityInfo.GenerateIndexTableItems();
+            //路由
+            var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{routeTemplateName}"), entityInfo);
+            SaveVueCodeToFile(html, $"{entityInfo.ModelVariableName}.js", "\\src\\router\\modules\\");
+            //api
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{apiTemplateName}"), entityInfo);
+            SaveVueCodeToFile(html, $"{entityInfo.ModelVariableName}.js",$"\\src\\api\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\");
+            //Index页面
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{indexTemplateName}"), entityInfo);
+            SaveVueCodeToFile(html, $"index.vue", $"\\src\\views\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\{entityInfo.ModelVariableName}\\");
+            //Edit页面
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{editTemplateName}"), entityInfo);
+            SaveVueCodeToFile(html, $"edit.vue", $"\\src\\views\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\{entityInfo.ModelVariableName}\\");
+            //Show页面
+            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{showTemplateName}"), entityInfo);
+            SaveVueCodeToFile(html, $"show.vue", $"\\src\\views\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\{entityInfo.ModelVariableName}\\");
+
+            return ApiResult.OK();
+        }
+
         #region 私有方法
 
         /// <summary>
@@ -93,6 +137,34 @@ namespace MyNetCore.Services
             //当前解决方案目录
             var solutionPath = baseDir.Replace($"{AppDomain.CurrentDomain.FriendlyName}", "");//C:\WorkSpace\GitHub\MyRepositoryNetCore\
             var targetFolder = solutionPath + projectName + "." + targetProject + targetRelativePath; //C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.IRepository\
+            if (!Directory.Exists(targetFolder)) Directory.CreateDirectory(targetFolder);
+            var targetFilePath = targetFolder + fileName;
+            if (File.Exists(targetFilePath)) return;//如果文件存在则不生成
+
+            using (var targetFileInfo = File.Create(targetFilePath))
+            {
+                var writer = new StreamWriter(targetFileInfo, Encoding.UTF8);
+                writer.Write(content);
+                writer.Dispose();
+            }
+
+        }
+
+        /// <summary>
+        /// 保存文件到指定的目录
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="fileName"></param>
+        /// <param name="targetProject">指定项目名</param>
+        /// <param name="targetRelativePath">保存的目录，默认为\\src\\，放在项目src目录，否则填写\\src\\</param>
+        /// <returns></returns>
+        private void SaveVueCodeToFile(string content, string fileName, string targetRelativePath = "\\src\\")
+        {
+            if (content.IsNull()) throw new ArgumentNullException("Content内容为空");
+            if (fileName.IsNull()) throw new ArgumentNullException("文件名不明确");
+
+            var baseDir = AppSettings.Get("VueProjectDirectory");
+            var targetFolder = baseDir + targetRelativePath;
             if (!Directory.Exists(targetFolder)) Directory.CreateDirectory(targetFolder);
             var targetFilePath = targetFolder + fileName;
             if (File.Exists(targetFilePath)) return;//如果文件存在则不生成
@@ -140,6 +212,52 @@ namespace MyNetCore.Services
 
             return resultModel;
         }
+
+        /// <summary>
+        /// 获取实体的信息
+        /// </summary>
+        /// <param name="entityName">实体名称</param>
+        /// <param name="entityDesc">实体说明，为空则反射获取</param>
+        /// <returns></returns>
+        private EntityPropertys loadEntityIncludeProperty(string entityName, string entityDesc = "")
+        {
+            var baseModelEntity = loadEntityInfo(entityName, entityDesc);
+
+            EntityPropertys entityInfo = new EntityPropertys
+            {
+                GeneratorTime = baseModelEntity.GeneratorTime,
+                HasView = baseModelEntity.HasView,
+                ModelDesc = baseModelEntity.ModelDesc,
+                ModelName = baseModelEntity.ModelName,
+                ViewClassName = baseModelEntity.ViewClassName
+            };
+
+            if (entityDesc.IsNotNull()) return entityInfo;
+
+            var fristNameSpace = $"{entityName.GetProjectMainName()}.Model";
+            var entityType = Assembly.Load(fristNameSpace).GetType($"{fristNameSpace}.Entity.{entityName}");
+            if (entityType == null) throw new NullReferenceException($"找不到指定类:{fristNameSpace}.Entity.{entityName}");
+            var fsTableInfo = entityType.GetCustomAttributes(typeof(Model.FsTableAttribute), true)[0] as Model.FsTableAttribute;
+            if (fsTableInfo == null) throw new NullReferenceException($"指定类未指定【FsTable】标识");
+            entityInfo.TableInfo = fsTableInfo;
+
+            entityType.GetProperties().ToList().ForEach(clumn =>
+            {
+                if (clumn.PropertyType.Namespace == "System.Collections.Generic") return;
+                if (!clumn.CanWrite) return;//只读的不要
+
+
+                var fsColumnInfo = clumn.GetCustomAttributes<Model.FsColumnAttribute>(true); //clumn.GetCustomAttributes(typeof(Model.FsColumnAttribute), true)[0] as Model.FsColumnAttribute;
+                if (fsColumnInfo.Any())
+                {
+                    entityInfo.PropertysItems.Add(new EntityPropertysItems() { ColumnInfo = fsColumnInfo.First(), ColumnTypeInfo = clumn });
+                }
+            });
+
+            return entityInfo;
+        }
+
+
 
         /// <summary>
         /// 获取视图相对路径

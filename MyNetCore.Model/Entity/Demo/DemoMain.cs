@@ -10,7 +10,7 @@ namespace MyNetCore.Model.Entity
     /// <summary>
     /// 演示主体
     /// </summary>
-    [FsTable("演示主体")]
+    [FsTable("演示主体", HaveItems = true, VueModuleName = "demo")]
     public class DemoMain : BaseEntityStandard
     {
         /// <summary>

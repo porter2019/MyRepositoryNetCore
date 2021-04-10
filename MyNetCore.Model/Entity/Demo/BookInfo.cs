@@ -9,7 +9,7 @@ namespace MyNetCore.Model.Entity
     /// <summary>
     /// 书籍信息
     /// </summary>
-    [FsTable("书籍信息", ViewClassName = typeof(BookInfoView))]
+    [FsTable("书籍信息", ViewClassName = typeof(BookInfoView),VueModuleName = "demo")]
     public class BookInfo : BaseEntityStandard
     {
         /// <summary>
