@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MyNetCore.IServices;
-using MyNetCore.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,20 +21,8 @@ namespace MyNetCore.Web.Controllers
 
         public IActionResult Index()
         {
-            var projectName = AppDomain.CurrentDomain.FriendlyName;
-            return Content("OK");
-            //return View();
+            return Content(_hostEnvironment.IsDevelopment() ? _hostEnvironment.ContentRootPath : "");
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

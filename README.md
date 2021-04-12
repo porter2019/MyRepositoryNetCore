@@ -1,4 +1,4 @@
-# 经典仓储结构
+# DDD下经典仓储架构
 
 > 阶段性技术总结汇总
 ## Basic
@@ -22,7 +22,7 @@ IOC使用NetCore自带的，为了方便批量注入，现定义以下约定
         return Task.FromResult(ApiResult.OK());
     }
     ```
-    > 这种方法接收`IServiceProvider`类型(容器)的注入，直接通过容器中的GetServices<<I>>方法获取容器中所有该接口的注入
+    > 这种方法接收`IServiceProvider`类型(容器)的注入，直接通过容器中的GetServices\<T>方法获取容器中所有该接口的注入
 - IEnumerable
     ```
     public Task<ApiResult> InvokeAsync(HttpContext context, IEnumerable<IDemoService> svs)
@@ -46,7 +46,7 @@ IOC使用NetCore自带的，为了方便批量注入，现定义以下约定
     ```
     > 必须指定`Name`，值为sql中视图的名称，并设置`DisableSyncStructure = true`禁用迁移
 
-    继承的实体中的FreeSql特性如下：
+    实体中的FreeSql特性如下：
     ```
     [FsTable("表备注", ViewClassName = typeof(DTO文件类名), VueModuleName = "demo")]
     ```

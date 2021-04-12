@@ -21,19 +21,6 @@ namespace MyNetCore.IServices
     /// </summary>
     public interface IValidateCodeHistoryServices : IBaseServices<ValidateCodeHistory>
     {
-        /// <summary>
-        /// 获取完整的model信息
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<ValidateCodeHistory> GetModelFullAsync(int id);
 
-
-        /// <summary>
-        /// 添加或修改数据
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        Task<ValidateCodeHistory> ModifyAsync(ValidateCodeHistory model);
     }
 }
