@@ -58,18 +58,40 @@ namespace MyNetCore.Web
             #region 将用户信息附加到上下文中
 
             var controller = context.Controller as BaseOpenApiController;
-            //获取JWT中用户的信息
-            //controller.CurrentUserInfo = new CurrentUserTickInfo() { UserId = 2, UserName = "管理员", LoginName = "admin", ExpireTime = DateTime.Now.AddDays(3) };
-            var tokenValue = context.HttpContext.Request.Headers[GlobalVar.AuthenticationTokenKey].FirstOrDefault()?.ToString() ?? "";
-            if(tokenValue.IsNull())
+            var tokenValue = context.HttpContext.Request.Headers[AppSettings.Get(GlobalVar.AuthenticationTokenKey)].FirstOrDefault()?.ToString() ?? "";
+            if (tokenValue.IsNull())
             {
                 context.Result = new ObjectResult(ApiResult.Anonymous());
                 return;
             }
+            string loginName = tokenValue;
+            if (AppSettings.Get<bool>("Jwt:IsEnabled"))
+            {
+                var jwtObj = Common.Helper.JWTHelper.ParseToken<JwtTokenObject>(tokenValue);
+                if (jwtObj == null)
+                {
+                    //Token无效,也有可能是过期了
+                    context.Result = new ObjectResult(ApiResult.Anonymous());
+                    return;
+                }
+                else
+                {
+                    var payload = JsonHelper.Deserialize<Model.ResponseModel.LoginUserInfo>(jwtObj.json_data);
+                    if (payload == null)
+                    {
+                        //Payload无效
+                        context.Result = new ObjectResult(ApiResult.Anonymous());
+                        return;
+                    }
+                    else
+                    {
+                        loginName = payload.LoginName;
+                    }
+                }
+            }
 
-            var loginName = tokenValue.Split("-")[0];
             var userEntity = _sysUserServices.GetModel(p => p.LoginName == loginName);
-            if(userEntity == null)
+            if (userEntity == null)
             {
                 context.Result = new ObjectResult(ApiResult.Anonymous());
                 return;

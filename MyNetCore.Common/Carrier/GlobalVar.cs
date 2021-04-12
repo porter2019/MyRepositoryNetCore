@@ -29,6 +29,6 @@
         /// <summary>
         /// token在报文头中的键名
         /// </summary>
-        public const string AuthenticationTokenKey = "x-auth-token";
+        public const string AuthenticationTokenKey = "Jwt:TokenKey";
     }
 }

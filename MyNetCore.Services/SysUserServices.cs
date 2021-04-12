@@ -111,13 +111,29 @@ namespace MyNetCore.Services
             var entity = await _sysUserRepository.GetModelAsync(p => p.LoginName == model.Account && p.Password == pwd);
             if (entity == null) throw new NullReferenceException("用户名或密码有误");
             if (!entity.Status) throw new NullReferenceException("账户已被禁用");
+
+            var exp_time = DateTime.Now.AddHours(AppSettings.Get<double>("Jwt:TokenExpires")).ToTimeStamp();
+
             var responseModel = new Model.ResponseModel.LoginUserInfo()
             {
                 LoginName = entity.LoginName,
                 UserName = entity.UserName,
-                FailureTime = DateTime.Now.AddDays(1).ToTimeStamp(),
+                FailureTime = exp_time,
             };
-            responseModel.Token = $"{entity.LoginName}-{responseModel.FailureTime}";
+            if (AppSettings.Get<bool>("Jwt:IsEnabled"))
+            {
+                var jsonData = JsonHelper.Serialize(responseModel);
+                responseModel.Token = Common.Helper.JWTHelper.GetToken(new JwtTokenObject()
+                {
+                    exp = exp_time,
+                    open_id = entity.UserId,
+                    json_data = jsonData,
+                });
+            }
+            else
+            {
+                responseModel.Token = entity.LoginName; //使用登录名做token，方便开发环境下开发
+            }
             return responseModel;
         }
 

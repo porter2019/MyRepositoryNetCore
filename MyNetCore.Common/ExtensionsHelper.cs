@@ -665,6 +665,21 @@ namespace MyNetCore
 
         #endregion
 
+        #region Int32
+
+        /// <summary>
+        /// 时间戳转换为日期（时间戳单位秒）
+        /// </summary>
+        /// <param name="timeStamp"></param>
+        /// <returns></returns>
+        public static DateTime ConvertToDateTime(this int timeStamp)
+        {
+            var startTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
+            return startTime.Add(new TimeSpan(timeStamp * 10000 * 1000));
+        }
+
+        #endregion
+
         #region long
 
         /// <summary>
@@ -806,10 +821,21 @@ namespace MyNetCore
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        public static long ToTimeStamp(this DateTime dt)
+        public static long ToTimeStampMilliSecond(this DateTime dt)
         {
             var startTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1), TimeZoneInfo.Utc);
             return (new DateTimeOffset(dt).UtcTicks - startTime.Ticks) / 10000;
+        }
+
+        /// <summary>
+        /// 转时间戳(精度:秒)
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static int ToTimeStamp(this DateTime dt)
+        {
+            var startTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1), TimeZoneInfo.Utc);
+            return (int)((new DateTimeOffset(dt).UtcTicks - startTime.Ticks) / 10000 / 1000);
         }
 
         /// <summary>

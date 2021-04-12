@@ -74,7 +74,7 @@ namespace MyNetCore.Services
             var sendTime = await _cacheServices.GetAsync(mobile);
             if (sendTime.IsNull()) return false;
             System.Diagnostics.Trace.Write("缓存中的:" + sendTime);
-            if ((DateTime.Now - sendTime.ObjToLong().ConvertToDateTime()).TotalSeconds <= 60) return true;//60秒内的为发送频繁
+            if ((DateTime.Now - sendTime.ObjToInt().ConvertToDateTime()).TotalSeconds <= 60) return true;//60秒内的为发送频繁
             else return false;
         }
 

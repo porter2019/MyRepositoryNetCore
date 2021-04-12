@@ -27,9 +27,9 @@ namespace MyNetCore.Model.ResponseModel
         public string Token { get; set; }
 
         /// <summary>
-        /// 过期时间，Unix时间戳，精度到秒，前端直接let a = Date.parse(new Date()); 然后判断a《FailureTime就行了
+        /// 过期时间，Unix时间戳，精度到秒，前端直接let a = Date.parse(new Date()) / 1000; 然后判断a 《  FailureTime就行了
         /// </summary>
-        public long FailureTime { get; set; }
+        public int FailureTime { get; set; }
 
     }
 }
