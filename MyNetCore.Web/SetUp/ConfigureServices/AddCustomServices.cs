@@ -69,22 +69,43 @@ namespace MyNetCore.Web.SetUp
             foreach (var instanceType in typeDic.Keys)
             {
                 var serviceBatchTag = (instanceType.GetCustomAttributes(typeof(ServiceLifetimeAttribute), true)[0] as ServiceLifetimeAttribute);
-                if (serviceBatchTag == null) continue;
+                if (serviceBatchTag == null) serviceBatchTag = new ServiceLifetimeAttribute(); //默认Scoped
+
                 if (!serviceBatchTag.IsEnabled) continue;
 
-                foreach (var interfaceType in typeDic[instanceType])
+                if (typeDic[instanceType].Length == 0)
                 {
+                    //针对只有实现类，没有接口的情况
                     switch (serviceBatchTag.Lifetime)
                     {
                         case ServiceLifetime.Singleton://单例
-                            services.AddSingleton(interfaceType, instanceType);
+                            services.AddSingleton(instanceType);
                             break;
                         case ServiceLifetime.Scoped: //同一请求上下文都是一个对象
-                            services.AddScoped(interfaceType, instanceType);
+                            services.AddScoped(instanceType);
                             break;
                         case ServiceLifetime.Transient: //瞬时单例，每次访问都是新的对象
-                            services.AddTransient(interfaceType, instanceType);
+                            services.AddTransient(instanceType);
                             break;
+                    }
+                }
+                else
+                {
+                    //注入实现类和接口
+                    foreach (var interfaceType in typeDic[instanceType])
+                    {
+                        switch (serviceBatchTag.Lifetime)
+                        {
+                            case ServiceLifetime.Singleton://单例
+                                services.AddSingleton(interfaceType, instanceType);
+                                break;
+                            case ServiceLifetime.Scoped: //同一请求上下文都是一个对象
+                                services.AddScoped(interfaceType, instanceType);
+                                break;
+                            case ServiceLifetime.Transient: //瞬时单例，每次访问都是新的对象
+                                services.AddTransient(interfaceType, instanceType);
+                                break;
+                        }
                     }
                 }
             }

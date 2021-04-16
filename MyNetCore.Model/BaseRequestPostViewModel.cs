@@ -10,7 +10,7 @@ namespace MyNetCore.Model
     /// 所有Post对象需要继承的基类
     /// <code>方便在filter中自动注入当前登录的用户信息，这些信息在业务层中可能会需要用到</code>
     /// </summary>
-    public class BaseRequestViewModel
+    public class BaseRequestPostViewModel
     {
         /// <summary>
         /// 当前操作的用户id

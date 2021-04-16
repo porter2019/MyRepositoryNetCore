@@ -169,9 +169,9 @@ namespace MyNetCore.Web
                 }
             }
             //ViewMode对象
-            if (postModelValue is Model.BaseRequestViewModel && context.HttpContext.Request.Method == "POST")
+            if (postModelValue is Model.BaseRequestPostViewModel && context.HttpContext.Request.Method == "POST")
             {
-                Model.BaseRequestViewModel reqModel = (Model.BaseRequestViewModel)postModelValue;
+                Model.BaseRequestPostViewModel reqModel = (Model.BaseRequestPostViewModel)postModelValue;
                 reqModel.CurrentUserId = controller.CurrentUserInfo.UserId;
                 reqModel.CurrentUserName = controller.CurrentUserInfo.UserName;
             }
