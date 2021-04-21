@@ -133,11 +133,7 @@ namespace MyNetCore.Web.ApiControllers
             }
 
             //更新视图
-            var domainDir = AppDomain.CurrentDomain.BaseDirectory;//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web\bin\Debug\net5.0\
-            var baseDir = domainDir.Substring(0, domainDir.LastIndexOf("\\bin"));//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web
-            //当前解决方案目录
-            //var solutionPath = baseDir.Replace($"{AppDomain.CurrentDomain.FriendlyName}", "");//C:\WorkSpace\GitHub\MyRepositoryNetCore\
-            var viewSqlRootDir = baseDir + "\\Content\\ViewSQL\\";//C:\WorkSpace\GitHub\MyRepositoryNetCore\MyNetCore.Web\Content\ViewSQL\
+            var viewSqlRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "ViewSQL");
             if (!Directory.Exists(viewSqlRootDir)) return ApiResult.OK("视图根目录不存在，此次仅刷新已有的视图");
 
             var sqlFileList = Directory.GetFiles(viewSqlRootDir, "*.sql", SearchOption.AllDirectories);

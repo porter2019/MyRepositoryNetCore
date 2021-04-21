@@ -23,13 +23,16 @@ namespace MyNetCore.Web.SetUp
         public async Task Invoke(HttpContext context)
         {
             await _next(context);
+
             if (context.Response.StatusCode == 404)
             {
-                var contentType = context.Request.Headers["accept"].ToString().ToLower();
-                if (contentType.StartsWith("image"))
-                {
-                    await SetDefaultImage(context);
-                }
+                await SetDefaultImage(context);
+
+                //var contentType = context.Request.Headers["accept"].ToString().ToLower();
+                //if (contentType.StartsWith("image"))
+                //{
+                    
+                //}
             }
         }
 
@@ -44,7 +47,7 @@ namespace MyNetCore.Web.SetUp
                 await fs.ReadAsync(bytes, 0, bytes.Length);
                 //this header is use for browser cache, format like: "Mon, 15 May 2017 07:03:37 GMT". 
                 //context.Response.Headers.Append("Last-Modified", $"{File.GetLastWriteTimeUtc(path).ToString("ddd, dd MMM yyyy HH:mm:ss")} GMT");
-
+                //context.Response.StatusCode = 200;
                 await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
             }
             catch (Exception ex)

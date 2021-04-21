@@ -93,7 +93,8 @@ namespace MyNetCore.Web
             else
             {
                 app.UseWebResponseStatus();
-                app.UseDefaultImage(defaultImagePath: Configuration.GetSection("DefaultImagePath").Value);
+                //app.UseDefaultImage(defaultImagePath: Configuration.GetSection("DefaultImagePath").Value);
+                app.MapWhen(context => { return context.Request.Headers["accept"].ToString().ToLower().StartsWith("image"); }, builder => { builder.UseDefaultImage(Configuration.GetSection("DefaultImagePath").Value); });
                 app.UseExceptionHandler("/Home/Error");
             }
 

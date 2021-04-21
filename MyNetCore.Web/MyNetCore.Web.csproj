@@ -10,9 +10,9 @@
     <DocumentationFile>..\MyNetCore.Web\bin\Debug\net5.0\MyNetCore.Web.xml</DocumentationFile>
   </PropertyGroup>
 
-  <!--发布时包含Content目录-->
+  <!--发布/生成时包含Content目录-->
   <ItemGroup>
-    <Content Include="Content\**" CopyToPublishDirectory="PreserveNewest"></Content>
+    <Content Include="Content\**" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="Always"></Content>
   </ItemGroup>
   <ItemGroup>
     <None Remove="Content\ViewSQL\BookCategory\Function.sql" />
