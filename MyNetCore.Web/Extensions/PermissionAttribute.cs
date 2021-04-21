@@ -51,14 +51,8 @@ namespace MyNetCore.Web
         /// </summary>
         public bool Anonymous
         {
-            get
-            {
-                return _anonymous;
-            }
-            set
-            {
-                _anonymous = value;
-            }
+            get { return _anonymous; }
+            set { _anonymous = value; }
         }
 
         private bool _autoCheck = true;
@@ -68,15 +62,21 @@ namespace MyNetCore.Web
         /// </summary>
         public bool AutoCheck
         {
-            get
-            {
-                return _autoCheck;
-            }
-            set
-            {
-                _autoCheck = value;
-            }
+            get { return _autoCheck; }
+            set { _autoCheck = value; }
         }
+
+        private bool _unCheckWhenDevelopment = false;
+
+        /// <summary>
+        /// 开发环境下跳过权限验证
+        /// </summary>
+        public bool UnCheckWhenDevelopment
+        {
+            get { return _unCheckWhenDevelopment; }
+            set { _unCheckWhenDevelopment = value; }
+        }
+
 
     }
 }

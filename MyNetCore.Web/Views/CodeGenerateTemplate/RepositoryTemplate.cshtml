@@ -27,11 +27,10 @@ namespace @(Model.ProjectName).Repository
     /// </summary>
     public class @(Model.ModelName)Repository : BaseMyRepository<@(Model.ModelName), int>, I@(Model.ModelName)Repository
     {
-        private readonly IFreeSql _freeSql;
 
-        public @(Model.ModelName)Repository(IFreeSql fsql) : base(fsql)
+        public @(Model.ModelName)Repository(ILogger<@(Model.ModelName)Repository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-            _freeSql = fsql;
+            
         }
     }
 }

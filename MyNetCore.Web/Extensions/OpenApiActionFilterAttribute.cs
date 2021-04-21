@@ -49,6 +49,9 @@ namespace MyNetCore.Web
             {
                 //anonymous = permissionAttributes.Anonymous;
                 if (permissionAttributes.Anonymous) return;
+                //开发环境下跳过权限验证
+                if (permissionAttributes.UnCheckWhenDevelopment && _hostEnvironment.IsDevelopment()) return;
+
             }
 
             //if (anonymous) return;

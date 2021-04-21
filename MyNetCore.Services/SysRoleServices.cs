@@ -16,6 +16,7 @@ using MyNetCore.IServices;
 using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -27,7 +28,7 @@ namespace MyNetCore.Services
     {
         private readonly ISysRoleRepository _sysRoleRepository;
 
-        public SysRoleServices(SysRoleRepository sysRoleRepository) : base(sysRoleRepository)
+        public SysRoleServices(ILogger<SysRoleServices> logger, SysRoleRepository sysRoleRepository) : base(sysRoleRepository, logger)
         {
             _sysRoleRepository = sysRoleRepository;
         }

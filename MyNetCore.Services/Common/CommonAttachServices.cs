@@ -16,7 +16,7 @@ using MyNetCore.IServices;
 using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
-
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -28,7 +28,7 @@ namespace MyNetCore.Services
     {
         private readonly ICommonAttachRepository _commonAttachRepository;
 
-        public CommonAttachServices(CommonAttachRepository commonAttachRepository) : base(commonAttachRepository)
+        public CommonAttachServices(ILogger<CommonAttachServices> logger, CommonAttachRepository commonAttachRepository) : base(commonAttachRepository, logger)
         {
             _commonAttachRepository = commonAttachRepository;
         }

@@ -16,7 +16,7 @@ using MyNetCore.IServices;
 using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
-
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -29,7 +29,7 @@ namespace MyNetCore.Services
         private readonly IFreeSql _fsq;
         private readonly IValidateCodeHistoryRepository _validateCodeHistoryRepository;
 
-        public ValidateCodeHistoryServices(IFreeSql fsq, ValidateCodeHistoryRepository validateCodeHistoryRepository) : base(validateCodeHistoryRepository)
+        public ValidateCodeHistoryServices(ILogger<ValidateCodeHistoryServices> logger, IFreeSql<DBFlagMain> fsq, ValidateCodeHistoryRepository validateCodeHistoryRepository) : base(validateCodeHistoryRepository, logger)
         {
             _fsq = fsq;
             _validateCodeHistoryRepository = validateCodeHistoryRepository;

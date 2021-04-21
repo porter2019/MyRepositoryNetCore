@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Repository
 {
@@ -23,11 +24,10 @@ namespace MyNetCore.Repository
     /// </summary>
     public class BookCategoryRepository : BaseMyRepository<BookCategory, int>, IBookCategoryRepository
     {
-        private readonly IFreeSql _freeSql;
 
-        public BookCategoryRepository(IFreeSql fsql) : base(fsql)
+        public BookCategoryRepository(ILogger<BookCategoryRepository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-            _freeSql = fsql;
+
         }
     }
 }

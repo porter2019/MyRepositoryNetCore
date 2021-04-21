@@ -7,6 +7,7 @@ using MyNetCore.IServices;
 using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -20,7 +21,7 @@ namespace MyNetCore.Services
         private readonly IFreeSql _fsq;
         private readonly ISysRoleRepository _sysRoleRepository;
 
-        public SysUserServices(SysUserRepository sysUserRepository, IFreeSql fsq, SysRoleRepository sysRoleRepository) : base(sysUserRepository)
+        public SysUserServices(ILogger<SysUserServices> logger, SysUserRepository sysUserRepository, IFreeSql<DBFlagMain> fsq, SysRoleRepository sysRoleRepository) : base(sysUserRepository, logger)
         {
             _sysUserRepository = sysUserRepository;
             _fsq = fsq;

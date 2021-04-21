@@ -1,4 +1,5 @@
 ﻿using FreeSql;
+using Microsoft.Extensions.Logging;
 using MyNetCore.IRepository;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace MyNetCore.Repository
     /// <typeparam name="TKey"></typeparam>
     public class BaseMyRepository<TEntity, TKey> : BaseRepository<TEntity, TKey>, IBaseMyRepository<TEntity> where TEntity : class, new() //Model.BaseEntity
     {
-        private readonly IFreeSql _freeSql;
+        protected readonly IFreeSql _fsql;
+        protected readonly ILogger _logger;
 
-        public BaseMyRepository(IFreeSql fsql) : base(fsql, null, null)
+        public BaseMyRepository(IFreeSql fsql, ILogger logger) : base(fsql, null, null)
         {
-            _freeSql = fsql;
+            _fsql = fsql;
+            _logger = logger;
         }
 
         #region 修改
@@ -31,7 +34,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public override int Update(TEntity entity)
         {
-            var repo = _freeSql.GetRepository<TEntity>();
+            var repo = _fsql.GetRepository<TEntity>();
             repo.AttachOnlyPrimary(entity);
 
             return repo.Update(entity);
@@ -44,7 +47,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<int> UpdateAsync(TEntity entity)
         {
-            var repo = _freeSql.GetRepository<TEntity>();
+            var repo = _fsql.GetRepository<TEntity>();
             repo.AttachOnlyPrimary(entity);
 
             return repo.UpdateAsync(entity);
@@ -59,7 +62,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public int UpdateOnlyChange(TEntity oldEntity, TEntity newEntity)
         {
-            var repo = _freeSql.GetRepository<TEntity>();
+            var repo = _fsql.GetRepository<TEntity>();
             repo.Attach(oldEntity);
             return repo.Update(newEntity);
         }
@@ -73,7 +76,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<int> UpdateOnlyChangeAsync(TEntity oldEntity, TEntity newEntity)
         {
-            var repo = _freeSql.GetRepository<TEntity>();
+            var repo = _fsql.GetRepository<TEntity>();
             repo.Attach(oldEntity);
             return repo.UpdateAsync(newEntity);
         }
@@ -85,7 +88,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public int UpdateEntity(TEntity entity)
         {
-            var runsql = _freeSql.Update<TEntity>().SetSource(entity);
+            var runsql = _fsql.Update<TEntity>().SetSource(entity);
 
             return runsql.ExecuteAffrows();
         }
@@ -97,7 +100,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<int> UpdateEntityAsync(TEntity entity)
         {
-            var runsql = _freeSql.Update<TEntity>().SetSource(entity);
+            var runsql = _fsql.Update<TEntity>().SetSource(entity);
             return runsql.ExecuteAffrowsAsync();
         }
 
@@ -114,11 +117,11 @@ namespace MyNetCore.Repository
         {
             if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
             {
-                return _freeSql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrows();
+                return _fsql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrows();
             }
             else
             {
-                return _freeSql.Delete<TEntity>(ids).ExecuteAffrows();
+                return _fsql.Delete<TEntity>(ids).ExecuteAffrows();
             }
         }
 
@@ -131,11 +134,11 @@ namespace MyNetCore.Repository
         {
             if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
             {
-                return await _freeSql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrowsAsync();
+                return await _fsql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrowsAsync();
             }
             else
             {
-                return await _freeSql.Delete<TEntity>(ids).ExecuteAffrowsAsync();
+                return await _fsql.Delete<TEntity>(ids).ExecuteAffrowsAsync();
             }
         }
 
@@ -150,7 +153,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public long GetCount(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().Where(where).Count();
+            return _fsql.Select<TEntity>().Where(where).Count();
         }
 
         /// <summary>
@@ -160,7 +163,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<long> GetCountAsync(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().Where(where).CountAsync();
+            return _fsql.Select<TEntity>().Where(where).CountAsync();
         }
 
         /// <summary>
@@ -171,7 +174,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public long GetCount(string sql, object parms = null)
         {
-            return _freeSql.Select<TEntity>().Where(sql, parms).Count();
+            return _fsql.Select<TEntity>().Where(sql, parms).Count();
         }
 
         /// <summary>
@@ -182,7 +185,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<long> GetCountAsync(string sql, object parms = null)
         {
-            return _freeSql.Select<TEntity>().Where(sql, parms).CountAsync();
+            return _fsql.Select<TEntity>().Where(sql, parms).CountAsync();
         }
 
         #endregion
@@ -196,7 +199,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public bool Exists(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().Any(where);
+            return _fsql.Select<TEntity>().Any(where);
         }
 
         /// <summary>
@@ -206,7 +209,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().AnyAsync(where);
+            return _fsql.Select<TEntity>().AnyAsync(where);
         }
 
         #endregion
@@ -220,7 +223,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public TEntity GetModel(object dywhere)
         {
-            return _freeSql.Select<TEntity>(dywhere).ToOne();
+            return _fsql.Select<TEntity>(dywhere).ToOne();
         }
 
         /// <summary>
@@ -230,7 +233,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<TEntity> GetModelAsync(object dywhere)
         {
-            return _freeSql.Select<TEntity>(dywhere).ToOneAsync();
+            return _fsql.Select<TEntity>(dywhere).ToOneAsync();
         }
 
         /// <summary>
@@ -240,7 +243,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public REntity GetModel<REntity>(object dywhere)
         {
-            return _freeSql.Select<TEntity>(dywhere).ToOne<REntity>();
+            return _fsql.Select<TEntity>(dywhere).ToOne<REntity>();
         }
 
         /// <summary>
@@ -250,7 +253,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<REntity> GetModelAsync<REntity>(object dywhere)
         {
-            return _freeSql.Select<TEntity>(dywhere).ToOneAsync<REntity>();
+            return _fsql.Select<TEntity>(dywhere).ToOneAsync<REntity>();
         }
 
         /// <summary>
@@ -260,7 +263,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public TEntity GetModel(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().Where(where).ToOne();
+            return _fsql.Select<TEntity>().Where(where).ToOne();
         }
 
         /// <summary>
@@ -270,7 +273,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<TEntity> GetModelAsync(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().Where(where).ToOneAsync();
+            return _fsql.Select<TEntity>().Where(where).ToOneAsync();
         }
 
         /// <summary>
@@ -280,7 +283,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public REntity GetModel<REntity>(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().Where(where).ToOne<REntity>();
+            return _fsql.Select<TEntity>().Where(where).ToOne<REntity>();
         }
 
         /// <summary>
@@ -290,7 +293,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<REntity> GetModelAsync<REntity>(Expression<Func<TEntity, bool>> where)
         {
-            return _freeSql.Select<TEntity>().Where(where).ToOneAsync<REntity>();
+            return _fsql.Select<TEntity>().Where(where).ToOneAsync<REntity>();
         }
 
         #region 视图
@@ -302,7 +305,7 @@ namespace MyNetCore.Repository
         /// <returns>REntity</returns>
         public REntity GetModelView<REntity>(object dywhere) where REntity : class
         {
-            return _freeSql.Select<REntity>(dywhere).ToOne();
+            return _fsql.Select<REntity>(dywhere).ToOne();
         }
 
         /// <summary>
@@ -312,7 +315,7 @@ namespace MyNetCore.Repository
         /// <returns>REntity</returns>
         public Task<REntity> GetModelViewAsync<REntity>(object dywhere) where REntity : class
         {
-            return _freeSql.Select<REntity>(dywhere).ToOneAsync();
+            return _fsql.Select<REntity>(dywhere).ToOneAsync();
         }
 
         /// <summary>
@@ -322,7 +325,7 @@ namespace MyNetCore.Repository
         /// <returns>REntity</returns>
         public REntity GetModelView<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>().Where(where).ToOne();
+            return _fsql.Select<REntity>().Where(where).ToOne();
         }
 
         /// <summary>
@@ -332,7 +335,7 @@ namespace MyNetCore.Repository
         /// <returns>REntity</returns>
         public Task<REntity> GetModelViewAsync<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>().Where(where).ToOneAsync();
+            return _fsql.Select<REntity>().Where(where).ToOneAsync();
         }
 
         #endregion
@@ -349,7 +352,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public List<TEntity> GetList(Expression<Func<TEntity, bool>> exp)
         {
-            return _freeSql.Select<TEntity>().Where(exp).ToList();
+            return _fsql.Select<TEntity>().Where(exp).ToList();
         }
 
         /// <summary>
@@ -360,7 +363,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> exp)
         {
-            return _freeSql.Select<TEntity>().Where(exp).ToListAsync();
+            return _fsql.Select<TEntity>().Where(exp).ToListAsync();
         }
 
         /// <summary>
@@ -371,7 +374,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public List<REntity> GetList<REntity>(Expression<Func<TEntity, bool>> exp)
         {
-            return _freeSql.Select<TEntity>().Where(exp).ToList<REntity>();
+            return _fsql.Select<TEntity>().Where(exp).ToList<REntity>();
         }
 
         /// <summary>
@@ -382,7 +385,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public Task<List<REntity>> GetListAsync<REntity>(Expression<Func<TEntity, bool>> exp)
         {
-            return _freeSql.Select<TEntity>().Where(exp).ToListAsync<REntity>();
+            return _fsql.Select<TEntity>().Where(exp).ToListAsync<REntity>();
         }
 
         /// <summary>
@@ -394,7 +397,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public List<TEntity> GetList(string where, object parms = null)
         {
-            return _freeSql.Select<TEntity>().Where(where, parms).ToList();
+            return _fsql.Select<TEntity>().Where(where, parms).ToList();
         }
 
         /// <summary>
@@ -406,7 +409,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public Task<List<TEntity>> GetListAsync(string where, object parms = null)
         {
-            return _freeSql.Select<TEntity>().Where(where, parms).ToListAsync();
+            return _fsql.Select<TEntity>().Where(where, parms).ToListAsync();
         }
 
         /// <summary>
@@ -418,7 +421,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public List<REntity> GetList<REntity>(string where, object parms = null)
         {
-            return _freeSql.Select<TEntity>().Where(where, parms).ToList<REntity>();
+            return _fsql.Select<TEntity>().Where(where, parms).ToList<REntity>();
         }
 
         /// <summary>
@@ -430,7 +433,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public Task<List<REntity>> GetListAsync<REntity>(string where, object parms = null)
         {
-            return _freeSql.Select<TEntity>().Where(where, parms).ToListAsync<REntity>();
+            return _fsql.Select<TEntity>().Where(where, parms).ToListAsync<REntity>();
         }
 
         #region 视图
@@ -443,7 +446,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public List<REntity> GetListView<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>().Where(exp).ToList();
+            return _fsql.Select<REntity>().Where(exp).ToList();
         }
 
         /// <summary>
@@ -454,7 +457,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public Task<List<REntity>> GetListViewAsync<REntity>(Expression<Func<REntity, bool>> exp) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>().Where(exp).ToListAsync();
+            return _fsql.Select<REntity>().Where(exp).ToListAsync();
         }
 
         /// <summary>
@@ -466,7 +469,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public List<REntity> GetListView<REntity>(string where, object parms = null) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>().Where(where, parms).ToList();
+            return _fsql.Select<REntity>().Where(where, parms).ToList();
         }
 
         /// <summary>
@@ -478,7 +481,7 @@ namespace MyNetCore.Repository
         /// <returns>List<TEntity></returns>
         public Task<List<REntity>> GetListViewAsync<REntity>(string where, object parms = null) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>().Where(where, parms).ToListAsync();
+            return _fsql.Select<REntity>().Where(where, parms).ToListAsync();
         }
 
         #endregion
@@ -497,7 +500,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public List<TEntity> GetPageList(PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         //.WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
                         .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
@@ -513,7 +516,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<TEntity>> GetPageListAsync(PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         //.WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
                         .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
@@ -529,7 +532,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public List<REntity> GetPageList<REntity>(PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         //.WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
                         .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
@@ -545,7 +548,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<REntity>> GetPageListAsync<REntity>(PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         //.WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
                         .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
@@ -565,7 +568,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public List<TEntity> GetPageList(string sql, PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         .WithSql(sql)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
@@ -581,7 +584,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<TEntity>> GetPageListAsync(string sql, PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         .WithSql(sql)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
@@ -597,7 +600,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public List<REntity> GetPageList<REntity>(string sql, PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         .WithSql(sql)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
@@ -613,7 +616,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<REntity>> GetPageListAsync<REntity>(string sql, PageOptions<TEntity> options, out long total)
         {
-            return _freeSql.Select<TEntity>()
+            return _fsql.Select<TEntity>()
                         .WithSql(sql)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
@@ -632,7 +635,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public List<REntity> GetPageListView<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>()
+            return _fsql.Select<REntity>()
                         .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
@@ -647,7 +650,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<REntity>> GetPageListViewAsync<REntity>(PageOptions<REntity> options, out long total) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>()
+            return _fsql.Select<REntity>()
                         //.WhereIf(options.Where.IsNull(), "1=1 " + options.Where)
                         .Where("1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
@@ -664,7 +667,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public List<REntity> GetPageListView<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>()
+            return _fsql.Select<REntity>()
                         .WithSql(sql)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
@@ -680,7 +683,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<REntity>> GetPageListViewAsync<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new()
         {
-            return _freeSql.Select<REntity>()
+            return _fsql.Select<REntity>()
                         .WithSql(sql)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)

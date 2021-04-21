@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Repository
 {
@@ -23,11 +24,10 @@ namespace MyNetCore.Repository
     /// </summary>
     public class DemoMainRepository : BaseMyRepository<DemoMain, int>, IDemoMainRepository
     {
-        private readonly IFreeSql _freeSql;
 
-        public DemoMainRepository(IFreeSql fsql) : base(fsql)
+        public DemoMainRepository(ILogger<DemoMainRepository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-            _freeSql = fsql;
+
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<DemoMainItem>> GetDemoMainItems(int mainId)
         {
-            return _freeSql.Select<DemoMainItem>().Where(p => p.MainId == mainId).ToListAsync();
+            return _fsql.Select<DemoMainItem>().Where(p => p.MainId == mainId).ToListAsync();
         }
 
     }

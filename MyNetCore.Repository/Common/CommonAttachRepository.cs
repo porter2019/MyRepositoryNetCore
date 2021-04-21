@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Repository
 {
@@ -23,11 +24,10 @@ namespace MyNetCore.Repository
     /// </summary>
     public class CommonAttachRepository : BaseMyRepository<CommonAttach, int>, ICommonAttachRepository
     {
-        private readonly IFreeSql _freeSql;
 
-        public CommonAttachRepository(IFreeSql fsql) : base(fsql)
+        public CommonAttachRepository(ILogger<CommonAttachRepository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-            _freeSql = fsql;
+
         }
     }
 }

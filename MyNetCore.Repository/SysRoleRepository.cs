@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Repository
 {
@@ -23,11 +24,10 @@ namespace MyNetCore.Repository
     /// </summary>
     public class SysRoleRepository : BaseMyRepository<SysRole, int>, ISysRoleRepository
     {
-        private readonly IFreeSql _freeSql;
 
-        public SysRoleRepository(IFreeSql fsql) : base(fsql)
+        public SysRoleRepository(ILogger<SysRoleRepository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-            _freeSql = fsql;
+
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace MyNetCore.Repository
                                         inner join SysModule as sm on sh.ModuleId = sm.ModuleId
                                         left join SysRolePermit as srp on srp.PermitId = sp.PermitId and srp.RoleId = {0}",
                                         roleId);
-            var dbData = await _freeSql.Select<Model.Dto.SysRolePermit>().WithSql(sql).ToListAsync();
+            var dbData = await _fsql.Select<Model.Dto.SysRolePermit>().WithSql(sql).ToListAsync();
 
             var moduleGroup = dbData.GroupBy(p => p.ModuleName).ToList();
 
@@ -88,10 +88,10 @@ namespace MyNetCore.Repository
                     RoleId = roleId,
                 });
             }
-            _freeSql.Transaction(() =>
+            _fsql.Transaction(() =>
             {
-                _freeSql.Delete<SysRolePermit>().Where(p => p.RoleId == roleId).ExecuteAffrowsAsync();
-                _freeSql.Insert(rolePermitList).ExecuteAffrowsAsync();
+                _fsql.Delete<SysRolePermit>().Where(p => p.RoleId == roleId).ExecuteAffrowsAsync();
+                _fsql.Insert(rolePermitList).ExecuteAffrowsAsync();
             });
             return Task.FromResult(true);
         }
@@ -104,7 +104,7 @@ namespace MyNetCore.Repository
         public Task<List<SysRole>> GetRoleListByUserId(int userId)
         {
             string sql = string.Format(@"select b.* from SysRoleUser as a inner join SysRole as b on a.RoleId = b.RoleId and a.UserId = {0} and b.IsDeleted = 0 and b.[Status] = 1", userId);
-            return _freeSql.Select<SysRole>().WithSql(sql).ToListAsync();
+            return _fsql.Select<SysRole>().WithSql(sql).ToListAsync();
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace MyNetCore.Repository
                                             SysRolePermit as a left join SysPermit as b on a.PermitId = b.PermitId and a.IsDeleted = 0 and a.RoleId in({0}) 
                                             left join SysHandler as c on b.HandlerId = c.HandlerId and c.IsDeleted=0", roleIds);
 
-            return _freeSql.Ado.QueryAsync<string>(sql);
+            return _fsql.Ado.QueryAsync<string>(sql);
         }
 
     }
