@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Repository
 {
@@ -14,11 +15,10 @@ namespace MyNetCore.Repository
     /// </summary>
     public class SysUserRepository : BaseMyRepository<SysUser, int>, ISysUserRepository
     {
-        private readonly IFreeSql _freeSql;
 
-        public SysUserRepository(IFreeSql fsql) : base(fsql)
+        public SysUserRepository(ILogger<SysUserRepository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-            _freeSql = fsql;
+
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<SysUser> Login(string loginName, string password)
         {
-            return _freeSql.Select<SysUser>().Where(p => p.LoginName == loginName && p.Password == password).ToOneAsync();
+            return _fsql.Select<SysUser>().Where(p => p.LoginName == loginName && p.Password == password).ToOneAsync();
         }
     }
 }

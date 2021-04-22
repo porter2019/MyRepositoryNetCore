@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyNetCore.Model.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Repository
 {
@@ -23,11 +24,10 @@ namespace MyNetCore.Repository
     /// </summary>
     public class ValidateCodeHistoryRepository : BaseMyRepository<ValidateCodeHistory, int>, IValidateCodeHistoryRepository
     {
-        private readonly IFreeSql _freeSql;
 
-        public ValidateCodeHistoryRepository(IFreeSql fsql) : base(fsql)
+        public ValidateCodeHistoryRepository(ILogger<ValidateCodeHistory> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-            _freeSql = fsql;
+
         }
     }
 }

@@ -21,6 +21,7 @@ namespace MyNetCore.Services
 
         public AliSMSServices(ICacheServices cacheServices, IValidateCodeHistoryServices validateCodeHistoryServices, ILogger<AliSMSServices> logger)
         {
+            _logger = logger;
             _cacheServices = cacheServices;
             _validateCodeHistoryServices = validateCodeHistoryServices;
             _logger = logger;
@@ -77,7 +78,7 @@ namespace MyNetCore.Services
         {
             var sendTime = await _cacheServices.GetAsync(mobile);
             if (sendTime.IsNull()) return false;
-            _logger.LogInformation("缓存中的:" + sendTime);
+            _logger.LogDebug("缓存中的:" + sendTime);
             if ((DateTime.Now - sendTime.ObjToInt().ConvertToDateTime()).TotalSeconds <= 60)
                 return true;//60秒内的为发送频繁
             else
@@ -101,7 +102,7 @@ namespace MyNetCore.Services
             await _cacheServices.AddAsync(guid, code, 60 * 10);
             //用于校验是否发送频繁
             await _cacheServices.AddAsync(mobile, DateTime.Now.ToTimeStamp(), 60);
-
+            _logger.LogDebug($"【发送验证码】内容：{sendBody}，GUID：{guid}，手机号：{mobile}，验证码：{code}，返回结果：{JsonHelper.Serialize(sendResult)}");
             //保存到数据库中
             await _validateCodeHistoryServices.InsertAsync(new Model.Entity.ValidateCodeHistory()
             {

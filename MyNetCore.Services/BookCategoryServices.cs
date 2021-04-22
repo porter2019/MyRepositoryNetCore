@@ -16,7 +16,7 @@ using MyNetCore.IServices;
 using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
-
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -28,7 +28,7 @@ namespace MyNetCore.Services
     {
         private readonly IBookCategoryRepository _bookCategoryRepository;
 
-        public BookCategoryServices(BookCategoryRepository bookCategoryRepository) : base(bookCategoryRepository)
+        public BookCategoryServices(ILogger<BookCategoryServices> logger, BookCategoryRepository bookCategoryRepository) : base(bookCategoryRepository, logger)
         {
             _bookCategoryRepository = bookCategoryRepository;
         }

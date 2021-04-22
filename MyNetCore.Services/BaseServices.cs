@@ -7,6 +7,7 @@ using MyNetCore.IServices;
 using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -17,10 +18,12 @@ namespace MyNetCore.Services
     public class BaseServices<TEntity, TKey> : IBaseServices<TEntity> where TEntity : class, new() //Model.BaseEntity, new()
     {
         private IBaseMyRepository<TEntity> _baseRepo;
+        protected ILogger _logger;
 
-        public BaseServices(BaseMyRepository<TEntity, TKey> baseRepo)
+        public BaseServices(BaseMyRepository<TEntity, TKey> baseRepo, ILogger logger)
         {
             this._baseRepo = baseRepo;
+            _logger = logger;
         }
 
         #region 添加

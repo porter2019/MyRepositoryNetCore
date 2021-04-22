@@ -16,7 +16,7 @@ using MyNetCore.IServices;
 using MyNetCore.IRepository;
 using MyNetCore.Repository;
 using MyNetCore.Model.Entity;
-
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -30,7 +30,7 @@ namespace MyNetCore.Services
         private readonly ICommonAttachServices _commonAttachServices;
         private readonly IFreeSql _fsq;
 
-        public DemoMainServices(DemoMainRepository demoMainRepository, IFreeSql fsq, ICommonAttachServices commonAttachServices) : base(demoMainRepository)
+        public DemoMainServices(ILogger<DemoMainServices> logger, DemoMainRepository demoMainRepository, IFreeSql<DBFlagMain> fsq, ICommonAttachServices commonAttachServices) : base(demoMainRepository, logger)
         {
             _demoMainRepository = demoMainRepository;
             _commonAttachServices = commonAttachServices;
