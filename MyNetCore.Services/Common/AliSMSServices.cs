@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MyNetCore.IServices;
 using MyNetCore.Common.Helper;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -16,11 +17,13 @@ namespace MyNetCore.Services
     {
         private readonly ICacheServices _cacheServices;
         private readonly IValidateCodeHistoryServices _validateCodeHistoryServices;
+        private readonly ILogger _logger;
 
-        public AliSMSServices(ICacheServices cacheServices, IValidateCodeHistoryServices validateCodeHistoryServices)
+        public AliSMSServices(ICacheServices cacheServices, IValidateCodeHistoryServices validateCodeHistoryServices, ILogger<AliSMSServices> logger)
         {
             _cacheServices = cacheServices;
             _validateCodeHistoryServices = validateCodeHistoryServices;
+            _logger = logger;
         }
 
         /// <summary>
@@ -53,7 +56,8 @@ namespace MyNetCore.Services
             var cacheValue = await _cacheServices.GetAsync(guid);
             if (cacheValue.IsNull()) return ApiResult.Failed("验证码无效");
 
-            if (!cacheValue.Equals(code)) return ApiResult.Failed("验证码错误");
+            if (!cacheValue.Equals(code))
+                return ApiResult.Failed("验证码错误");
             else
             {
                 await _cacheServices.RemoveAsync(guid);
@@ -73,9 +77,11 @@ namespace MyNetCore.Services
         {
             var sendTime = await _cacheServices.GetAsync(mobile);
             if (sendTime.IsNull()) return false;
-            System.Diagnostics.Trace.Write("缓存中的:" + sendTime);
-            if ((DateTime.Now - sendTime.ObjToInt().ConvertToDateTime()).TotalSeconds <= 60) return true;//60秒内的为发送频繁
-            else return false;
+            _logger.LogInformation("缓存中的:" + sendTime);
+            if ((DateTime.Now - sendTime.ObjToInt().ConvertToDateTime()).TotalSeconds <= 60)
+                return true;//60秒内的为发送频繁
+            else
+                return false;
         }
 
         /// <summary>
