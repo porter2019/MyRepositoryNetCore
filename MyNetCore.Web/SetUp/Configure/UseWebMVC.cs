@@ -31,6 +31,9 @@ namespace MyNetCore.Web.SetUp
             var isCORS = AppSettings.Get<bool>("CORS", "IsEnabled");
             if (isCORS) app.UseCors(GlobalVar.AllowSpecificOrigins);
 
+            //放到最后执行
+            app.MapWhen(context => { return context.Request.Headers["accept"].ToString().ToLower().StartsWith("image"); }, builder => { builder.UseDefaultImage(AppSettings.Get("DefaultImagePath")); });
+
             app.UseEndpoints(endpoints =>
             {
                 if (isCORS)

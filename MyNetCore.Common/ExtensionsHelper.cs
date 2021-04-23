@@ -675,7 +675,7 @@ namespace MyNetCore
         public static DateTime ConvertToDateTime(this int timeStamp)
         {
             var startTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
-            return startTime.Add(new TimeSpan(timeStamp * 10000 * 1000));
+            return startTime.AddSeconds(timeStamp);
         }
 
         #endregion
@@ -690,7 +690,7 @@ namespace MyNetCore
         public static DateTime ConvertToDateTime(this long timeStamp)
         {
             var startTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
-            return startTime.Add(new TimeSpan(timeStamp * 10000));
+            return startTime.AddMilliseconds(timeStamp);
         }
 
         #endregion
