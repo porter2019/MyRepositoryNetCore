@@ -58,6 +58,36 @@ namespace MyNetCore.Model
         NotEqual,
 
         /// <summary>
+        /// 大于
+        /// </summary>
+        GreaterThan,
+
+        /// <summary>
+        /// 大于等于
+        /// </summary>
+        GreaterThanOrEqual,
+
+        /// <summary>
+        /// 小于
+        /// </summary>
+        LessThan,
+
+        /// <summary>
+        /// 小于等于
+        /// </summary>
+        LessThanOrEqual,
+
+        /// <summary>
+        /// bool类型使用，为True时给条件“=1”
+        /// </summary>
+        BoolWhenTrue,
+
+        /// <summary>
+        /// Int类型使用，当>0时给条件
+        /// </summary>
+        IntEqualWhenGreaterZero,
+
+        /// <summary>
         /// like '%参数%'
         /// </summary>
         Like,

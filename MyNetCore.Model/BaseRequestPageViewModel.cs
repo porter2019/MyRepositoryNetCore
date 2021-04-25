@@ -44,10 +44,14 @@ namespace MyNetCore.Model
                 var columnName = queryAttr.ColumnName.IsNull() ? $"[{filedName}]" : $"[{queryAttr.ColumnName}]";
                 var sqlColumnName = queryAttr.PrefixName.IsNull() ? columnName : queryAttr.PrefixName + "." + columnName;
 
-                //String类型
-                if (itemType.PropertyType == typeof(System.String))
+                var propType = itemType.PropertyType;
+                if (propType == typeof(System.String))
                 {
                     fileValueChar = "'";
+                }
+                else if (propType == typeof(System.Boolean))
+                {
+                    filedValue = filedValue.ToString().EqualsIgnoreCase("true") ? 1 : 0;
                 }
 
                 switch (queryAttr.OperatoryType)
@@ -57,6 +61,30 @@ namespace MyNetCore.Model
                         break;
                     case PageQueryColumnMatchType.NotEqual:
                         sbWhere.Append($" and {sqlColumnName} != {fileValueChar}{filedValue}{fileValueChar}");
+                        break;
+                    case PageQueryColumnMatchType.GreaterThan:
+                        sbWhere.Append($" and {sqlColumnName} > {fileValueChar}{filedValue}{fileValueChar}");
+                        break;
+                    case PageQueryColumnMatchType.GreaterThanOrEqual:
+                        sbWhere.Append($" and {sqlColumnName} >= {fileValueChar}{filedValue}{fileValueChar}");
+                        break;
+                    case PageQueryColumnMatchType.LessThan:
+                        sbWhere.Append($" and {sqlColumnName} < {fileValueChar}{filedValue}{fileValueChar}");
+                        break;
+                    case PageQueryColumnMatchType.LessThanOrEqual:
+                        sbWhere.Append($" and {sqlColumnName} <= {fileValueChar}{filedValue}{fileValueChar}");
+                        break;
+                    case PageQueryColumnMatchType.BoolWhenTrue:
+                        if (filedValue.ObjToInt() == 1)
+                        {
+                            sbWhere.Append($" and {sqlColumnName} = 1");
+                        }
+                        break;
+                    case PageQueryColumnMatchType.IntEqualWhenGreaterZero:
+                        if (filedValue.ObjToInt() > 0)
+                        {
+                            sbWhere.Append($" and {sqlColumnName} = {filedValue}");
+                        }
                         break;
                     case PageQueryColumnMatchType.Like:
                         sbWhere.Append($" and {sqlColumnName} like '%{filedValue}%'");
