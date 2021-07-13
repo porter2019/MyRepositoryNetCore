@@ -341,6 +341,20 @@ namespace MyNetCore
         #region String
 
         /// <summary>
+        /// 正则表达式匹配截取字符串
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="regexExpression">正则表达式</param>
+        /// <remarks>比如从"AAhelloBB"中取出"hello"，正则写为：AA(\\S*)BB</remarks>
+        /// <returns></returns>
+        public static string RegexMatchValue(this string s, string regexExpression)
+        {
+            if (regexExpression.IsNull()) return string.Empty;
+            Regex regex = new Regex(regexExpression, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+            return regex.IsMatch(s) ? regex.Match(s).Groups[1].ToString() : "";
+        }
+
+        /// <summary>
         /// 判断字符串是否为Null、空
         /// </summary>
         /// <param name="s"></param>
