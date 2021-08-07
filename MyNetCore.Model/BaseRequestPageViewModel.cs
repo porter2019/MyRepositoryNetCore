@@ -49,7 +49,7 @@ namespace MyNetCore.Model
                 {
                     fileValueChar = "'";
                 }
-                else if (propType == typeof(System.Boolean))
+                else if (propType == typeof(System.Boolean) && (propType == typeof(System.Nullable<Boolean>)))
                 {
                     filedValue = filedValue.ToString().EqualsIgnoreCase("true") ? 1 : 0;
                 }
