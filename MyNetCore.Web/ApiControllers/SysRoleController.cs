@@ -19,9 +19,9 @@ namespace MyNetCore.Web.ApiControllers
     public class SysRoleController : BaseOpenApiController
     {
         private readonly ILogger<SysRoleController> _logger;
-        private readonly ISysRoleServices _sysRoleServices;
+        private readonly ISysRoleService _sysRoleServices;
 
-        public SysRoleController(ILogger<SysRoleController> logger, ISysRoleServices sysRoleServices)
+        public SysRoleController(ILogger<SysRoleController> logger, ISysRoleService sysRoleServices)
         {
             _logger = logger;
             _sysRoleServices = sysRoleServices;

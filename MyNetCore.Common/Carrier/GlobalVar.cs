@@ -19,16 +19,16 @@
         /// <summary>
         /// 配置文件中静态文件根目录key
         /// </summary>
-        public const string StaticFilesDirectoryKey = "StaticFilesDirectory";
+        public const string ConfigKeyPath_StaticFilesDirectoryKey = "StaticFilesDirectory";
 
         /// <summary>
-        /// 主站域名配置文件key
+        /// 静态文件统一访问域名Key
         /// </summary>
-        public const string DomainUrlKey = "SysInfo:DomainName";
+        public const string ConfigKeyPath_StaticFileDomainUrl = "DomainUrl:StaticFileDomainUrl";
 
         /// <summary>
         /// token在报文头中的键名
         /// </summary>
-        public const string AuthenticationTokenKey = "Jwt:TokenKey";
+        public const string ConfigKeyPath_AuthenticationTokenKey = "Jwt:TokenKey";
     }
 }

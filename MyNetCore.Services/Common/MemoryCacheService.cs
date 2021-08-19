@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using MyNetCore.IServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
-using MyNetCore.IServices;
 
 namespace MyNetCore.Services
 {
     /// <summary>
     /// MemoryCache 实现
     /// </summary>
-    public class MemoryCacheService : ICacheServices
+    [ServiceLifetime(true)]
+    public class MemoryCacheService : ICacheService
     {
         protected IMemoryCache _cache;
 

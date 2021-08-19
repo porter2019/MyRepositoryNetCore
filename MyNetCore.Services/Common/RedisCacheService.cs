@@ -13,7 +13,7 @@ namespace MyNetCore.Services
     /// <summary>
     /// MemoryCache 实现
     /// </summary>
-    public class RedisCacheService : ICacheServices
+    public class RedisCacheService : ICacheService
     {
         protected IDatabase _cache;
         private ConnectionMultiplexer _connection;

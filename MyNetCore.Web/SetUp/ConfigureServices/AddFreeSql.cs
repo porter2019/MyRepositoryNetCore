@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -11,21 +11,26 @@ namespace MyNetCore.Web.SetUp
         /// 注入FreeSql
         /// </summary>
         /// <param name="services"></param>
-        public static void AddFreeSqlServices(this IServiceCollection services)
+        /// <param name="config"></param>
+        public static void AddFreeSqlServices(this IServiceCollection services, IConfiguration config)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
 
+            var appName = AppDomain.CurrentDomain.FriendlyName;
+
+            string logTemplate = "【" + appName + "】数据库：{0}，类别：{1}，实体：{2}，耗时：{3}毫秒，SQL：{4}";
+
             #region 注入主数据库
 
             {
                 var pathRoot = "DBContexts:Main";
-                var sqlTypeConfig = AppSettings.Get($"{pathRoot}:DBType");
+                var sqlTypeConfig = config[$"{pathRoot}:DBType"];
                 var sqlType = (global::FreeSql.DataType)Enum.Parse(typeof(global::FreeSql.DataType), sqlTypeConfig);
-                var connectionString = AppSettings.Get($"{pathRoot}:{sqlTypeConfig}:ConnectionString");
-                var isAutoMigration = AppSettings.Get<bool>($"{pathRoot}:{sqlTypeConfig}:IsAutoMigration");
-                var lazyLoading = AppSettings.Get<bool>($"{pathRoot}:{sqlTypeConfig}:LazyLoading");
+                var connectionString = config[$"{pathRoot}:{sqlTypeConfig}:ConnectionString"];
+                var isAutoMigration = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:IsAutoMigration");
+                var lazyLoading = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:LazyLoading");
 
                 var freeSql = new FreeSql.FreeSqlBuilder()
                     .UseConnectionString(sqlType, connectionString)
@@ -40,7 +45,7 @@ namespace MyNetCore.Web.SetUp
                         (cmd, traceLog) =>
                         {
                             //监听SQL命令对象，在执行后
-                            logger.Debug($"执行后：{traceLog}");
+                            logger.Debug($"【{appName}】Main数据库执行后：{traceLog}");
                         })
                     .Build<DBFlagMain>();
 
@@ -53,7 +58,7 @@ namespace MyNetCore.Web.SetUp
                         stringBuilder.Append($"[{item.ParameterName}] = [{ item.Value}],");
                     }
 
-                    var logTxt = $"【{e.CurdType}】实体：{e.EntityType.FullName},耗时：{e.ElapsedMilliseconds}毫秒,执行的SQL：{e.Sql}";
+                    var logTxt = string.Format(logTemplate, "Main", e.CurdType, e.EntityType.FullName, e.ElapsedMilliseconds, e.Sql);
                     if (stringBuilder.Length > 0)
                         logTxt += "，参数：" + stringBuilder.ToString();
                     logTxt += "，返回值：" + JsonConvert.SerializeObject(e.ExecuteResult);
@@ -73,11 +78,11 @@ namespace MyNetCore.Web.SetUp
 
             {
                 var pathRoot = "DBContexts:Secondary";
-                var sqlTypeConfig = AppSettings.Get($"{pathRoot}:DBType");
+                var sqlTypeConfig = config[$"{pathRoot}:DBType"];
                 var sqlType = (global::FreeSql.DataType)Enum.Parse(typeof(global::FreeSql.DataType), sqlTypeConfig);
-                var connectionString = AppSettings.Get($"{pathRoot}:{sqlTypeConfig}:ConnectionString");
-                var isAutoMigration = AppSettings.Get<bool>($"{pathRoot}:{sqlTypeConfig}:IsAutoMigration");
-                var lazyLoading = AppSettings.Get<bool>($"{pathRoot}:{sqlTypeConfig}:LazyLoading");
+                var connectionString = config[$"{pathRoot}:{sqlTypeConfig}:ConnectionString"];
+                var isAutoMigration = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:IsAutoMigration");
+                var lazyLoading = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:LazyLoading");
 
                 var freeSql = new FreeSql.FreeSqlBuilder()
                     .UseConnectionString(sqlType, connectionString)
@@ -92,7 +97,7 @@ namespace MyNetCore.Web.SetUp
                         (cmd, traceLog) =>
                         {
                             //监听SQL命令对象，在执行后
-                            logger.Debug($"执行后：{traceLog}");
+                            logger.Debug($"【{appName}】Secondary数据库执行后：{traceLog}");
                         })
                     .Build<DBFlagSecondary>();
 
@@ -105,7 +110,7 @@ namespace MyNetCore.Web.SetUp
                         stringBuilder.Append($"[{item.ParameterName}] = [{ item.Value}],");
                     }
 
-                    var logTxt = $"【{e.CurdType}】实体：{e.EntityType.FullName},耗时：{e.ElapsedMilliseconds}毫秒,执行的SQL：{e.Sql}";
+                    var logTxt = string.Format(logTemplate, "Main", e.CurdType, e.EntityType.FullName, e.ElapsedMilliseconds, e.Sql);
                     if (stringBuilder.Length > 0)
                         logTxt += "，参数：" + stringBuilder.ToString();
                     logTxt += "，返回值：" + JsonConvert.SerializeObject(e.ExecuteResult);

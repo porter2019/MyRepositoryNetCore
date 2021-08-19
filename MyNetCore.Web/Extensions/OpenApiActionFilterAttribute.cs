@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MyNetCore.IServices;
+using Microsoft.Extensions.Configuration;
 
 namespace MyNetCore.Web
 {
@@ -17,13 +18,21 @@ namespace MyNetCore.Web
     {
         private readonly IHostEnvironment _hostEnvironment;
         private readonly ILogger<OpenApiActionFilterAttribute> _logger;
-        private readonly ISysUserServices _sysUserServices;
+        private readonly ISysUserService _sysUserServices;
+        private readonly IJwtService _jwtService;
+        private readonly IConfiguration _config;
 
-        public OpenApiActionFilterAttribute(IHostEnvironment hostEnvironment, ILogger<OpenApiActionFilterAttribute> logger, ISysUserServices sysUserServices)
+        public OpenApiActionFilterAttribute(IHostEnvironment hostEnvironment,
+            ILogger<OpenApiActionFilterAttribute> logger,
+            IJwtService jwtService,
+            IConfiguration config,
+            ISysUserService sysUserServices)
         {
             _hostEnvironment = hostEnvironment;
+            _config = config;
             _logger = logger;
             _sysUserServices = sysUserServices;
+            _jwtService = jwtService;
         }
 
         /// <summary>
@@ -61,16 +70,16 @@ namespace MyNetCore.Web
             #region 将用户信息附加到上下文中
 
             var controller = context.Controller as BaseOpenApiController;
-            var tokenValue = context.HttpContext.Request.Headers[AppSettings.Get(GlobalVar.AuthenticationTokenKey)].FirstOrDefault()?.ToString() ?? "";
+            var tokenValue = context.HttpContext.Request.Headers[_config[GlobalVar.ConfigKeyPath_AuthenticationTokenKey]].FirstOrDefault()?.ToString() ?? "";
             if (tokenValue.IsNull())
             {
                 context.Result = new ObjectResult(ApiResult.Anonymous());
                 return;
             }
             string loginName = tokenValue;
-            if (AppSettings.Get<bool>("Jwt:IsEnabled"))
+            if (_config.GetValue<bool>("Jwt:IsEnabled"))
             {
-                var jwtObj = Common.Helper.JWTHelper.ParseToken<JwtTokenObject>(tokenValue);
+                var jwtObj = _jwtService.ParseToken<JwtTokenObject>(tokenValue);
                 if (jwtObj == null)
                 {
                     //Token无效,也有可能是过期了

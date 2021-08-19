@@ -73,7 +73,7 @@ namespace MyNetCore.Model.Entity
                 if (FilePath.IsNull()) return "";
                 try
                 {
-                    var domainName = AppSettings.Get(GlobalVar.DomainUrlKey);
+                    var domainName = _config[GlobalVar.ConfigKeyPath_StaticFileDomainUrl];
                     return domainName + FilePath;
                 }
                 catch (Exception ex)

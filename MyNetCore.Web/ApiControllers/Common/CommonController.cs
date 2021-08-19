@@ -15,12 +15,16 @@ namespace MyNetCore.Web.ApiControllers
     public class CommonController : BaseOpenApiController
     {
         private readonly ILogger<CommonController> _logger;
-        private readonly ISMSServices _SMSServices;
+        private readonly ISMSService _SMSServices;
+        private readonly IAttachUploadService _attachUploadService;
 
-        public CommonController(ILogger<CommonController> logger, ISMSServices SMSServices)
+        public CommonController(ILogger<CommonController> logger,
+            IAttachUploadService attachUploadService,
+            ISMSService SMSServices)
         {
             _logger = logger;
             _SMSServices = SMSServices;
+            _attachUploadService = attachUploadService;
         }
 
         #region 文件上传
@@ -32,7 +36,7 @@ namespace MyNetCore.Web.ApiControllers
         [HttpPost, Route("upload")]
         public ApiResult FileUpload()
         {
-            var saveResult = HttpContext.Request.Form.Files.SaveAttach(HttpContext.Request.Form["tag"].ToString());
+            var saveResult = _attachUploadService.SaveAttach(HttpContext.Request.Form.Files, HttpContext.Request.Form["tag"].ToString());
             return ApiResult.OK(saveResult);
         }
 

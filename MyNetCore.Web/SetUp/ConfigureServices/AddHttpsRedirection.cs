@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -13,16 +11,17 @@ namespace MyNetCore.Web.SetUp
         /// 强制跳转到https
         /// </summary>
         /// <param name="services"></param>
-        public static void AddHttpsRedirectionServices(this IServiceCollection services)
+        /// <param name="config"></param>
+        public static void AddHttpsRedirectionServices(this IServiceCollection services, IConfiguration config)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (AppSettings.Get<bool>("Https", "Redirection"))
+            if (config.GetValue<bool>("Service:IsHttps"))
             {
                 services.AddHttpsRedirection(options =>
                 {
                     options.RedirectStatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status308PermanentRedirect;
-                    options.HttpsPort = AppSettings.Get<int>("Https", "Port");
+                    options.HttpsPort = config.GetValue<int>("Service:Port");
                 });
             }
 

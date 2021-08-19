@@ -18,9 +18,9 @@ namespace MyNetCore.Web.ApiControllers
     public class CodeGenerateController : BaseOpenApiController
     {
         public ILogger<CodeGenerateController> _logger;
-        public ICodeGenerateServices _codeGenerateServices;
+        public ICodeGenerateService _codeGenerateServices;
 
-        public CodeGenerateController(ILogger<CodeGenerateController> logger, ICodeGenerateServices codeGenerateServices)
+        public CodeGenerateController(ILogger<CodeGenerateController> logger, ICodeGenerateService codeGenerateServices)
         {
             _logger = logger;
             _codeGenerateServices = codeGenerateServices;

@@ -20,11 +20,11 @@ namespace MyNetCore.Web.ApiControllers
     public class SysController : BaseOpenApiController
     {
         private readonly ILogger<SysController> _logger;
-        private readonly ISysUserServices _sysUserServices;
-        private readonly ICacheServices _cache;
-        private readonly IDBSyncServices _dbSyncServices;
+        private readonly ISysUserService _sysUserServices;
+        private readonly ICacheService _cache;
+        private readonly IDBSyncService _dbSyncServices;
 
-        public SysController(ILogger<SysController> logger, ISysUserServices sysUserServices, ICacheServices cache, IDBSyncServices dbSyncServices)
+        public SysController(ILogger<SysController> logger, ISysUserService sysUserServices, ICacheService cache, IDBSyncService dbSyncServices)
         {
             _logger = logger;
             _sysUserServices = sysUserServices;

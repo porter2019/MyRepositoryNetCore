@@ -33,7 +33,7 @@ namespace MyNetCore.Web.ApiControllers
         /// <param name="content"></param>
         /// <returns></returns>
         [HttpGet, Route("get")]
-        public async Task<FileContentResult> Get([FromServices] IQRCodeServices _qr, string content)
+        public async Task<FileContentResult> Get([FromServices] IQRCodeService _qr, string content)
         {
             //var buffer = await _qr.GenerateQRCode(content);
             var iconPath = _hostEnvironment.ContentRootPath;//D:\\WorkSpace\\GitHub\\MyNetCore\\MyNetCore.Web

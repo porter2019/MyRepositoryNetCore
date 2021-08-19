@@ -26,7 +26,7 @@ namespace MyNetCore.Web.ApiControllers
         }
 
         [HttpGet, Route("get"),HiddenApi]
-        public async Task<FileContentResult> CaptchaAsync([FromServices] ICaptchaServices _captchaServices)
+        public async Task<FileContentResult> CaptchaAsync([FromServices] ICaptchaService _captchaServices)
         {
             //if (_captchaServices == null) throw new ArgumentNullException(nameof(_captchaServices), "ICaptchaServices未注入，请在CaptchaServices的属性ServiceLifetimeAttribute中启用");
             var code = await _captchaServices.GenerateRandomCaptchaAsync();

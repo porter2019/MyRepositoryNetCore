@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
@@ -11,11 +12,12 @@ namespace MyNetCore.Web.SetUp
         /// 注入Swagger
         /// </summary>
         /// <param name="services"></param>
-        public static void AddSwaggerServices(this IServiceCollection services)
+        /// <param name="config"></param>
+        public static void AddSwaggerServices(this IServiceCollection services, IConfiguration config)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (!AppSettings.Get<bool>("Swagger", "IsEnabled")) return;
+            if (!config.GetValue<bool>("Swagger:IsEnabled")) return;
 
             var projectMainName = AppDomain.CurrentDomain.GetProjectMainName();
 
@@ -33,7 +35,7 @@ namespace MyNetCore.Web.SetUp
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Description = "Token值",
-                    Name = GlobalVar.AuthenticationTokenKey,
+                    Name = config[GlobalVar.ConfigKeyPath_AuthenticationTokenKey],
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer",
@@ -57,7 +59,7 @@ namespace MyNetCore.Web.SetUp
                 {
 
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlList[i]);
-                    c.IncludeXmlComments(xmlPath, i == 0);
+                    if (File.Exists(xmlPath)) c.IncludeXmlComments(xmlPath, i == 0);
                 }
                 c.DocumentFilter<HiddenApiFilter>();
                 c.SchemaFilter<HiddenApiSchemaFilter>();

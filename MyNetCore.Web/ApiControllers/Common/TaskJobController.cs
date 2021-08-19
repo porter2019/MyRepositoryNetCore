@@ -28,9 +28,9 @@ namespace MyNetCore.Web.ApiControllers
 	public class TaskJobController : BaseOpenApiController
     {
         private readonly ILogger<TaskJobController> _logger;
-        private ITaskJobServices _taskJobServices;
+        private ITaskJobService _taskJobServices;
 
-        public TaskJobController(ILogger<TaskJobController> logger, ITaskJobServices taskJobServices)
+        public TaskJobController(ILogger<TaskJobController> logger, ITaskJobService taskJobServices)
         {
             _logger = logger;
             _taskJobServices = taskJobServices;

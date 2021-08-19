@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MyNetCore.Model
 {
@@ -14,11 +16,26 @@ namespace MyNetCore.Model
     /// </summary>
     public class BaseEntity
     {
+        protected readonly IConfiguration _config;
+
+        public BaseEntity()
+        {
+            if (ServiceLocator.Instance == null) throw new Exception("单例ServiceLocator.Instance为NULL");
+            _config = ServiceLocator.Instance.GetService<IConfiguration>();
+            if (_config == null) throw new Exception("获取不到注入的文件配置对象");
+        }
+
         /// <summary>
         /// 创建时间
         /// </summary>
         [FsColumn("创建时间", ServerTime = DateTimeKind.Local, CanUpdate = false, Position = -3)]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// 最后更新时间
+        /// </summary>
+        [FsColumn("更新时间", ServerTime = DateTimeKind.Local, Position = -4)]
+        public DateTime UpdatedDate { get; set; }
 
         /// <summary>
         /// 是否删除
@@ -94,11 +111,11 @@ namespace MyNetCore.Model
         /// <summary>
         /// 创建者ID
         /// </summary>
-        [FsColumn("创建者ID", CanUpdate = false, Position = -5)]
+        [FsColumn("创建者ID", CanUpdate = false, Position = -6)]
         [Newtonsoft.Json.JsonIgnore]
         public int? CreatedUserId { get; set; }
 
-        [FsColumn("创建者名称", CanUpdate = false, Position = -4, StringLength = 50)]
+        [FsColumn("创建者名称", CanUpdate = false, Position = -5, StringLength = 50)]
         public string CreatedUserName { get; set; } = "";
 
         /// <summary>

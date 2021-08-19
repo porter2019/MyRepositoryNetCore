@@ -44,7 +44,7 @@ namespace MyNetCore.Web.ApiControllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("output/demo1")]
-        public async Task<ApiResult> OutPutDemo1([FromServices] IDemoMainServices _demoMainServices)
+        public async Task<ApiResult> OutPutDemo1([FromServices] IDemoMainService _demoMainServices)
         {
             var data = await _demoMainServices.GetListAsync(p => p.MainId > 0);
             //需要将List置为null

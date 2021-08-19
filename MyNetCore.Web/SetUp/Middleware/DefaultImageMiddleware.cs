@@ -40,9 +40,7 @@ namespace MyNetCore.Web.SetUp
         {
             try
             {
-                string path = Path.Combine(AppSettings.Get("StaticFilesDirectory"), DefaultImagePath);
-
-                FileStream fs = File.OpenRead(path);
+                FileStream fs = File.OpenRead(DefaultImagePath);
                 byte[] bytes = new byte[fs.Length];
                 await fs.ReadAsync(bytes, 0, bytes.Length);
                 //this header is use for browser cache, format like: "Mon, 15 May 2017 07:03:37 GMT". 

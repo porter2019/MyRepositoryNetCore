@@ -27,9 +27,9 @@ namespace MyNetCore.Web.ApiControllers
 	public class AccountController : BaseOpenApiController
     {
         private readonly ILogger<AccountController> _logger;
-        private readonly ISysUserServices _sysUserServices;
+        private readonly ISysUserService _sysUserServices;
 
-        public AccountController(ILogger<AccountController> logger, ISysUserServices sysUserServices)
+        public AccountController(ILogger<AccountController> logger, ISysUserService sysUserServices)
         {
             _logger = logger;
             _sysUserServices = sysUserServices;

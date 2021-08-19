@@ -17,7 +17,7 @@ using MyNetCore.IServices;
 
 namespace MyNetCore.Services
 {
-    [ServiceLifetime()]
+    [ServiceLifetime(true)]
     public class ViewRenderService : IViewRenderService
     {
         private readonly IRazorViewEngine _razorViewEngine;

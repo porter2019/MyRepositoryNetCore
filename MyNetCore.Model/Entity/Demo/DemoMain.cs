@@ -39,7 +39,7 @@ namespace MyNetCore.Model.Entity
         {
             get
             {
-                if (ImagePath.IsNotNull()) return AppSettings.Get(GlobalVar.DomainUrlKey) + ImagePath;
+                if (ImagePath.IsNotNull()) return _config[GlobalVar.ConfigKeyPath_StaticFileDomainUrl] + ImagePath;
                 else return "";
             }
         }

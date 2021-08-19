@@ -68,8 +68,19 @@ namespace MyNetCore.Web.SetUp
 
             foreach (var instanceType in typeDic.Keys)
             {
-                var serviceBatchTag = (instanceType.GetCustomAttributes(typeof(ServiceLifetimeAttribute), true)[0] as ServiceLifetimeAttribute);
-                if (serviceBatchTag == null) serviceBatchTag = new ServiceLifetimeAttribute(); //默认Scoped
+                //var serviceBatchTag = (instanceType.GetCustomAttributes(typeof(ServiceLifetimeAttribute), true)[0] as ServiceLifetimeAttribute);
+                //if (serviceBatchTag == null) serviceBatchTag = new ServiceLifetimeAttribute(); //默认Scoped
+
+                ServiceLifetimeAttribute serviceBatchTag;
+                var tagArray = instanceType.GetCustomAttributes(typeof(ServiceLifetimeAttribute), true);
+                if (tagArray == null) serviceBatchTag = new ServiceLifetimeAttribute(); //默认Scoped
+                else
+                {
+                    if (tagArray.Length > 0)
+                        serviceBatchTag = tagArray[0] as ServiceLifetimeAttribute;
+                    else
+                        serviceBatchTag = new ServiceLifetimeAttribute(); //如果服务没有指定[ServiceLifetime]标签，则默认添加
+                }
 
                 if (!serviceBatchTag.IsEnabled) continue;
 

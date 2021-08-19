@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -14,25 +11,30 @@ namespace MyNetCore.Web.SetUp
         /// 使用MVC组件
         /// </summary>
         /// <param name="app"></param>
-        public static void UseMyWebMVC([NotNull] this IApplicationBuilder app)
+        /// <param name="config"></param>
+        public static void UseMyWebMVC([NotNull] this IApplicationBuilder app, IConfiguration config)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 
             System.Diagnostics.Trace.Listeners.Clear();
             System.Diagnostics.Trace.Listeners.Add(new Common.Helper.NlogTraceListener());
 
-            if (AppSettings.Get<bool>("Session", "IsEnabled"))
-            {
-                app.UseSession();
-            }
+            app.UseSession();
 
             app.UseRouting();
 
-            var isCORS = AppSettings.Get<bool>("CORS", "IsEnabled");
+            var isCORS = config.GetValue<bool>("CORS:IsEnabled");
             if (isCORS) app.UseCors(GlobalVar.AllowSpecificOrigins);
 
             //放到最后执行
-            app.MapWhen(context => { return context.Request.Headers["accept"].ToString().ToLower().StartsWith("image"); }, builder => { builder.UseDefaultImage(AppSettings.Get("DefaultImagePath")); });
+            app.MapWhen(context =>
+            {
+                return context.Request.Headers["accept"].ToString().ToLower().StartsWith("image");
+            },
+            builder =>
+            {
+                builder.UseDefaultImage(defaultImagePath: System.IO.Path.Combine(config[GlobalVar.ConfigKeyPath_StaticFilesDirectoryKey], config["DefaultImagePath"]));
+            });
 
             app.UseEndpoints(endpoints =>
             {

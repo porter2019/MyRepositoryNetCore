@@ -21,7 +21,7 @@ namespace MyNetCore.Web.Controllers
 
         public IActionResult Index()
         {
-            return Content(_hostEnvironment.IsDevelopment() ? _hostEnvironment.ContentRootPath : "");
+            return Content(_hostEnvironment.EnvironmentName);
         }
 
     }

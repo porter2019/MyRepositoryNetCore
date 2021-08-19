@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.WebEncoders;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Web
 {
@@ -26,9 +27,11 @@ namespace MyNetCore.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
+
         private IServiceCollection _services;
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -39,22 +42,22 @@ namespace MyNetCore.Web
             services.AddHttpContextAccessor();
 
             //添加Swgger
-            services.AddSwaggerServices();
+            services.AddSwaggerServices(Configuration);
 
             //添加FreeSql
-            services.AddFreeSqlServices();
+            services.AddFreeSqlServices(Configuration);
 
             //Excel导入导出
             //services.AddMagicodesIEServices();
 
             //添加缓存
-            services.AddMyCache();
+            services.AddMyCache(Configuration);
 
             //强制跳转https
-            services.AddHttpsRedirectionServices();
+            services.AddHttpsRedirectionServices(Configuration);
 
             //批量注入Services层中数据库实体业务，注意给的baseType是公共基础业务泛型(BaseServices<,>)
-            services.BatchRegisterServices(new Assembly[] { Assembly.GetExecutingAssembly(), Assembly.Load($"{services.GetProjectMainName()}.Services") }, typeof(BaseServices<,>));
+            services.BatchRegisterServices(new Assembly[] { Assembly.GetExecutingAssembly(), Assembly.Load($"{services.GetProjectMainName()}.Services") }, typeof(BaseService<,>));
 
             //批量注入Services层中普通业务，注意给的baseType是接口类型(IBatchDIServicesTag)
             services.BatchRegisterServices(new Assembly[] { Assembly.Load($"{services.GetProjectMainName()}.Services") }, typeof(IBatchDIServicesTag));
@@ -63,16 +66,17 @@ namespace MyNetCore.Web
             services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
 
             //添加MVC相关
-            services.AddWebMVCServices();
+            services.AddWebMVCServices(Configuration);
+            //services.AddWebApiServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             //获取所有注入的服务
             ServiceLocator.Instance = app.ApplicationServices;
 
-            if (env.IsDevelopment())
+            if (!env.IsProduction())
             {
                 app.Map("/allservices", builder => builder.Run(async context =>
                 {
@@ -88,7 +92,7 @@ namespace MyNetCore.Web
                     }
                     await context.Response.WriteAsync("</tbody></table>");
                 }));
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
             }
             else
             {
@@ -97,16 +101,20 @@ namespace MyNetCore.Web
             }
 
             //静态文件
-            app.UseMyStaticFiles();
+            app.UseMyStaticFiles(Configuration);
 
             //程序启动/停止进行的操作
-            app.UseMyAppStartup();
+            app.UseMyAppLaunch();
 
             //Swagger
-            app.UseMySwagger();
+            app.UseMySwagger(Configuration);
+
+            //Consul站点监控
+            app.UseMyConsul(lifetime, Configuration);
 
             //MVC
-            app.UseMyWebMVC();
+            app.UseMyWebMVC(Configuration);
+            //app.UseMyWebApi(Configuration);
         }
     }
 }

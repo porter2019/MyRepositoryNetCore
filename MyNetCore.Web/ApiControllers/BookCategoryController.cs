@@ -28,9 +28,9 @@ namespace MyNetCore.Web.ApiControllers
     public class BookCategoryController : BaseOpenApiController
     {
         private readonly ILogger<BookCategoryController> _logger;
-        private readonly IBookCategoryServices _bookCategoryServices;
+        private readonly IBookCategoryService _bookCategoryServices;
 
-        public BookCategoryController(ILogger<BookCategoryController> logger, IBookCategoryServices bookCategoryServices)
+        public BookCategoryController(ILogger<BookCategoryController> logger, IBookCategoryService bookCategoryServices)
         {
             _logger = logger;
             _bookCategoryServices = bookCategoryServices;

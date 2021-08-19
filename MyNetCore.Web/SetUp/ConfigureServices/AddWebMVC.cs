@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Serialization;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -17,21 +14,19 @@ namespace MyNetCore.Web.SetUp
         /// 添加MVC
         /// </summary>
         /// <param name="services"></param>
-        public static void AddWebMVCServices([NotNull] this IServiceCollection services)
+        /// <param name="config"></param>
+        public static void AddWebMVCServices([NotNull] this IServiceCollection services, IConfiguration config)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-            if (AppSettings.Get<bool>("Session", "IsEnabled"))
-            {
-                services.AddSession();
-            }
+            services.AddSession();
 
             //跨域
-            if (AppSettings.Get<bool>("CORS", "IsEnabled"))
+            if (config.GetValue<bool>("CORS:IsEnabled"))
             {
-                var origins = AppSettings.Get("CORS", "AllowOrigins");
+                var origins = config["CORS:AllowOrigins"];
                 services.AddCors(option =>
                 {
                     option.AddPolicy(GlobalVar.AllowSpecificOrigins, builder =>

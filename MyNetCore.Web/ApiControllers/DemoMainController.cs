@@ -28,9 +28,9 @@ namespace MyNetCore.Web.ApiControllers
     public class DemoMainController : BaseOpenApiController
     {
         private readonly ILogger<DemoMainController> _logger;
-        private readonly IDemoMainServices _demoMainServices;
+        private readonly IDemoMainService _demoMainServices;
 
-        public DemoMainController(ILogger<DemoMainController> logger, IDemoMainServices demoMainServices)
+        public DemoMainController(ILogger<DemoMainController> logger, IDemoMainService demoMainServices)
         {
             _logger = logger;
             _demoMainServices = demoMainServices;
