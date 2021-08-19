@@ -102,7 +102,14 @@ namespace MyNetCore.Web.ApiControllers
             //同步指定命名空间开头的实体
             string syncNameSpace = $"{projectMainName}.Model.EntitySecondary";
 
-            return _dbSyncServices.DBMigration(_fsql, assemblies, syncNameSpace, tableNames);
+            var result = _dbSyncServices.DBMigration(_fsql, assemblies, syncNameSpace, tableNames);
+            if (result.IsOK())
+            {
+                //成功后通知更新视图
+                var viewSqlRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "ViewSQL");
+                return _dbSyncServices.SqlViewSync(_fsql, viewSqlRootDir);
+            }
+            return result;
         }
 
         /// <summary>

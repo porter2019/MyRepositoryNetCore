@@ -60,11 +60,11 @@ namespace MyNetCore.Services
 
                 return decoder.DecodeToObject<T>(token, _securityKey, verify: true);
             }
-            catch (TokenExpiredException ex)
+            catch (TokenExpiredException)
             {
                 //Token过期了
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

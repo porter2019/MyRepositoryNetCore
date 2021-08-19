@@ -32,6 +32,12 @@ namespace MyNetCore
         public object data { get; set; }
 
         /// <summary>
+        /// 判断当前返回值是否成功
+        /// </summary>
+        /// <returns></returns>
+        public bool IsOK() => code == ApiCode.成功;
+
+        /// <summary>
         /// 成功
         /// </summary>
         /// <returns></returns>

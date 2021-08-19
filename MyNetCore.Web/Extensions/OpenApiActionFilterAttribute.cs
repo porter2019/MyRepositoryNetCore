@@ -175,9 +175,15 @@ namespace MyNetCore.Web
 
                 if (crudModel.Id < 1)
                 {
-                    crudModel.CreatedDate = DateTime.Now;
                     crudModel.CreatedUserId = controller.CurrentUserInfo.UserId;
                     crudModel.CreatedUserName = controller.CurrentUserInfo.UserName;
+                    crudModel.UpdatedUserId = controller.CurrentUserInfo.UserId;
+                    crudModel.UpdatedUserName = controller.CurrentUserInfo.UserName;
+                }
+                else
+                {
+                    crudModel.UpdatedUserId = controller.CurrentUserInfo.UserId;
+                    crudModel.UpdatedUserName = controller.CurrentUserInfo.UserName;
                 }
             }
             //ViewMode对象

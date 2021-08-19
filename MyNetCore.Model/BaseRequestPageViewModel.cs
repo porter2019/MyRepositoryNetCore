@@ -26,7 +26,7 @@ namespace MyNetCore.Model
         {
             var currentType = this.GetType();
 
-            StringBuilder sbWhere = new StringBuilder();
+            StringBuilder sbWhere = new();
 
             foreach (var itemType in currentType.GetProperties())
             {
@@ -86,6 +86,12 @@ namespace MyNetCore.Model
                             sbWhere.Append($" and {sqlColumnName} = {filedValue}");
                         }
                         break;
+                    case PageQueryColumnMatchType.IntEqualWhenGreaterMinus:
+                        if (filedValue.ObjToInt() > -1)
+                        {
+                            sbWhere.Append($" and {sqlColumnName} = {filedValue}");
+                        }
+                        break;
                     case PageQueryColumnMatchType.Like:
                         sbWhere.Append($" and {sqlColumnName} like '%{filedValue}%'");
                         break;
@@ -107,6 +113,12 @@ namespace MyNetCore.Model
                         var tempArr2 = filedValue.ToString().SplitWithSemicolon();
                         if (tempArr2.Length != 2) throw new Exception("Between条件下值的格式必须使用英文分号分割");
                         sbWhere.Append($" and {sqlColumnName} between '{tempArr2[0]}' and '{tempArr2[1]} 23:59:59'");
+                        break;
+                    case PageQueryColumnMatchType.IntIn:
+                        sbWhere.Append($" and {sqlColumnName} in ({filedValue})");
+                        break;
+                    case PageQueryColumnMatchType.IntNotIn:
+                        sbWhere.Append($" and {sqlColumnName} not in({filedValue})");
                         break;
                     default:
                         break;

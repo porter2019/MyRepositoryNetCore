@@ -82,6 +82,18 @@ namespace MyNetCore.Model
             }
         }
 
+        /// <summary>
+        /// 更新时间，yyyy-MM-dd HH:mm
+        /// </summary>
+        [FsColumn("时间1", IsIgnore = true)]
+        public string UpdatedDate1
+        {
+            get
+            {
+                return CreatedDate.ToString("yyyy-MM-dd HH:mm");
+            }
+        }
+
         ///// <summary>
         ///// 创建时间，MM-dd HH:mm
         ///// </summary>
@@ -115,8 +127,24 @@ namespace MyNetCore.Model
         [Newtonsoft.Json.JsonIgnore]
         public int? CreatedUserId { get; set; }
 
+        /// <summary>
+        /// 创建者名称
+        /// </summary>
         [FsColumn("创建者名称", CanUpdate = false, Position = -5, StringLength = 50)]
         public string CreatedUserName { get; set; } = "";
+
+        /// <summary>
+        /// 修改者ID
+        /// </summary>
+        [FsColumn("修改者ID", Position = -7)]
+        [Newtonsoft.Json.JsonIgnore]
+        public int? UpdatedUserId { get; set; }
+
+        /// <summary>
+        /// 修改者名称
+        /// </summary>
+        [FsColumn("修改者名称", Position = -8, StringLength = 50)]
+        public string UpdatedUserName { get; set; } = "";
 
         /// <summary>
         /// 浅复制

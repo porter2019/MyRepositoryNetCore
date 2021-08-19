@@ -88,6 +88,11 @@ namespace MyNetCore.Model
         IntEqualWhenGreaterZero,
 
         /// <summary>
+        /// Int类型使用，当>-1时给条件
+        /// </summary>
+        IntEqualWhenGreaterMinus,
+
+        /// <summary>
         /// like '%参数%'
         /// </summary>
         Like,
@@ -116,6 +121,15 @@ namespace MyNetCore.Model
         /// 时间Between;分割,between and
         /// </summary>
         BetweenDate,
+
+        /// <summary>
+        /// Int类型的in查询，值必须英文逗号分隔
+        /// </summary>
+        IntIn,
+        /// <summary>
+        /// Int类型的not in查询，值必须英文逗号分割
+        /// </summary>
+        IntNotIn,
     }
 
 }
