@@ -65,9 +65,8 @@ namespace MyNetCore.Web
             //解决Razor生成html时中文被转成Unicode码的问题
             services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
 
-            //添加MVC相关
-            services.AddWebMVCServices(Configuration);
-            //services.AddWebApiServices(Configuration);
+            //添加WebApi相关
+            services.AddWebApiServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,9 +111,8 @@ namespace MyNetCore.Web
             //Consul站点监控
             app.UseMyConsul(lifetime, Configuration);
 
-            //MVC
-            app.UseMyWebMVC(Configuration);
-            //app.UseMyWebApi(Configuration);
+            //WebApi
+            app.UseMyWebApi(Configuration);
         }
     }
 }

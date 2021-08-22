@@ -16,6 +16,8 @@ namespace MyNetCore.Web.SetUp
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 
+            app.UseRouting();
+
             var isCORS = config.GetValue<bool>("CORS:IsEnabled");
             if (isCORS) app.UseCors(GlobalVar.AllowSpecificOrigins);
 
@@ -28,8 +30,6 @@ namespace MyNetCore.Web.SetUp
             {
                 builder.UseDefaultImage(defaultImagePath: System.IO.Path.Combine(config[GlobalVar.ConfigKeyPath_StaticFilesDirectoryKey], config["DefaultImagePath"]));
             });
-
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {

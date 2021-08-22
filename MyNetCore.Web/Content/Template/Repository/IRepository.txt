@@ -1,0 +1,28 @@
+﻿#pragma warning disable CS1587 // XML 注释没有放在有效语言元素上
+/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：{{ ModelDesc }}仓储接口
+*│　作    者：{{ Author }}
+*│　版    本：1.0 使用Mustachio引擎自动生成
+*│　创建时间：{{ GeneratorTime }}
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FreeSql;
+using {{ ProjectName }}.Model.Entity;
+
+namespace {{ ProjectName }}.IRepository
+{
+    /// <summary>
+    /// {{ ModelDesc }}仓储接口
+    /// </summary>
+    public interface I{{ ModelName }}Repository : IBaseMyRepository<{{ ModelName }}>
+    {
+
+    }
+}

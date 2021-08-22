@@ -1,0 +1,47 @@
+﻿/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：{{ ModelDesc }}Api
+*│　作    者：{{ Author}}
+*│　版    本：1.0 使用Mustachio引擎自动生成
+*│　创建时间：{{ GeneratorTime }}
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+import request from "@/util/request"
+
+//获取列表
+export const apiGet{{ ModelName }}PageList = data => {
+    return request({
+        url: '/{{ ModelVariableName }}/get/pagelist',
+        method: 'post',
+        data
+    })
+}
+
+
+//删除
+export const apiDelete{{ ModelName }}ByIds = (ids) => {
+    return request({
+        url: '/{{ ModelVariableName }}/delete',
+        method: 'delete',
+        params: { ids: ids }
+    })
+}
+
+//获取详情
+export const apiGet{{ ModelName }}Info = (id) => {
+    return request({
+        url: '/{{ ModelVariableName }}/get/info',
+        method: 'get',
+        params: { id: id }
+    })
+}
+
+//编辑信息
+export const apiModify{{ ModelName }}Info = data => {
+    return request({
+        url: '/{{ ModelVariableName }}/modify',
+        method: 'post',
+        data
+    })
+}

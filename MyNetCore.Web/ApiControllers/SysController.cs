@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace MyNetCore.Web.ApiControllers
             //var list = await _sysUserServices.GetPageListAsync(model.PageOptions, out long total);
 
             //return ApiResult.OK(total, list);
-            return ApiResult.OK(_hostEnvironment.ContentRootPath);
+            return ApiResult.OK(_hostEnvironment.EnvironmentName);
         }
 
         /// <summary>

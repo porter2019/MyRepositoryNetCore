@@ -1,0 +1,107 @@
+﻿#pragma warning disable CS1587 // XML 注释没有放在有效语言元素上
+/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：{{ ModelDesc }}业务逻辑接口                                                    
+*│　作    者：{{ Author }}                                          
+*│　版    本：1.0 使用Mustachio引擎自动生成                                              
+*│　创建时间：{{ GeneratorTime }}                            
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using {{ ProjectName }}.IServices;
+using {{ ProjectName }}.IRepository;
+using {{ ProjectName }}.Repository;
+using {{ ProjectName }}.Model.Entity;
+
+
+namespace {{ ProjectName }}.Services
+{
+    /// <summary>
+    /// {{ ModelDesc }}业务实现类
+    /// </summary>
+    [ServiceLifetime()]
+    public class {{ ModelName }}Service : BaseService<{{ ModelName }}, int>, I{{ ModelName }}Service
+    {
+        private readonly IFreeSql _fsq;
+        private readonly ICommonAttachService _commonAttachService;
+        private readonly I{{ ModelName }}Repository _{{ ModelVariableName }}Repository;
+
+        public {{ ModelName }}Service(ILogger<{{ ModelName }}Service> logger, IFreeSql<DBFlagMain> fsq, ICommonAttachService commonAttachService, {{ ModelName }}Repository {{ ModelVariableName }}Repository) : base({{ ModelVariableName }}Repository, logger)
+        {
+            _fsq = fsq;
+            _commonAttachService = commonAttachService;
+            _{{ ModelVariableName }}Repository = {{ ModelVariableName }}Repository;
+        }
+
+        /// <summary>
+        /// 获取完整的model信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<{{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}}> GetModelFullAsync(int id)
+        {
+            if (id < 0) return new {{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}}();
+            {{#HasView}}
+            var entity = await _{{../ModelVariableName}}Repository.GetModelViewAsync<{{../ViewClassName}}>(id);
+            {{/HasView}}
+            {{^HasView}}
+            var entity = await _{{../ModelVariableName}}Repository.GetModelAsync(id);
+            {{/HasView}}
+            
+            if (entity == null) return new {{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}}();
+
+                entity.Attachs = await _commonAttachService.GetAttachListAsync(id, typeof({{ ModelName }}));
+
+            return entity;
+
+        }
+
+        /// <summary>
+        /// 添加或修改数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<{{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}}> ModifyAsync({{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}} entity)
+        {
+            using (var uow = _fsq.CreateUnitOfWork())
+            {
+                var {{ ModelVariableName }}Repo = uow.GetRepository<{{ ModelName }}>();
+                {{ ModelVariableName }}Repo.UnitOfWork = uow;
+
+                var attachRepo = uow.GetRepository<CommonAttach>();
+                attachRepo.UnitOfWork = uow;
+
+
+                var newEntity = await {{ ModelVariableName }}Repo.InsertOrUpdateAsync(entity);
+                var refModel = typeof({{ ModelName }}).FullName;
+
+                //附件
+                string[] fields = { "Attach" };
+                await attachRepo.DeleteAsync(p => p.RefId == newEntity.Id && p.RefModel == refModel && fields.Contains(p.Field));
+
+                if (entity.Attachs != null)
+                {
+                    entity.Attachs.ForEach(item =>
+                    {
+                        item.AttachId = 0;
+                        item.RefId = newEntity.Id;
+                        item.RefModel = refModel;
+                        item.Field = "Attach";
+                    });
+                    await attachRepo.InsertAsync(entity.Attachs);
+                }
+
+                uow.Commit();
+            }
+
+            return entity;
+        }
+
+    }
+}

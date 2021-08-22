@@ -1,0 +1,40 @@
+﻿#pragma warning disable CS1587 // XML 注释没有放在有效语言元素上
+/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：{{ ModelDesc }}业务逻辑接口                                                    
+*│　作    者：{{ Author }}                                            
+*│　版    本：1.0 使用Mustachio引擎自动生成                                              
+*│　创建时间：{{ GeneratorTime }}                           
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using {{ ProjectName }}.Model.Entity;
+
+namespace {{ ProjectName }}.IServices
+{
+    /// <summary>
+    /// {{ ModelDesc }}业务类接口
+    /// </summary>
+    public interface I{{ ModelName }}Service : IBaseService<{{ ModelName }}>
+    {
+        /// <summary>
+        /// 获取完整的model信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<{{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}}> GetModelFullAsync(int id);
+
+
+        /// <summary>
+        /// 添加或修改数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<{{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}}> ModifyAsync({{#HasView}}{{ ../ViewClassName }}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}} model);
+    }
+}

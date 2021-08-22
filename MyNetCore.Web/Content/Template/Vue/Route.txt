@@ -1,0 +1,56 @@
+﻿/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：{{ ModelDesc }}路由
+*│　作    者：{{ Author}}
+*│　版    本：1.0 使用Mustachio引擎自动生成
+*│　创建时间：{{ GeneratorTime }}
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+import Layout from '@/layout'
+
+export default {
+    path: '/模块名称',
+    component: Layout,
+    name: '模块名称',
+    redirect: '/模块名称/{{ ModelVariableName }}/index',
+    meta: {
+        title: '待填写的模块名',
+        auth: ['模块名称.show'],
+        icon: 'sidebar-demo',
+    },
+    children: [
+        {
+            path: '{{ ModelVariableName }}/index',
+            name: '{{ ModelVariableName }} Index',
+            component: () => import(/* webpackChunkName: '模块名称' */ '@/views/模块名称/{{ ModelVariableName }}/index'),
+            meta: {
+                title: "{{ ModelDesc }}列表",
+                auth: ['{{ ModelVariableName }}.show'],
+                icon: 'sidebar-form',
+            }
+        },
+        {
+            path: '{{ ModelVariableName }}/show',
+            name: '{{ ModelVariableName }} Show',
+            component: () => import(/* webpackChunkName: '模块名称' */ '@/views/模块名称/{{ ModelVariableName }}/show'),
+            meta: {
+                title: '{{ ModelDesc }}详情',
+                auth: ['{{ ModelVariableName }}.show'],
+                sidebar: false,
+                activeMenu: '/模块名称/{{ ModelVariableName }}/index'
+            }
+        },
+        {
+            path: '{{ ModelVariableName }}/edit',
+            name: '{{ ModelVariableName }} Edit',
+            component: () => import(/* webpackChunkName: '模块名称' */ '@/views/模块名称/{{ ModelVariableName }}/edit'),
+            meta: {
+                title: '{{ ModelDesc }}编辑',
+                auth: ['{{ ModelVariableName }}.modify'],
+                sidebar: false,
+                activeMenu: '/模块名称/{{ ModelVariableName }}/index'
+            }
+        },
+    ]
+}

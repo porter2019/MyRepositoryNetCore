@@ -42,10 +42,10 @@ namespace MyNetCore.Model.RequestModel
         }
 
         /// <summary>
-        /// 创建时间
+        /// 更新时间
         /// </summary>
         [PageQuery(PageQueryColumnMatchType.BetweenDate)]
-        public string CreatedDate { get; set; }
+        public string UpdatedDate { get; set; }
 
     }
 }

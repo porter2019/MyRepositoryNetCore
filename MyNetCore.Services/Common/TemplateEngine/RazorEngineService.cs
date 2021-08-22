@@ -17,15 +17,19 @@ using MyNetCore.IServices;
 
 namespace MyNetCore.Services
 {
-    [ServiceLifetime(true)]
-    public class ViewRenderService : IViewRenderService
+    /// <summary>
+    /// 使用RazorEngines生成代码
+    /// 注意Startup中要使用MVC
+    /// </summary>
+    [ServiceLifetime(false)]
+    public class RazorEngineService : ITemplateEngineService
     {
         private readonly IRazorViewEngine _razorViewEngine;
         private readonly ITempDataProvider _tempDataProvider;
         private readonly IHttpContextAccessor _contextAccessor;
 
 
-        public ViewRenderService(IRazorViewEngine razorViewEngine, ITempDataProvider tempDataProvider, IHttpContextAccessor contextAccessor)
+        public RazorEngineService(IRazorViewEngine razorViewEngine, ITempDataProvider tempDataProvider, IHttpContextAccessor contextAccessor)
         {
             _razorViewEngine = razorViewEngine;
             _tempDataProvider = tempDataProvider;
@@ -33,7 +37,13 @@ namespace MyNetCore.Services
 
         }
 
-        public async Task<string> RenderViewToStringAsync(string viewName, object model)
+        /// <summary>
+        /// 根据模板解析成最终的字符串
+        /// </summary>
+        /// <param name="viewName">视图名称</param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<string> ParseAsync(string viewName, object model)
         {
             var actionContext = new ActionContext(_contextAccessor.HttpContext, _contextAccessor.HttpContext.GetRouteData(), new ActionDescriptor());
 

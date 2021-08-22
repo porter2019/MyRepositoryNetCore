@@ -1,0 +1,56 @@
+﻿/**
+*┌──────────────────────────────────────────────────────────────┐
+*│　描    述：{{ ModelDesc }}路由
+*│　作    者：{{ Author}}
+*│　版    本：1.0 使用Mustachio引擎自动生成
+*│　创建时间：{{ GeneratorTime }}
+*└──────────────────────────────────────────────────────────────┘
+*/
+
+import Layout from '@/layout'
+
+export default {
+    path: '/{{ VueModuleName }}',
+    component: Layout,
+    name: '{{ VueModuleName }}',
+    redirect: '/{{ VueModuleName }}/{{ ModelVariableName }}/index',
+    meta: {
+        title: '待填写的模块名',
+        auth: ['{{ ModelVariableName }}.show'],
+        icon: 'sidebar-demo',
+    },
+    children: [
+        {
+            path: '{{ ModelVariableName }}/index',
+            name: '{{ ModelVariableName }} Index',
+            component: () => import(/* webpackChunkName: '{{ VueModuleName }}' */ '@/views/{{ VueModuleName }}/{{ ModelVariableName }}/index'),
+            meta: {
+                title: "{{ ModelDesc }}列表",
+                auth: ['{{ ModelVariableName }}.show'],
+                icon: 'sidebar-form',
+            }
+        },
+        {
+            path: '{{ ModelVariableName }}/show',
+            name: '{{ ModelVariableName }} Show',
+            component: () => import(/* webpackChunkName: '{{ VueModuleName }}' */ '@/views/{{ VueModuleName }}/{{ ModelVariableName }}/show'),
+            meta: {
+                title: '{{ ModelDesc }}详情',
+                auth: ['{{ ModelVariableName }}.show'],
+                sidebar: false,
+                activeMenu: '/{{ VueModuleName }}/{{ ModelVariableName }}/index'
+            }
+        },
+        {
+            path: '{{ ModelVariableName }}/edit',
+            name: '{{ ModelVariableName }} Edit',
+            component: () => import(/* webpackChunkName: '{{ VueModuleName }}' */ '@/views/{{ VueModuleName }}/{{ ModelVariableName }}/edit'),
+            meta: {
+                title: '{{ ModelDesc }}编辑',
+                auth: ['{{ ModelVariableName }}.modify'],
+                sidebar: false,
+                activeMenu: '/{{ VueModuleName }}/{{ ModelVariableName }}/index'
+            }
+        },
+    ]
+}

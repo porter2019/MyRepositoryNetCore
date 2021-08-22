@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MyNetCore.Model.CodeGenerate
 {
@@ -14,12 +15,33 @@ namespace MyNetCore.Model.CodeGenerate
         /// <summary>
         /// 表属性
         /// </summary>
+        [JsonIgnore]
         public FsTableAttribute TableInfo { get; set; }
 
         /// <summary>
         /// 属性集合
         /// </summary>
+        [JsonIgnore]
         public List<EntityPropertysItems> PropertysItems { get; set; } = new List<EntityPropertysItems>();
+
+        /// <summary>
+        /// Vue模块名称
+        /// </summary>
+        public string VueModuleName
+        {
+            get
+            {
+                return TableInfo != null ? TableInfo.VueModuleName : "";
+            }
+        }
+
+        public bool HaveItems
+        {
+            get
+            {
+                return TableInfo != null ? TableInfo.HaveItems : false;
+            }
+        }
 
         /// <summary>
         /// 生成index的table列
@@ -40,8 +62,8 @@ namespace MyNetCore.Model.CodeGenerate
                 html.AppendLine("<el-table-column label=\"金额\" prop=\"ValueDe\" sortable=\"custom\" :formatter=\"(row,column,cellValue,index)=>$numberUtil.formatMoney(cellValue)\" min-width=\"80\" align=\"center\" header-align=\"center\" show-overflow-tooltip></el-table-column>");
                 html.AppendLine("<el-table-column label=\"日期\" prop=\"Date1\" min-width=\"80\" :formatter=\"(row,column,cellValue,index)=>$dateUtil.formatDate(cellValue)\" align=\"center\" header-align=\"center\" show-overflow-tooltip></el-table-column>");
                 html.AppendLine("<el-table-column label=\"日期时间\" prop=\"Date2\" width=\"160\" :formatter=\"(row,column,cellValue,index)=>$dateUtil.formatDate(cellValue,'yyyy-MM-dd hh:mm')\" align=\"center\" header-align=\"center\" show-overflow-tooltip></el-table-column>");
-                html.AppendLine("<el-table-column label=\"创建者\" prop=\"CreatedUserName\" min-width=\"90\" align=\"center\" show-overflow-tooltip></el-table-column>");
-                html.AppendLine("<el-table-column label=\"创建时间\" prop=\"CreatedDate1\" sortable=\"custom\" width=\"160\" align=\"center\" show-overflow-tooltip></el-table-column>");
+                html.AppendLine("<el-table-column label=\"更新时间\" prop=\"UpdatedDate1\" sortable=\"custom\" width=\"160\" align=\"center\" show-overflow-tooltip></el-table-column>");
+                html.AppendLine("<el-table-column label=\"更新者\" prop=\"UpdatedUserName\" min-width=\"90\" align=\"center\" show-overflow-tooltip></el-table-column>");
                 html.AppendLine("<el-table-column label=\"状态\" prop=\"Status\" sortable=\"custom\" width=\"100\" align=\"center\" fixed=\"right\">");
                 html.AppendLine("    <template slot-scope=\"{row}\">");
                 html.AppendLine("        <el-tag v-if=\"row.Status\" type=\"success\" size=\"small\" effect=\"light\">正常</el-tag>");
@@ -57,7 +79,7 @@ namespace MyNetCore.Model.CodeGenerate
                 var name = item.ColumnTypeInfo.Name;
                 var desc = item.ColumnInfo.DisplayName;
                 if (item.ColumnInfo.DbType?.ToLower() == "text" || name == "Remark") continue;
-                if (name == "CreatedUserId" || name == "IsDeleted" || name == "Version") continue;
+                if (name == "CreatedUserId" || name == "UpdatedUserId" || name == "IsDeleted" || name == "Version") continue;
                 var dataType = item.ColumnTypeInfo.PropertyType.FullName;
                 if (dataType.Contains("System.Int32"))
                     html.AppendLine($"<el-table-column label=\"{desc}\" prop=\"{name}\" sortable=\"custom\" min-width=\"80\" align=\"center\" header-align=\"center\" show-overflow-tooltip></el-table-column>");
@@ -81,6 +103,10 @@ namespace MyNetCore.Model.CodeGenerate
                     if (name == "CreatedDate")
                     {
                         html.AppendLine($"<el-table-column label=\"{desc}\" prop=\"CreatedDate1\" sortable=\"custom\" width=\"160\" align=\"center\" show-overflow-tooltip></el-table-column>");
+                    }
+                    else if (name == "UpdatedDate")
+                    {
+                        html.AppendLine($"<el-table-column label=\"{desc}\" prop=\"UpdatedDate1\" sortable=\"custom\" width=\"160\" align=\"center\" show-overflow-tooltip></el-table-column>");
                     }
                     else
                     {
@@ -127,7 +153,7 @@ namespace MyNetCore.Model.CodeGenerate
                 if (item.ColumnInfo.IsPK) continue;
                 var name = item.ColumnTypeInfo.Name;
                 var desc = item.ColumnInfo.DisplayName;
-                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "IsDeleted", "Version" };
+                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "UpdatedUserId", "UpdatedUserName", "UpdatedDate", "IsDeleted", "Version" };
                 if (isIgonPro.Contains(name)) continue;
 
                 StringBuilder inputHtml = new();
@@ -231,7 +257,7 @@ namespace MyNetCore.Model.CodeGenerate
                 if (item.ColumnInfo.IsPK) continue;
                 var name = item.ColumnTypeInfo.Name;
                 var desc = item.ColumnInfo.DisplayName;
-                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "IsDeleted", "Version", "Remark" };
+                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "UpdatedUserId", "UpdatedUserName", "UpdatedDate", "IsDeleted", "Version", "Remark" };
                 if (isIgonPro.Contains(name)) continue;
 
                 var dataType = item.ColumnTypeInfo.PropertyType.FullName;
@@ -313,7 +339,7 @@ namespace MyNetCore.Model.CodeGenerate
                 if (item.ColumnInfo.IsPK) continue;
                 var name = item.ColumnTypeInfo.Name;
                 var desc = item.ColumnInfo.DisplayName;
-                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "IsDeleted", "Version", "Remark" };
+                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "UpdatedUserId", "UpdatedUserName", "UpdatedDate", "IsDeleted", "Version", "Remark" };
                 if (isIgonPro.Contains(name)) continue;
 
                 var dataType = item.ColumnTypeInfo.PropertyType.FullName;
@@ -354,7 +380,7 @@ namespace MyNetCore.Model.CodeGenerate
                 if (item.ColumnInfo.IsPK) continue;
                 var name = item.ColumnTypeInfo.Name;
                 var desc = item.ColumnInfo.DisplayName;
-                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "IsDeleted", "Version" };
+                var isIgonPro = new string[] { "CreatedUserId", "CreatedUserName", "CreatedDate", "UpdatedUserId", "UpdatedUserName", "UpdatedDate", "IsDeleted", "Version" };
                 if (isIgonPro.Contains(name)) continue;
 
                 StringBuilder inputHtml = new();

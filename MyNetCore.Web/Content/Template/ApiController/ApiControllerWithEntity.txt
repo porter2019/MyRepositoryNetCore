@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS1587 // XML 注释没有放在有效语言元素上
 /**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：演示主体接口控制器
-*│　作    者：杨习友
-*│　版    本：1.0 使用Razor引擎自动生成
-*│　创建时间：2021-03-28 16:06:58
+*│　描    述：{{ ModelDesc }}接口控制器
+*│　作    者：{{ Author }}
+*│　版    本：1.0 使用Mustachio引擎自动生成
+*│　创建时间：{{ GeneratorTime }}
 *└──────────────────────────────────────────────────────────────┘
 */
 
@@ -20,34 +20,34 @@ using MyNetCore.IServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace MyNetCore.Web.ApiControllers
+namespace {{ ProjectName }}.Web.ApiControllers
 {
     /// <summary>
-    /// 演示主体管理
+    /// {{ ModelName }}管理
     /// </summary>
-	[PermissionHandler("演示", "演示主体", "demoMain", 10)]
-    public class DemoMainController : BaseOpenApiController
+	[PermissionHandler("所属模块", "{{ ModelName }}", "{{ ModelVariableName }}", 10)]
+	public class {{ ModelName }}Controller : BaseOpenApiController
     {
-        private readonly ILogger<DemoMainController> _logger;
-        private readonly IDemoMainService _demoMainService;
-
-        public DemoMainController(ILogger<DemoMainController> logger, IDemoMainService demoMainService)
+		private readonly ILogger<{{ ModelName }}Controller> _logger;
+		private readonly I{{ ModelName }}Service _{{ ModelVariableName }}Service;
+		
+		public {{ ModelName }}Controller(ILogger<{{ ModelName }}Controller> logger, I{{ ModelName }}Service {{ ModelVariableName }}Service)
         {
             _logger = logger;
-            _demoMainService = demoMainService;
+			_{{ ModelVariableName }}Service = {{ ModelVariableName }}Service;
         }
-
-        /// <summary>
+		
+		/// <summary>
         /// 查询分页
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost, Route("get/pagelist")]
         [Permission("查看", "show")]
-        public async Task<ApiResult> GetPageList(Model.RequestModel.DemoMainPageModel model)
+        public async Task<ApiResult> GetPageList(Model.RequestModel.{{ ModelName }}PageModel model)
         {
-            var data = await _demoMainService.GetPageListBasicAsync(model, out long total);
-
+            var data = await _{{ ModelVariableName }}Service.{{#HasView}}GetPageListViewBasicAsync{{/HasView}}{{^HasView}}GetPageListViewBasicAsync{{/HasView}}(model, out long total);
+           
             return ApiResult.OK(total, data);
         }
 
@@ -60,7 +60,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("查看", "show")]
         public async Task<ApiResult> GetInfo(int id)
         {
-            var data = await _demoMainService.GetModelFullAsync(id);
+            var data = await _{{ ModelVariableName }}Service.GetModelFullAsync(id);
 
             return ApiResult.OK(data);
         }
@@ -72,9 +72,9 @@ namespace MyNetCore.Web.ApiControllers
         /// <returns></returns>
         [HttpPost, Route("modify")]
         [Permission("编辑", "modify")]
-        public async Task<ApiResult> Post(Model.Entity.DemoMain model)
+        public async Task<ApiResult> Post(Model.Entity.{{#HasView}}{{../ViewClassName}}{{/HasView}}{{^HasView}}{{../ModelName}}{{/HasView}} model)
         {
-            var data = await _demoMainService.ModifyAsync(model);
+            var data = await _{{ ModelVariableName }}Service.ModifyAsync(model);
 
             return ApiResult.OK(data);
         }
@@ -88,10 +88,10 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("删除", "delete")]
         public async Task<ApiResult> Delete(string ids)
         {
-            var affrows = await _demoMainService.DeleteByIdsAsync(ids.SplitWithComma());
+            var affrows = await _{{ ModelVariableName }}Service.DeleteByIdsAsync(ids.SplitWithComma());
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }
-
+		
     }
 }

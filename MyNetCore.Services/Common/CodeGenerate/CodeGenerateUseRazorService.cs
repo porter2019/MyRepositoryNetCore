@@ -12,17 +12,17 @@ using Microsoft.Extensions.Configuration;
 namespace MyNetCore.Services
 {
     /// <summary>
-    /// 代码生成服务
+    /// 代码生成服务,使用Razor引擎
     /// </summary>
-    [ServiceLifetime(true)]
-    public class CodeGenerateService : ICodeGenerateService
+    [ServiceLifetime(false)]
+    public class CodeGenerateUseRazorService : ICodeGenerateService
     {
-        private readonly IViewRenderService _viewRender;
+        private readonly ITemplateEngineService _templateEngine;
         private readonly IConfiguration _config;
 
-        public CodeGenerateService(IViewRenderService viewRender, IConfiguration config)
+        public CodeGenerateUseRazorService(ITemplateEngineService templateEngine, IConfiguration config)
         {
-            _viewRender = viewRender;
+            _templateEngine = templateEngine;
             _config = config;
         }
 
@@ -35,19 +35,19 @@ namespace MyNetCore.Services
         {
             var model = loadEntityInfo(modelName);
             //IRepository
-            var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("IRepositoryTemplate"), model);
+            var html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath("IRepositoryTemplate"), model);
             SaveCodeToFile(html, $"I{modelName}Repository.cs", "IRepository");
             //IServices
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("IServicesTemplate"), model);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath("IServicesTemplate"), model);
             SaveCodeToFile(html, $"I{modelName}Services.cs", "IServices");
             //Repository
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("RepositoryTemplate"), model);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath("RepositoryTemplate"), model);
             SaveCodeToFile(html, $"{modelName}Repository.cs", "Repository");
             //Services
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("ServicesTemplate"), model);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath("ServicesTemplate"), model);
             SaveCodeToFile(html, $"{modelName}Services.cs", "Services");
             //Model ReqeustPageQueryModel
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath("ModelRequestPageModel"), model);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath("ModelRequestPageModel"), model);
             SaveCodeToFile(html, $"{modelName}PageModel.cs", "Model\\RequestModel");
             return ApiResult.OK();
         }
@@ -68,7 +68,7 @@ namespace MyNetCore.Services
 
             }
             var model = loadEntityInfo(name, remark);
-            var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath(templateName), model);
+            var html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath(templateName), model);
             SaveCodeToFile(html, $"{name}Controller.cs", "Web\\ApiControllers");
 
             return ApiResult.OK();
@@ -100,19 +100,19 @@ namespace MyNetCore.Services
             var entityInfo = loadEntityIncludeProperty(name, desc);
             var ss = entityInfo.GenerateIndexTableItems();
             //路由
-            var html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{routeTemplateName}"), entityInfo);
+            var html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath($"Vue/{routeTemplateName}"), entityInfo);
             SaveVueCodeToFile(html, $"{entityInfo.ModelVariableName}.js", "\\src\\router\\modules\\");
             //api
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{apiTemplateName}"), entityInfo);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath($"Vue/{apiTemplateName}"), entityInfo);
             SaveVueCodeToFile(html, $"{entityInfo.ModelVariableName}.js", $"\\src\\api\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\");
             //Index页面
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{indexTemplateName}"), entityInfo);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath($"Vue/{indexTemplateName}"), entityInfo);
             SaveVueCodeToFile(html, $"index.vue", $"\\src\\views\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\{entityInfo.ModelVariableName}\\");
             //Edit页面
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{editTemplateName}"), entityInfo);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath($"Vue/{editTemplateName}"), entityInfo);
             SaveVueCodeToFile(html, $"edit.vue", $"\\src\\views\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\{entityInfo.ModelVariableName}\\");
             //Show页面
-            html = await _viewRender.RenderViewToStringAsync(GetViewTemplateRelativePath($"Vue/{showTemplateName}"), entityInfo);
+            html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath($"Vue/{showTemplateName}"), entityInfo);
             SaveVueCodeToFile(html, $"show.vue", $"\\src\\views\\{entityInfo.TableInfo?.VueModuleName ?? "empty"}\\{entityInfo.ModelVariableName}\\");
 
             return ApiResult.OK();

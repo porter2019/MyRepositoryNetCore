@@ -12,12 +12,7 @@
 
   <!--发布/生成时包含Content目录-->
   <ItemGroup>
-    <Content Include="Content\**" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="Always"></Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Content\ViewSQL\BookCategory\Function.sql" />
-    <None Remove="Content\ViewSQL\BookCategory\PROC.sql" />
-    <None Remove="Content\ViewSQL\BookInfo\View.sql" />
+    <Content Include="Content\ViewSQL\**" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="Always"></Content>
   </ItemGroup>
 
   <ItemGroup>

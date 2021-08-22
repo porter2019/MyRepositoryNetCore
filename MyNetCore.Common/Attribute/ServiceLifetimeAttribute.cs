@@ -22,26 +22,26 @@ namespace MyNetCore
         /// </summary>
         public ServiceLifetimeAttribute()
         {
-            this.Lifetime = ServiceLifetime.Scoped;
-            this.IsEnabled = true;
+            this._Lifetime = ServiceLifetime.Scoped;
+            this._IsEnabled = true;
         }
 
         public ServiceLifetimeAttribute(ServiceLifetime serviceLifetime)
         {
-            this.Lifetime = serviceLifetime;
-            this.IsEnabled = true;
+            this._Lifetime = serviceLifetime;
+            this._IsEnabled = true;
         }
 
         public ServiceLifetimeAttribute(bool isEnabled)
         {
-            this.Lifetime = ServiceLifetime.Scoped;
-            this.IsEnabled = IsEnabled;
+            this._Lifetime = ServiceLifetime.Scoped;
+            this._IsEnabled = IsEnabled;
         }
 
         public ServiceLifetimeAttribute(ServiceLifetime serviceLifetime, bool isEnabled)
         {
-            this.Lifetime = serviceLifetime;
-            this.IsEnabled = IsEnabled;
+            this._Lifetime = serviceLifetime;
+            this._IsEnabled = IsEnabled;
         }
 
 
