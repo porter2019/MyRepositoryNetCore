@@ -90,7 +90,7 @@ namespace MyNetCore.Model
         {
             get
             {
-                return CreatedDate.ToString("yyyy-MM-dd HH:mm");
+                return UpdatedDate.ToString("yyyy-MM-dd HH:mm");
             }
         }
 
