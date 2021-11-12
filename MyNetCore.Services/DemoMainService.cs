@@ -49,7 +49,7 @@ namespace MyNetCore.Services
             var entity = await _demoMainRepository.GetModelAsync(id);
             if (entity == null) return new DemoMain();
 
-            entity.Items = await _demoMainRepository.GetDemoMainItems(id);
+            //entity.Items = await _demoMainRepository.GetDemoMainItems(id);
             entity.ImageList = await _commonAttachServices.GetAttachListAsync(id, typeof(DemoMain), "ImageList");
             entity.Attachs = await _commonAttachServices.GetAttachListAsync(id, typeof(DemoMain));
 

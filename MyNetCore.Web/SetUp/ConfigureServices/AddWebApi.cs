@@ -42,16 +42,18 @@ namespace MyNetCore.Web.SetUp
             services.AddControllers(options =>
                     {
                         options.Filters.Add(typeof(GlobalExceptionFilter));
-                    }).AddNewtonsoftJson(options =>
+                    }).AddJsonOptions(options =>
                     {
-                        //忽略循环引用
-                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                        //string类型的值为NULL的改为空字符串
-                        options.SerializerSettings.ContractResolver = new Common.Config.NullToEmptyStringResolver();
-                        //设置时间格式
-                        options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                        options.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                        options.JsonSerializerOptions.Converters.Add(new SystemTextJsonConfig.DateTimeConverter());
+                        options.JsonSerializerOptions.Converters.Add(new SystemTextJsonConfig.DateTimeNullableConverter());
+                        options.JsonSerializerOptions.Converters.Add(new SystemTextJsonConfig.IntToStringConverter());
+                        options.JsonSerializerOptions.Converters.Add(new SystemTextJsonConfig.DoubleToStringConverter());
+                        options.JsonSerializerOptions.Converters.Add(new SystemTextJsonConfig.DecimalToStringConverter());
+                        options.JsonSerializerOptions.Converters.Add(new SystemTextJsonConfig.StringJsonConverter());
                     });
-
             //处理DTO验证错误时的返回消息格式
             services.Configure<ApiBehaviorOptions>(options =>
             {

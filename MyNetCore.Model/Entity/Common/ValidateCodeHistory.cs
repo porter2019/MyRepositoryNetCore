@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNetCore.Model.Entity
@@ -69,7 +70,7 @@ namespace MyNetCore.Model.Entity
         /// <summary>
         /// 忽略
         /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         new static List<CommonAttach> Attachs => null;
 
     }

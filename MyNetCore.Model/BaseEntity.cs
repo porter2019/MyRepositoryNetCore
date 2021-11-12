@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -41,7 +40,7 @@ namespace MyNetCore.Model
         /// 是否删除
         /// </summary>
         [FsColumn("是否删除", Position = -2)]
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public bool IsDeleted { get; set; } = false;
 
         /// <summary>
@@ -124,7 +123,7 @@ namespace MyNetCore.Model
         /// 创建者ID
         /// </summary>
         [FsColumn("创建者ID", CanUpdate = false, Position = -6)]
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public int? CreatedUserId { get; set; }
 
         /// <summary>
@@ -137,7 +136,7 @@ namespace MyNetCore.Model
         /// 修改者ID
         /// </summary>
         [FsColumn("修改者ID", Position = -7)]
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public int? UpdatedUserId { get; set; }
 
         /// <summary>

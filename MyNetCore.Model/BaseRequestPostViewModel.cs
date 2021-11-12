@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNetCore.Model
@@ -15,13 +16,13 @@ namespace MyNetCore.Model
         /// <summary>
         /// 当前操作的用户id
         /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public int CurrentUserId { get; set; }
 
         /// <summary>
         /// 当前操作的用户名
         /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public string CurrentUserName { get; set; }
     }
 }
