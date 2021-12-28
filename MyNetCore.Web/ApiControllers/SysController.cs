@@ -84,6 +84,18 @@ namespace MyNetCore.Web.ApiControllers
         }
 
         /// <summary>
+        /// 初始化系统用户种子数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("db/sync/seeddata")]
+        [Permission(Anonymous = true)]
+        public async Task<ApiResult> InitSeedData()
+        {
+            await _sysUserServices.InitSeedDataAsync();
+            return ApiResult.OK();
+        }
+
+        /// <summary>
         /// 同步次数据库结构
         /// </summary>
         /// <param name="_fsql">自动从服务中获取注入的数据库操作对象</param>

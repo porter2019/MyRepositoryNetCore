@@ -28,21 +28,24 @@ namespace MyNetCore.Web
             //已处理
             if (context.ExceptionHandled) return;
 
-            _logger.LogError(context.Exception, "发生异常");
+            if (context.Exception.GetType().Equals(typeof(CustomException)))
+            {
+                //只有指定了InnerException的才会记录，不然Seq里太多异常日志了，不方便排查关键性问题
+                if (context.Exception.InnerException != null)
+                {
+                    _logger.LogError(context.Exception.InnerException, "发生异常(手动)");
+                }
+            }
+            else
+            {
+                _logger.LogError(context.Exception, "发生异常");
+            }
+
 
             //开发环境抛出全部异常
             //if (_hostEnvironment.IsDevelopment()) return;
 
             context.Result = new ObjectResult(ApiResult.Error(context.Exception.Message));
-            //var contentType = context.HttpContext.Request.Headers["Content-Type"].FirstOrDefault()?.ToLower() ?? "";
-            //var accept = context.HttpContext.Request.Headers["accept"].FirstOrDefault()?.ToLower() ?? "";
-            //if (contentType.Equals("application/json") || accept.Equals("application/json"))
-            //{
-            //}
-            //else
-            //{
-            //    context.Result = new ObjectResult("服务器出现异常");
-            //}
 
             context.ExceptionHandled = true;
         }

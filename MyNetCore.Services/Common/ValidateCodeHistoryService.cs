@@ -29,7 +29,7 @@ namespace MyNetCore.Services
         private readonly IFreeSql _fsq;
         private readonly IValidateCodeHistoryRepository _validateCodeHistoryRepository;
 
-        public ValidateCodeHistoryService(ILogger<ValidateCodeHistoryService> logger, IFreeSql<DBFlagMain> fsq, ValidateCodeHistoryRepository validateCodeHistoryRepository) : base(validateCodeHistoryRepository, logger)
+        public ValidateCodeHistoryService(ILogger<ValidateCodeHistoryService> logger, IFreeSql<DBFlagMain> fsq, IValidateCodeHistoryRepository validateCodeHistoryRepository) : base(validateCodeHistoryRepository, logger)
         {
             _fsq = fsq;
             _validateCodeHistoryRepository = validateCodeHistoryRepository;

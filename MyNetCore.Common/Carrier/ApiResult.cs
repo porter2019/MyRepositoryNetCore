@@ -32,6 +32,11 @@ namespace MyNetCore
         public object data { get; set; }
 
         /// <summary>
+        /// 枚举集合
+        /// </summary>
+        public List<ApiEnumProp> enums { get; set; }
+
+        /// <summary>
         /// 判断当前返回值是否成功
         /// </summary>
         /// <returns></returns>
@@ -62,6 +67,24 @@ namespace MyNetCore
             {
                 code = ApiCode.成功,
                 data = data,
+                msg = "OK"
+            };
+        }
+
+        /// <summary>
+        /// 成功
+        /// </summary>
+        /// <param name="data">返回的对象</param>
+        /// <param name="enums">枚举</param>
+        /// <returns></returns>
+        public static ApiResult OK(object data, List<ApiEnumProp> enums)
+        {
+
+            return new ApiResult()
+            {
+                code = ApiCode.成功,
+                data = data,
+                enums = enums,
                 msg = "OK"
             };
         }
@@ -109,6 +132,25 @@ namespace MyNetCore
                 code = ApiCode.成功,
                 total = total,
                 data = data,
+                msg = "OK"
+            };
+        }
+
+        /// <summary>
+        /// 成功
+        /// </summary>
+        /// <param name="total">数据总条数</param>
+        /// <param name="data">返回数据</param>
+        /// <param name="enums">枚举</param>
+        /// <returns></returns>
+        public static ApiResult OK(long total, object data, List<ApiEnumProp> enums)
+        {
+            return new ApiResult()
+            {
+                code = ApiCode.成功,
+                total = total,
+                data = data,
+                enums = enums,
                 msg = "OK"
             };
         }
@@ -289,6 +331,46 @@ namespace MyNetCore
         }
 
 
+    }
+
+    /// <summary>
+    /// API-枚举集合
+    /// </summary>
+    public class ApiEnumProp
+    {
+        public ApiEnumProp()
+        {
+
+        }
+
+        public ApiEnumProp(string name, List<ApiEnumOptions> options)
+        {
+            this.Name = name;
+            this.Options = options;
+        }
+
+        /// <summary>
+        /// 枚举名称
+        /// </summary>
+        public string Name { get; set; }
+
+        public List<ApiEnumOptions> Options { get; set; }
+    }
+
+    /// <summary>
+    /// 枚举-项
+    /// </summary>
+    public class ApiEnumOptions
+    {
+        public ApiEnumOptions(string label, int value)
+        {
+            this.Label = label;
+            this.Value = value;
+        }
+
+        public string Label { get; set; }
+
+        public int Value { get; set; }
     }
 
     /// <summary>

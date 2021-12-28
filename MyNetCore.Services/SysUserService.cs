@@ -27,9 +27,9 @@ namespace MyNetCore.Services
         public SysUserService(ILogger<SysUserService> logger,
             IConfiguration config,
             IJwtService jwtService,
-            SysUserRepository sysUserRepository,
+            ISysUserRepository sysUserRepository,
             IFreeSql<DBFlagMain> fsq,
-            SysRoleRepository sysRoleRepository) : base(sysUserRepository, logger)
+            ISysRoleRepository sysRoleRepository) : base(sysUserRepository, logger)
         {
             _sysUserRepository = sysUserRepository;
             _fsq = fsq;
@@ -165,6 +165,64 @@ namespace MyNetCore.Services
             if (roleList.Any(p => p.IsSuper)) return new List<string>() { "ALL" };
             var roleIds = roleList.Select(p => p.RoleId).ToList().Join();
             return await _sysRoleRepository.GetPermissionsByRoleIds(roleIds);
+        }
+
+        /// <summary>
+        /// 初始化种子数据，添加超级管理组和超级管理员，默认账号：admin 111111
+        /// </summary>
+        /// <returns></returns>
+        public async Task InitSeedDataAsync()
+        {
+            var defaultRole = await _sysRoleRepository.GetModelAsync(p => p.IsSuper);
+            if (defaultRole != null) throw new Exception("默认管理员组已存在");
+
+            var defaultUser = await _sysUserRepository.GetCountAsync(p => p.UserId > 0);
+            if (defaultUser != 0) throw new Exception("已有用户");
+
+            using (var uow = _fsq.CreateUnitOfWork())
+            {
+                _sysRoleRepository.UnitOfWork = uow;
+                _sysUserRepository.UnitOfWork = uow;
+                var userRoleRepo = uow.GetRepository<SysRoleUser>();
+                userRoleRepo.UnitOfWork = uow;
+
+                var role = new SysRole()
+                {
+                    IsSuper = true,
+                    RoleName = "超级管理员组",
+                    CreatedUserId = 0,
+                    CreatedUserName = "系统",
+                    UpdatedUserId = 0,
+                    UpdatedUserName = "系统",
+                };
+
+                await _sysRoleRepository.InsertAsync(role);
+
+                var user = new SysUser()
+                {
+                    LoginName = "admin",
+                    Password = "111111".EncryptMD5Encode(),
+                    Status = true,
+                    UserName = "管理员",
+                    CreatedUserId = 0,
+                    CreatedUserName = "系统",
+                    UpdatedUserId = 0,
+                    UpdatedUserName = "系统",
+                };
+
+                await _sysUserRepository.InsertAsync(user);
+
+                var roleUser = new SysRoleUser()
+                {
+                    RoleId = role.RoleId,
+                    UserId = user.UserId,
+                };
+
+                await userRoleRepo.InsertAsync(roleUser);
+
+                uow.Commit();
+            }
+
         }
 
     }

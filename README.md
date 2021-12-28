@@ -1,9 +1,9 @@
-# DDD下经典仓储架构
+# NetCore经典仓储架构
 
 > 阶段性技术总结汇总
 ## Basic
 
-采用`.net core 5.0`构建，ORM使用`FreeSql`
+采用`.net core 6.0`构建，ORM使用`FreeSql`
 
 ## 依赖注入
 IOC使用NetCore自带的，为了方便批量注入，现定义以下约定
@@ -41,11 +41,12 @@ IOC使用NetCore自带的，为了方便批量注入，现定义以下约定
 ## 实体需要标识的FreeSql特性说明
 - 实体分页查询、GetModel需要查询sql视图的情况
     建立视图对应的dto类，一般继承实体，在dto增加需要查询额外的属性，给该dto增加FreeSql特性
+    
     ```
     [FsTable("说明", Name = "BookInfoView", DisableSyncStructure = true)]
     ```
     > 必须指定`Name`，值为sql中视图的名称，并设置`DisableSyncStructure = true`禁用迁移
-
+    
     实体中的FreeSql特性如下：
     ```
     [FsTable("表备注", ViewClassName = typeof(DTO文件类名), VueModuleName = "demo")]
@@ -93,7 +94,7 @@ B.如果name不是表的实体，则生成一个基础的api控制器模板，�
                 <image-upload :url.sync="formData.ImagePathFull" :data="{'tag':'images'}" @on-success="imageUploadSuccess" />
             </el-form-item>
         </el-col>
-
+    
         //methods
         imageUploadSuccess(res) {
             if (res.code === 200) {
@@ -107,7 +108,7 @@ B.如果name不是表的实体，则生成一个基础的api控制器模板，�
                 this.$message.error(res.msg);
             }
         },
-
+    
     ```
     > `tag`属性为文件最终保存的目录，不指定这个参数则默认`attach`
     - 如果有明细，明细中的列代码并未自动生成，只写了一些演示的数据，对应的做调整就行

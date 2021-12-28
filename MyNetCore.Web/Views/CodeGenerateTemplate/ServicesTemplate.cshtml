@@ -34,7 +34,7 @@ namespace @(Model.ProjectName).Services
         private readonly ICommonAttachService _commonAttachService;
         private readonly I@(Model.ModelName)Repository _@(Model.ModelVariableName)Repository;
 
-        public @(Model.ModelName)Service(ILogger<@(Model.ModelName)Service> logger, IFreeSql<DBFlagMain> fsq, ICommonAttachService commonAttachService, @(Model.ModelName)Repository @(Model.ModelVariableName)Repository) : base(@(Model.ModelVariableName)Repository, logger)
+        public @(Model.ModelName)Service(ILogger<@(Model.ModelName)Service> logger, IFreeSql<DBFlagMain> fsq, ICommonAttachService commonAttachService, I@(Model.ModelName)Repository @(Model.ModelVariableName)Repository) : base(@(Model.ModelVariableName)Repository, logger)
         {
             _fsq = fsq;
             _commonAttachService = commonAttachService;

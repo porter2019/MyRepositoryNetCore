@@ -109,7 +109,7 @@ namespace MyNetCore.Web.ApiControllers
         [Permission("删除", "delete")]
         public async Task<ApiResult> Delete(string ids)
         {
-            var affrows = await _sysRoleServices.DeleteByIdsAsync(ids.SplitWithComma());
+            var affrows = await _sysRoleServices.DeleteByIdsAsync(ids.SplitWithComma().ConvertIntArray());
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }

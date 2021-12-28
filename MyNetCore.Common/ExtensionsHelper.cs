@@ -303,7 +303,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 获取当前项目名称(MyNetCore)
+        /// 获取当前项目名称(YZLHMall)
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -341,6 +341,58 @@ namespace MyNetCore
         #region String
 
         /// <summary>
+        /// 移除最后一个指定的字符(如果最后一个字符匹配)
+        /// </summary>
+        /// <param name="sourceStr"></param>
+        /// <param name="lastChar">指定的char</param>
+        /// <returns></returns>
+        public static string RemoveLastCharWith(this string sourceStr, char lastChar)
+        {
+            if (sourceStr.IsNull()) return "";
+            if (sourceStr.EndsWith(lastChar))
+            {
+                return sourceStr.Substring(0, sourceStr.Length - 1);
+            }
+            else
+            {
+                return sourceStr;
+            }
+        }
+
+        /// <summary>
+        /// 将当天，近三天，近一周，近十天，近三个月这种字符串转为搜索的时间范围，英文逗号分割
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string BuildSearchDataRange(this string s)
+        {
+            var searchRange = "";
+            switch (s)
+            {
+                case "当天":
+                    searchRange = DateTime.Now.ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
+                    break;
+                case "近三天":
+                    searchRange = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
+                    break;
+                case "近一周":
+                    searchRange = DateTime.Now.AddDays(-6).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
+                    break;
+                case "近十天":
+                    searchRange = DateTime.Now.AddDays(-9).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
+                    break;
+                case "近一个月":
+                    searchRange = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
+                    break;
+                case "近三个月":
+                    searchRange = DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
+                    break;
+            }
+
+            return searchRange;
+        }
+
+        /// <summary>
         /// 正则表达式匹配截取字符串
         /// </summary>
         /// <param name="s"></param>
@@ -350,7 +402,7 @@ namespace MyNetCore
         public static string RegexMatchValue(this string s, string regexExpression)
         {
             if (regexExpression.IsNull()) return string.Empty;
-            Regex regex = new Regex(regexExpression, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+            var regex = new Regex(regexExpression, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
             return regex.IsMatch(s) ? regex.Match(s).Groups[1].ToString() : "";
         }
 
@@ -422,7 +474,7 @@ namespace MyNetCore
         /// <returns></returns>
         public static string RemoveElement(this string str, string element, string separator)
         {
-            List<string> strList = new List<string>(str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries));
+            var strList = new List<string>(str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries));
 
             if (!String.IsNullOrEmpty(element))
             {
@@ -444,7 +496,7 @@ namespace MyNetCore
         /// <returns></returns>
         public static string AddElement(this string str, string element, string separator)
         {
-            List<string> strList = new List<string>(str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries));
+            var strList = new List<string>(str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries));
 
             if (!String.IsNullOrEmpty(element))
             {
@@ -471,7 +523,7 @@ namespace MyNetCore
 
             if (!String.IsNullOrEmpty(str2))
             {
-                str2.Replace("'", "''");
+                str2 = str2.Replace("'", "''");
 
                 string words = "and|exec|insert|select|delete|update|chr|mid|master|or|truncate|char|declare|join";
                 foreach (string w in words.Split('|'))
@@ -529,13 +581,13 @@ namespace MyNetCore
         /// <returns></returns>
         public static string SubStringByte(this string str, int start, int length)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (!String.IsNullOrEmpty(str))
             {
                 int intLen = 0;
 
-                ASCIIEncoding ascii = new ASCIIEncoding();
+                var ascii = new ASCIIEncoding();
                 byte[] bytes = ascii.GetBytes(str);
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -558,6 +610,17 @@ namespace MyNetCore
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// 截取指定长度的字符串，超出使用省略号代替
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="length">最大长度</param>
+        /// <returns></returns>
+        public static string SubStringWithLength(this string str, int length)
+        {
+            return str.Length > length ? string.Concat(str.AsSpan(0, length), "...") : str;
         }
 
         /// <summary>
@@ -586,7 +649,7 @@ namespace MyNetCore
         public static string[] SplitString(this string sourceStr, string splitStr)
         {
             if (string.IsNullOrEmpty(sourceStr) || string.IsNullOrEmpty(splitStr))
-                return new string[0] { };
+                return Array.Empty<string>();
 
             if (sourceStr.IndexOf(splitStr) == -1)
                 return new string[] { sourceStr };
@@ -718,7 +781,7 @@ namespace MyNetCore
         /// <returns></returns>
         public static string Format(this TimeSpan ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (ts.Days > 0)
             {
@@ -794,7 +857,7 @@ namespace MyNetCore
         /// <returns></returns>
         public static int WeekOfYear(this DateTime dt)
         {
-            CultureInfo ci = new CultureInfo("zh-CN");
+            var ci = new CultureInfo("zh-CN");
             return ci.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
         }
 
@@ -1267,25 +1330,40 @@ namespace MyNetCore
             return null;
         }
 
-        ///// <summary>
-        ///// 获取枚举名以及对应的Value
-        ///// </summary>
-        ///// <param name="type">枚举类型typeof(T)</param>
-        ///// <returns></returns>
-        //public static List<ApiEnumOptions> GetEnumOptions(this Type type)
-        //{
-        //    if (type.IsEnum)
-        //    {
-        //        var list = new List<ApiEnumOptions>();
-        //        var enumValues = Enum.GetValues(type);
-        //        foreach (Enum value in enumValues)
-        //        {
-        //            list.Add(new ApiEnumOptions(GetEnumDescription(value), value.GetHashCode().ToString()));
-        //        }
-        //        return list;
-        //    }
-        //    return null;
-        //}
+        /// <summary>
+        /// 获取枚举名以及对应的Value
+        /// </summary>
+        /// <param name="type">枚举类型typeof(T)</param>
+        /// <returns></returns>
+        public static List<ApiEnumOptions> GetEnumOptions(this Type type)
+        {
+            if (type.IsEnum)
+            {
+                var list = new List<ApiEnumOptions>();
+                var enumValues = Enum.GetValues(type);
+                foreach (Enum value in enumValues)
+                {
+                    list.Add(new ApiEnumOptions(GetEnumDescription(value), value.GetHashCode().ObjToInt()));
+                }
+                return list;
+            }
+            return null;
+        }
+
+        #endregion
+
+        #region Http上下文
+
+        /// <summary>
+        /// 获取Request中的Header指定key的值
+        /// </summary>
+        /// <param name="heads"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static string GetValue(this Microsoft.AspNetCore.Http.IHeaderDictionary heads, string key)
+        {
+            return heads[key].FirstOrDefault()?.ToString() ?? "";
+        }
 
         #endregion
     }

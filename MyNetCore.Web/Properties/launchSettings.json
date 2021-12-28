@@ -1,13 +1,9 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://rep.litdev.me",
-      "sslPort": 0
-    },
-    "iisExpress": {
-      "applicationUrl": "http://localhost:63349",
+      "applicationUrl": "http://localhost:5120",
       "sslPort": 0
     }
   },
@@ -26,12 +22,11 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "dotnetRunMessages": "true",
-      "applicationUrl": "http://localhost:5000"
+      "applicationUrl": "http://localhost:5000",
+      "dotnetRunMessages": "true"
     },
     "IIS": {
       "commandName": "IIS",
-      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

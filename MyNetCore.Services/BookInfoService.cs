@@ -30,7 +30,10 @@ namespace MyNetCore.Services
         private readonly ICommonAttachService _commonAttachServices;
         private readonly IFreeSql _fsq;
 
-        public BookInfoService(ILogger<BookInfoService> logger, BookInfoRepository bookInfoRepository, IFreeSql<DBFlagMain> fsq, ICommonAttachService commonAttachServices) : base(bookInfoRepository, logger)
+        public BookInfoService(ILogger<BookInfoService> logger, 
+            IBookInfoRepository bookInfoRepository, 
+            IFreeSql<DBFlagMain> fsq, 
+            ICommonAttachService commonAttachServices) : base(bookInfoRepository, logger)
         {
             _bookInfoRepository = bookInfoRepository;
             _commonAttachServices = commonAttachServices;

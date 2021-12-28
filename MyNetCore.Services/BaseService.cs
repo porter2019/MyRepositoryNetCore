@@ -17,10 +17,10 @@ namespace MyNetCore.Services
     /// <typeparam name="TEntity"></typeparam>
     public class BaseService<TEntity, TKey> : IBaseService<TEntity> where TEntity : class, new() //Model.BaseEntity, new()
     {
-        private IBaseMyRepository<TEntity> _baseRepo;
+        private readonly IBaseMyRepository<TEntity> _baseRepo;
         protected ILogger _logger;
 
-        public BaseService(BaseMyRepository<TEntity, TKey> baseRepo, ILogger logger)
+        public BaseService(IBaseMyRepository<TEntity> baseRepo, ILogger logger)
         {
             this._baseRepo = baseRepo;
             _logger = logger;
@@ -113,6 +113,28 @@ namespace MyNetCore.Services
         }
 
         /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public int Update(string rowSql, Expression<Func<TEntity, bool>> where)
+        {
+            return _baseRepo.Update(rowSql, where);
+        }
+
+        /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> UpdateAsync(string rowSql, Expression<Func<TEntity, bool>> where)
+        {
+            return _baseRepo.UpdateAsync(rowSql, where);
+        }
+
+        /// <summary>
         /// 修改数据(只更新变化的属性)
         /// </summary>
         /// <param name="oldEntity">修改前的实体</param>
@@ -165,8 +187,9 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public int DeleteByIds(object[] ids)
+        public int DeleteByIds(int[] ids)
         {
+            if (!ids.Any()) throw new CustomException("缺少参数");
             return _baseRepo.DeleteByIds(ids);
         }
 
@@ -175,9 +198,78 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public Task<int> DeleteByIdsAsync(object[] ids)
+        public Task<int> DeleteByIdsAsync(int[] ids)
         {
+            if (!ids.Any()) throw new CustomException("缺少参数");
             return _baseRepo.DeleteByIdsAsync(ids);
+        }
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public int DeleteByIds(int[] ids, Expression<Func<TEntity, bool>> where)
+        {
+            if (!ids.Any()) throw new CustomException("缺少参数");
+            return _baseRepo.DeleteByIds(ids, where);
+        }
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> DeleteByIdsAsync(int[] ids, Expression<Func<TEntity, bool>> where)
+        {
+            if (!ids.Any()) throw new CustomException("缺少参数");
+            return _baseRepo.DeleteByIdsAsync(ids, where);
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public int DeleteByWhere(Expression<Func<TEntity, bool>> where)
+        {
+            return _baseRepo.DeleteByWhere(where);
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> DeleteByWhereAsync(Expression<Func<TEntity, bool>> where)
+        {
+            return _baseRepo.DeleteByWhereAsync(where);
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="exp"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public int DeleteByWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            return _baseRepo.DeleteByWhereIf(where, condition, exp);
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> DeleteByWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            return _baseRepo.DeleteByWhereIfAsync(where, condition, exp);
         }
 
         #endregion
@@ -248,6 +340,30 @@ namespace MyNetCore.Services
         public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> where)
         {
             return _baseRepo.ExistsAsync(where);
+        }
+
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public bool ExistsWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            return _baseRepo.ExistsWhereIf(where, condition, exp);
+        }
+
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public Task<bool> ExistsWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            return _baseRepo.ExistsWhereIfAsync(where, condition, exp);
         }
 
         #endregion

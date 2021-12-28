@@ -15,6 +15,15 @@ namespace MyNetCore.Web
         public PermissionAttribute() { }
 
         /// <summary>
+        /// 是否允许匿名访问
+        /// </summary>
+        /// <param name="anonymous"></param>
+        public PermissionAttribute(bool anonymous)
+        {
+            this.Anonymous = anonymous;
+        }
+
+        /// <summary>
         /// 只指定操作名
         /// </summary>
         /// <param name="operationName"></param>

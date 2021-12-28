@@ -54,6 +54,30 @@ namespace MyNetCore.Repository
         }
 
         /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public int Update(string rowSql, Expression<Func<TEntity, bool>> where)
+        {
+            var repo = _fsql.GetRepository<TEntity>();
+            return repo.UpdateDiy.SetRaw(rowSql).Where(where).ExecuteAffrows();
+        }
+
+        /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> UpdateAsync(string rowSql, Expression<Func<TEntity, bool>> where)
+        {
+            var repo = _fsql.GetRepository<TEntity>();
+            return repo.UpdateDiy.SetRaw(rowSql).Where(where).ExecuteAffrowsAsync();
+        }
+
+        /// <summary>
         /// 修改数据(只更新变化的属性)
         /// </summary>
         /// <param name="oldEntity">修改前的实体</param>
@@ -113,7 +137,7 @@ namespace MyNetCore.Repository
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public int DeleteByIds(object[] ids)
+        public int DeleteByIds(int[] ids)
         {
             if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
             {
@@ -130,15 +154,123 @@ namespace MyNetCore.Repository
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task<int> DeleteByIdsAsync(object[] ids)
+        public Task<int> DeleteByIdsAsync(int[] ids)
         {
             if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
             {
-                return await _fsql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrowsAsync();
+                return _fsql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").ExecuteAffrowsAsync();
             }
             else
             {
-                return await _fsql.Delete<TEntity>(ids).ExecuteAffrowsAsync();
+                return _fsql.Delete<TEntity>(ids).ExecuteAffrowsAsync();
+            }
+        }
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public int DeleteByIds(int[] ids, Expression<Func<TEntity, bool>> where)
+        {
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return _fsql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").Where(where).ExecuteAffrows();
+            }
+            else
+            {
+                return _fsql.Delete<TEntity>(ids).Where(where).ExecuteAffrows();
+            }
+        }
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> DeleteByIdsAsync(int[] ids, Expression<Func<TEntity, bool>> where)
+        {
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return _fsql.Update<TEntity>(ids).SetRaw("IsDeleted = 1").Where(where).ExecuteAffrowsAsync();
+            }
+            else
+            {
+                return _fsql.Delete<TEntity>(ids).Where(where).ExecuteAffrowsAsync();
+            }
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public int DeleteByWhere(Expression<Func<TEntity, bool>> where)
+        {
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return _fsql.Update<TEntity>().SetRaw("IsDeleted = 1").Where(where).ExecuteAffrows();
+            }
+            else
+            {
+                return _fsql.Delete<TEntity>().Where(where).ExecuteAffrows();
+            }
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> DeleteByWhereAsync(Expression<Func<TEntity, bool>> where)
+        {
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return _fsql.Update<TEntity>().SetRaw("IsDeleted = 1").Where(where).ExecuteAffrowsAsync();
+            }
+            else
+            {
+                return _fsql.Delete<TEntity>().Where(where).ExecuteAffrowsAsync();
+            }
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="exp"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public int DeleteByWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return _fsql.Update<TEntity>().SetRaw("IsDeleted = 1").Where(where).WhereIf(condition, exp).ExecuteAffrows();
+            }
+            else
+            {
+                return _fsql.Delete<TEntity>().Where(where).WhereIf(condition, exp).ExecuteAffrows();
+            }
+        }
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public Task<int> DeleteByWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            if (typeof(TEntity).GetProperties().Any(p => p.Name == "IsDeleted"))
+            {
+                return _fsql.Update<TEntity>().SetRaw("IsDeleted = 1").Where(where).WhereIf(condition, exp).ExecuteAffrowsAsync();
+            }
+            else
+            {
+                return _fsql.Delete<TEntity>().Where(where).WhereIf(condition, exp).ExecuteAffrowsAsync();
             }
         }
 
@@ -212,6 +344,30 @@ namespace MyNetCore.Repository
             return _fsql.Select<TEntity>().AnyAsync(where);
         }
 
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public bool ExistsWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            return _fsql.Select<TEntity>().Where(where).WhereIf(condition, exp).Count() > 0;
+        }
+
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp)
+        {
+            return (await _fsql.Select<TEntity>().Where(where).WhereIf(condition, exp).CountAsync()) > 0;
+        }
+
         #endregion
 
         #region 查询单条数据
@@ -274,6 +430,17 @@ namespace MyNetCore.Repository
         public Task<TEntity> GetModelAsync(Expression<Func<TEntity, bool>> where)
         {
             return _fsql.Select<TEntity>().Where(where).ToOneAsync();
+        }
+
+        /// <summary>
+        /// 查询单条数据，指定排序
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="orderBy">排序</param>
+        /// <returns></returns>
+        public Task<TEntity> GetModelAsync(Expression<Func<TEntity, bool>> where, string orderBy)
+        {
+            return _fsql.Select<TEntity>().Where(where).OrderBy(orderBy).ToOneAsync();
         }
 
         /// <summary>
@@ -364,6 +531,18 @@ namespace MyNetCore.Repository
         public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> exp)
         {
             return _fsql.Select<TEntity>().Where(exp).ToListAsync();
+        }
+
+        /// <summary>
+        /// 查询列表，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <param name="orderBy">排序</param>
+        /// <returns>List<TEntity></returns>
+        public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> exp, string orderBy)
+        {
+            return _fsql.Select<TEntity>().Where(exp).OrderBy(orderBy).ToListAsync();
         }
 
         /// <summary>
@@ -602,6 +781,7 @@ namespace MyNetCore.Repository
         {
             return _fsql.Select<TEntity>()
                         .WithSql(sql)
+                        .WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToList<REntity>();
@@ -618,6 +798,7 @@ namespace MyNetCore.Repository
         {
             return _fsql.Select<TEntity>()
                         .WithSql(sql)
+                        .WhereIf(options.Where.IsNotNull(), "1=1 " + options.Where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToListAsync<REntity>();
@@ -667,8 +848,15 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public List<REntity> GetPageListView<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new()
         {
+            string where = string.Empty;
+            if (options.Where.IsNotNull())
+            {
+                if (options.Where.StartsWith("and")) where = "1=1 " + options.Where;
+                else where = options.Where;
+            }
             return _fsql.Select<REntity>()
                         .WithSql(sql)
+                        .WhereIf(where.IsNotNull(), where)
                         .Count(out total).Page(options.PageIndex, options.PageSize)
                         .OrderBy(options.OrderBy)
                         .ToList();

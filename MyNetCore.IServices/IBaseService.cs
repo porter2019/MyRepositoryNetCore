@@ -77,6 +77,22 @@ namespace MyNetCore.IServices
         Task<int> UpdateAsync(TEntity entity);
 
         /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        int Update(string rowSql, Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> UpdateAsync(string rowSql, Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
         /// 修改数据(只更新变化的属性)
         /// </summary>
         /// <param name="oldEntity">修改前的实体</param>
@@ -117,15 +133,63 @@ namespace MyNetCore.IServices
         /// 根据ids批量删除数据
         /// </summary>
         /// <param name="ids"></param>
-        /// <returns>受影响的行数</returns>
-        int DeleteByIds(object[] ids);
+        /// <returns></returns>
+        int DeleteByIds(int[] ids);
 
         /// <summary>
         /// 根据ids批量删除数据
         /// </summary>
         /// <param name="ids"></param>
-        /// <returns>受影响的行数</returns>
-        Task<int> DeleteByIdsAsync(object[] ids);
+        /// <returns></returns>
+        Task<int> DeleteByIdsAsync(int[] ids);
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        int DeleteByIds(int[] ids, Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> DeleteByIdsAsync(int[] ids, Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        int DeleteByWhere(Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> DeleteByWhereAsync(Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="exp"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        int DeleteByWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> DeleteByWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
         #endregion
 
@@ -179,6 +243,23 @@ namespace MyNetCore.IServices
         /// <returns>bool</returns>
         Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> where);
 
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        bool ExistsWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        Task<bool> ExistsWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
         #endregion
 

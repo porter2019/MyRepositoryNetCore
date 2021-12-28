@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Reflection;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -74,60 +75,63 @@ namespace MyNetCore.Web.SetUp
             #endregion
 
 
-            #region 注入次数据库
+            //#region 注入次数据库
 
-            {
-                var pathRoot = "DBContexts:Secondary";
-                var sqlTypeConfig = config[$"{pathRoot}:DBType"];
-                var sqlType = (global::FreeSql.DataType)Enum.Parse(typeof(global::FreeSql.DataType), sqlTypeConfig);
-                var connectionString = config[$"{pathRoot}:{sqlTypeConfig}:ConnectionString"];
-                var isAutoMigration = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:IsAutoMigration");
-                var lazyLoading = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:LazyLoading");
+            //{
+            //    var pathRoot = "DBContexts:Secondary";
+            //    var sqlTypeConfig = config[$"{pathRoot}:DBType"];
+            //    var sqlType = (global::FreeSql.DataType)Enum.Parse(typeof(global::FreeSql.DataType), sqlTypeConfig);
+            //    var connectionString = config[$"{pathRoot}:{sqlTypeConfig}:ConnectionString"];
+            //    var isAutoMigration = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:IsAutoMigration");
+            //    var lazyLoading = config.GetValue<bool>($"{pathRoot}:{sqlTypeConfig}:LazyLoading");
 
-                var freeSql = new FreeSql.FreeSqlBuilder()
-                    .UseConnectionString(sqlType, connectionString)
-                    .UseAutoSyncStructure(isAutoMigration)
-                    .UseLazyLoading(lazyLoading)
-                    .UseMonitorCommand(
-                        cmd =>
-                        {
-                            //监听SQL命令对象，在执行前
-                            //logger.Info("执行前："+cmd.CommandText);
-                        },
-                        (cmd, traceLog) =>
-                        {
-                            //监听SQL命令对象，在执行后
-                            logger.Debug($"【{appName}】Secondary数据库执行后：{traceLog}");
-                        })
-                    .Build<DBFlagSecondary>();
+            //    var freeSql = new FreeSql.FreeSqlBuilder()
+            //        .UseConnectionString(sqlType, connectionString)
+            //        .UseAutoSyncStructure(isAutoMigration)
+            //        .UseLazyLoading(lazyLoading)
+            //        .UseMonitorCommand(
+            //            cmd =>
+            //            {
+            //                //监听SQL命令对象，在执行前
+            //                //logger.Info("执行前："+cmd.CommandText);
+            //            },
+            //            (cmd, traceLog) =>
+            //            {
+            //                //监听SQL命令对象，在执行后
+            //                logger.Debug($"【{appName}】Secondary数据库执行后：{traceLog}");
+            //            })
+            //        .Build<DBFlagSecondary>();
 
-                freeSql.Aop.CurdAfter += (s, e) =>
-                {
-                    System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-                    foreach (var item in e.DbParms)
-                    {
-                        if (item == null) continue;
-                        stringBuilder.Append($"[{item.ParameterName}] = [{ item.Value}],");
-                    }
+            //    freeSql.Aop.CurdAfter += (s, e) =>
+            //    {
+            //        System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            //        foreach (var item in e.DbParms)
+            //        {
+            //            if (item == null) continue;
+            //            stringBuilder.Append($"[{item.ParameterName}] = [{ item.Value}],");
+            //        }
 
-                    var logTxt = string.Format(logTemplate, "Main", e.CurdType, e.EntityType.FullName, e.ElapsedMilliseconds, e.Sql);
-                    if (stringBuilder.Length > 0)
-                        logTxt += "，参数：" + stringBuilder.ToString();
-                    logTxt += "，返回值：" + JsonConvert.SerializeObject(e.ExecuteResult);
-                    logger.Info(logTxt);
-                };
-                freeSql.GlobalFilter.Apply<ISoftDelete>("SoftDelete", a => a.IsDeleted == false);
+            //        var logTxt = string.Format(logTemplate, "Main", e.CurdType, e.EntityType.FullName, e.ElapsedMilliseconds, e.Sql);
+            //        if (stringBuilder.Length > 0)
+            //            logTxt += "，参数：" + stringBuilder.ToString();
+            //        logTxt += "，返回值：" + JsonConvert.SerializeObject(e.ExecuteResult);
+            //        logger.Info(logTxt);
+            //    };
+            //    freeSql.GlobalFilter.Apply<ISoftDelete>("SoftDelete", a => a.IsDeleted == false);
 
-                //必须定义为单例模式
-                services.AddSingleton(freeSql);
+            //    //必须定义为单例模式
+            //    services.AddSingleton(freeSql);
 
-            }
+            //}
 
-            #endregion
+            //#endregion
 
-            var repositoryAssmbly = System.Reflection.Assembly.Load($"{services.GetProjectMainName()}.Repository");
-            //注入仓储
-            services.AddFreeRepository(null, repositoryAssmbly);
+            //不用他的注入仓储方法，因为只有实例，没有接口，可以调用他的注入全局过滤器
+            //services.AddFreeRepository(FluentDataFilter);
+
+            //批量注入Repository层
+            services.BatchRegisterServices(new Assembly[] { Assembly.Load($"{services.GetProjectMainName()}.Repository") }, typeof(Repository.BaseMyRepository<,>));
+
         }
 
     }

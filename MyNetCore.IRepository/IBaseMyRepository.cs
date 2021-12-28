@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using MyNetCore.Model;
 
 namespace MyNetCore.IRepository
 {
@@ -29,6 +28,22 @@ namespace MyNetCore.IRepository
         /// <param name="entity"></param>
         /// <returns>受影响的行数</returns>
         Task<int> UpdateAsync(TEntity entity);
+
+        /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        int Update(string rowSql, Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 修改数据，指定的列为sql
+        /// </summary>
+        /// <param name="rowSql">Title='abc',TT=1</param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> UpdateAsync(string rowSql, Expression<Func<TEntity, bool>> where);
 
         /// <summary>
         /// 修改数据(只更新变化的属性)
@@ -71,15 +86,63 @@ namespace MyNetCore.IRepository
         /// 根据ids批量删除数据
         /// </summary>
         /// <param name="ids"></param>
-        /// <returns>受影响的行数</returns>
-        int DeleteByIds(object[] ids);
+        /// <returns></returns>
+        int DeleteByIds(int[] ids);
 
         /// <summary>
         /// 根据ids批量删除数据
         /// </summary>
         /// <param name="ids"></param>
-        /// <returns>受影响的行数</returns>
-        Task<int> DeleteByIdsAsync(object[] ids);
+        /// <returns></returns>
+        Task<int> DeleteByIdsAsync(int[] ids);
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        int DeleteByIds(int[] ids, Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据ids批量删除数据，指定条件
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> DeleteByIdsAsync(int[] ids, Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        int DeleteByWhere(Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> DeleteByWhereAsync(Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="exp"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        int DeleteByWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 根据条件批量删除数据，指定条件
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> DeleteByWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
         #endregion
 
@@ -133,6 +196,23 @@ namespace MyNetCore.IRepository
         /// <returns>bool</returns>
         Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> where);
 
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        bool ExistsWhereIf(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 查询数据是否存在
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="condition"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        Task<bool> ExistsWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
         #endregion
 
@@ -179,6 +259,14 @@ namespace MyNetCore.IRepository
         /// <param name="where"></param>
         /// <returns>TEntity</returns>
         Task<TEntity> GetModelAsync(Expression<Func<TEntity, bool>> where);
+
+        /// <summary>
+        /// 查询单条数据，指定排序
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="orderBy">排序</param>
+        /// <returns></returns>
+        Task<TEntity> GetModelAsync(Expression<Func<TEntity, bool>> where, string orderBy);
 
         /// <summary>
         /// 查询单条数据，返回ViewModel类型
@@ -245,6 +333,15 @@ namespace MyNetCore.IRepository
         /// <param name="exp">lambda表达式</param>
         /// <returns>List<TEntity></returns>
         Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 查询列表，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="exp">lambda表达式</param>
+        /// <param name="orderBy">排序</param>
+        /// <returns>List<TEntity></returns>
+        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> exp, string orderBy);
 
         /// <summary>
         /// 查询列表，返回DTO对象，Where(a => a.Id > 10)，支持导航对象查询，Where(a => a.Author.Email == "2881099@qq.com")

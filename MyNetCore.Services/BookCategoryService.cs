@@ -28,7 +28,7 @@ namespace MyNetCore.Services
     {
         private readonly IBookCategoryRepository _bookCategoryRepository;
 
-        public BookCategoryService(ILogger<BookCategoryService> logger, BookCategoryRepository bookCategoryRepository) : base(bookCategoryRepository, logger)
+        public BookCategoryService(ILogger<BookCategoryService> logger, IBookCategoryRepository bookCategoryRepository) : base(bookCategoryRepository, logger)
         {
             _bookCategoryRepository = bookCategoryRepository;
         }

@@ -5,8 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyNetCore.IServices;
 using MyNetCore.Services;
-using MyNetCore.IRepository;
-using MyNetCore.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +16,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.WebEncoders;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Web
 {
@@ -77,20 +74,6 @@ namespace MyNetCore.Web
 
             if (!env.IsProduction())
             {
-                app.Map("/allservices", builder => builder.Run(async context =>
-                {
-                    context.Response.ContentType = "text/html; charset=utf-8";
-                    await context.Response.WriteAsync($"<h1>所有服务{_services.Count}个</h1><table><thead><tr><th>类型</th><th>生命周期</th><th>实例</th></tr></thead><tbody>");
-                    foreach (var svc in _services)
-                    {
-                        await context.Response.WriteAsync("<tr>");
-                        await context.Response.WriteAsync($"<td>{svc.ServiceType.FullName}</td>");
-                        await context.Response.WriteAsync($"<td>{svc.Lifetime}</td>");
-                        await context.Response.WriteAsync($"<td>{svc.ImplementationType?.FullName}</td>");
-                        await context.Response.WriteAsync("</tr>");
-                    }
-                    await context.Response.WriteAsync("</tbody></table>");
-                }));
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -98,6 +81,9 @@ namespace MyNetCore.Web
                 app.UseWebResponseStatus();
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            //非生产环境下显示所有注入的服务路由
+            app.UseAllServicesRoute(env, _services);
 
             //静态文件
             app.UseMyStaticFiles(Configuration);

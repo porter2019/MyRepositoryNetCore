@@ -25,7 +25,7 @@ namespace MyNetCore
                 PropertyNamingPolicy = null,
                 ReferenceHandler = ReferenceHandler.IgnoreCycles
             };
-            options.Converters.Add(item: new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false));
+            //options.Converters.Add(item: new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false));
             options.Converters.Add(new SystemTextJsonConfig.DateTimeConverter());
             options.Converters.Add(new SystemTextJsonConfig.DateTimeNullableConverter());
             options.Converters.Add(new SystemTextJsonConfig.IntToStringConverter());
@@ -55,7 +55,7 @@ namespace MyNetCore
                     ReferenceHandler = ReferenceHandler.IgnoreCycles
                 };
 
-                options.Converters.Add(item: new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false));
+                //options.Converters.Add(item: new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false));
                 options.Converters.Add(new SystemTextJsonConfig.DateTimeConverter());
                 options.Converters.Add(new SystemTextJsonConfig.DateTimeNullableConverter());
                 options.Converters.Add(new SystemTextJsonConfig.IntToStringConverter());

@@ -28,7 +28,7 @@ namespace MyNetCore.Services
     {
         private readonly ICommonAttachRepository _commonAttachRepository;
 
-        public CommonAttachService(ILogger<CommonAttachService> logger, CommonAttachRepository commonAttachRepository) : base(commonAttachRepository, logger)
+        public CommonAttachService(ILogger<CommonAttachService> logger, ICommonAttachRepository commonAttachRepository) : base(commonAttachRepository, logger)
         {
             _commonAttachRepository = commonAttachRepository;
         }

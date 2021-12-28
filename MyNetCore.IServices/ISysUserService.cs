@@ -41,5 +41,11 @@ namespace MyNetCore.IServices
         /// <param name="entity"></param>
         /// <returns></returns>
         Task<SysUser> ModifyAsync(SysUserView entity);
+
+        /// <summary>
+        /// 初始化种子数据，添加超级管理组和超级管理员，默认账号：admin 111111
+        /// </summary>
+        /// <returns></returns>
+        Task InitSeedDataAsync();
     }
 }

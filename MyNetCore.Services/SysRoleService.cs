@@ -28,7 +28,8 @@ namespace MyNetCore.Services
     {
         private readonly ISysRoleRepository _sysRoleRepository;
 
-        public SysRoleService(ILogger<SysRoleService> logger, SysRoleRepository sysRoleRepository) : base(sysRoleRepository, logger)
+        public SysRoleService(ILogger<SysRoleService> logger,
+            ISysRoleRepository sysRoleRepository) : base(sysRoleRepository, logger)
         {
             _sysRoleRepository = sysRoleRepository;
         }

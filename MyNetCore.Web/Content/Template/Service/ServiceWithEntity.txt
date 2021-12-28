@@ -32,7 +32,7 @@ namespace {{ ProjectName }}.Services
         private readonly ICommonAttachService _commonAttachService;
         private readonly I{{ ModelName }}Repository _{{ ModelVariableName }}Repository;
 
-        public {{ ModelName }}Service(ILogger<{{ ModelName }}Service> logger, IFreeSql<DBFlagMain> fsq, ICommonAttachService commonAttachService, {{ ModelName }}Repository {{ ModelVariableName }}Repository) : base({{ ModelVariableName }}Repository, logger)
+        public {{ ModelName }}Service(ILogger<{{ ModelName }}Service> logger, IFreeSql<DBFlagMain> fsq, ICommonAttachService commonAttachService, I{{ ModelName }}Repository {{ ModelVariableName }}Repository) : base({{ ModelVariableName }}Repository, logger)
         {
             _fsq = fsq;
             _commonAttachService = commonAttachService;
