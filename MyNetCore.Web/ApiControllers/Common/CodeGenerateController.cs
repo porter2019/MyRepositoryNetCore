@@ -44,7 +44,7 @@ namespace MyNetCore.Web.ApiControllers
         /// <param name="desc">说明，如果为空，则表示name是Entity实体，该值自动反射从实体中取得</param>
         /// <returns></returns>
         [HttpGet, Route("controller/api")]
-        public async Task<ApiResult> GenerateApiController(string name, string desc)
+        public async Task<ApiResult> GenerateApiController(string name, string? desc)
         {
             return await _codeGenerateServices.GenerateApiControllerFile(name, desc);
 
@@ -57,7 +57,7 @@ namespace MyNetCore.Web.ApiControllers
         /// <param name="desc">说明，如果为空，则表示name是Entity实体，该值自动反射从实体中取得</param>
         /// <returns></returns>
         [HttpGet, Route("vue/all")]
-        public Task<ApiResult> GenerateVueFiles(string name, string desc)
+        public Task<ApiResult> GenerateVueFiles(string name, string? desc)
         {
             return _codeGenerateServices.GenerateVuePageFile(name, desc);
 

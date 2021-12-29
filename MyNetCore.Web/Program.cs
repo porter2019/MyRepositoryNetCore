@@ -1,85 +1,74 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.WebEncoders;
+using MyNetCore.Web.SetUp;
+using NLog;
 using NLog.Web;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Winton.Extensions.Configuration.Consul;
+using System.Reflection;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
-namespace MyNetCore.Web
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+
+try
 {
-    public class Program
+    var builder = WebApplication.CreateBuilder(args);
+    //Nlog
+    builder.Logging.ClearProviders();
+    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+    builder.Host.UseNLog();
+
+    builder.Services.AddMyConsulKV(builder.Configuration, builder.Environment);//ConsulKV
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddSwaggerServices(builder.Configuration);//Swgger
+    builder.Services.AddFreeSqlServices(builder.Configuration);//FreeSql
+    builder.Services.AddMyCache(builder.Configuration);//缓存
+    builder.Services.AddHttpsRedirectionServices(builder.Configuration);//强制跳转https
+                                                                        //批量注入Services层中数据库实体业务，注意给的baseType是公共基础业务泛型(BaseServices<,>)
+    builder.Services.BatchRegisterServices(new Assembly[] { Assembly.GetExecutingAssembly(), Assembly.Load($"{builder.Services.GetProjectMainName()}.Services") }, typeof(BaseService<,>));
+    //批量注入Services层中普通业务，注意给的baseType是接口类型(IBatchDIServicesTag)
+    builder.Services.BatchRegisterServices(new Assembly[] { Assembly.Load($"{builder.GetProjectMainName()}.Services") }, typeof(IBatchDIServicesTag));
+    //解决Razor生成html时中文被转成Unicode码的问题
+    builder.Services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
+    builder.Services.AddWebApiServices(builder.Configuration);//WebApi相关
+
+    var app = builder.Build();
+    ServiceLocator.Instance = app.Services;
+
+    if (!app.Environment.IsProduction())
     {
-        public static void Main(string[] args)
-        {
-            var logger = NLogBuilder.ConfigureNLog($"nlog.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.config").GetCurrentClassLogger();
-
-            try
-            {
-                var webHost = CreateHostBuilder(args).Build();
-
-                //�ȴ�ϵͳע����Ϻ�ִ��һЩ����
-                //var config = (IConfiguration)webHost.Services.GetService(typeof(IConfiguration));
-                //var dbDashboard = (IFreeSql<Tools.DashboardDBFlag>)webHost.Services.GetService(typeof(IFreeSql<Tools.DashboardDBFlag>));
-                //Business.FreeSql.Dashboard.SettingsSysDAL settingsSysDAL = new Business.FreeSql.Dashboard.SettingsSysDAL(dbDashboard);
-                //settingsSysDAL.Register(AppDomain.CurrentDomain.FriendlyName, config.GetSection("SysInfo:SysName").Value);
-
-                webHost.Run();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "���������쳣");
-                throw;
-            }
-            finally
-            {
-                NLog.LogManager.Shutdown();
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
-                    {
-                        var env = hostingContext.HostingEnvironment;
-                        hostingContext.Configuration = config.Build();
-                        //ʹ��Consul��K/V�滻appsetting.json�����ļ�
-                        if (hostingContext.Configuration.GetValue<bool>("ConsulKV:IsEnabled"))
-                        {
-                            string consulServerUrl = hostingContext.Configuration["ConsulKV:ServerUrl"];
-                            string folderName = hostingContext.Configuration["ConsulKV:Folder"];
-                            if (folderName.IsNotNull()) folderName += "/";
-                            else folderName = "";
-                            //ʹ��Consule�ͻ��˼�������
-                            config.AddConsul($"{folderName}public.{env.EnvironmentName}.json", options => //�����ļ�
-                            {
-                                options.Optional = true;
-                                options.ReloadOnChange = true;
-                                options.OnLoadException = exceptionContext => { exceptionContext.Ignore = true; };
-                                options.ConsulConfigurationOptions = cco => { cco.Address = new Uri(consulServerUrl); };
-                            });
-                            config.AddConsul($"{folderName}{env.ApplicationName}.{env.EnvironmentName}.json", options =>
-                            {
-                                options.Optional = true;
-                                options.ReloadOnChange = true;
-                                options.OnLoadException = exceptionContext => { exceptionContext.Ignore = true; };
-                                options.ConsulConfigurationOptions = cco => { cco.Address = new Uri(consulServerUrl); };
-                            });
-                            hostingContext.Configuration = config.Build();
-                        }
-                    });
-
-                    webBuilder.UseStartup<Startup>();
-                }).ConfigureLogging(logger =>
-                {
-                    logger.ClearProviders();
-                    logger.SetMinimumLevel(LogLevel.Trace);
-                })
-                .UseNLog();
+        app.UseDeveloperExceptionPage();
     }
+    else
+    {
+        app.UseWebResponseStatus();
+        app.UseExceptionHandler("/Home/Error");
+    }
+
+    //非生产环境下显示所有注入的服务路由
+    app.UseAllServicesRoute(app.Environment, builder.Services);
+
+    //静态文件
+    app.UseMyStaticFiles(app.Configuration);
+
+    //程序启动/停止进行的操作
+    app.UseMyAppLaunch();
+
+    //Swagger
+    app.UseMySwagger(app.Configuration);
+
+    //Consul站点监控
+    app.UseMyConsul(app.Lifetime, app.Configuration);
+
+    //WebApi
+    app.UseMyWebApi(app.Configuration);
+
+    app.Run();
+}
+catch (Exception exception)
+{
+    logger.Error(exception, "系统无法启动");
+    throw;
+}
+finally
+{
+    NLog.LogManager.Shutdown();
 }

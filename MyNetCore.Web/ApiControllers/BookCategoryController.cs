@@ -44,7 +44,7 @@ namespace MyNetCore.Web.ApiControllers
         /// <returns></returns>
         [HttpGet, Route("get/list/tree")]
         [Permission("查看", "show")]
-        public async Task<ApiResult> GetTreeList(string title)
+        public async Task<ApiResult> GetTreeList(string? title)
         {
             var data = await _bookCategoryServices.GetTreeListAsync(title);
 
