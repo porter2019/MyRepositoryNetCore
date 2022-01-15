@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using MyNetCore.IRepository;
-using MyNetCore.Repository;
-using System.Linq.Expressions;
-using Microsoft.Extensions.Logging;
+﻿using System.Linq.Expressions;
 
 namespace MyNetCore.Services
 {
@@ -88,7 +79,7 @@ namespace MyNetCore.Services
             return _baseRepo.InsertOrUpdateAsync(entity);
         }
 
-        #endregion
+        #endregion 添加
 
         #region 修改
 
@@ -178,7 +169,7 @@ namespace MyNetCore.Services
             return _baseRepo.UpdateEntityAsync(entity);
         }
 
-        #endregion
+        #endregion 修改
 
         #region 删除
 
@@ -272,7 +263,7 @@ namespace MyNetCore.Services
             return _baseRepo.DeleteByWhereIfAsync(where, condition, exp);
         }
 
-        #endregion
+        #endregion 删除
 
         #region 查询数量
 
@@ -318,7 +309,7 @@ namespace MyNetCore.Services
             return _baseRepo.GetCountAsync(sql, parms);
         }
 
-        #endregion
+        #endregion 查询数量
 
         #region 是否存在
 
@@ -366,7 +357,7 @@ namespace MyNetCore.Services
             return _baseRepo.ExistsWhereIfAsync(where, condition, exp);
         }
 
-        #endregion
+        #endregion 是否存在
 
         #region 查询单条数据
 
@@ -492,9 +483,9 @@ namespace MyNetCore.Services
             return _baseRepo.GetModelViewAsync(where);
         }
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询单条数据
 
         #region 查询集合
 
@@ -638,9 +629,9 @@ namespace MyNetCore.Services
             return _baseRepo.GetListViewAsync<REntity>(where, parms);
         }
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询集合
 
         #region 查询分页
 
@@ -738,8 +729,7 @@ namespace MyNetCore.Services
             return GetPageListAsync<REntity>(options.PageInfo, out total);
         }
 
-
-        #endregion
+        #endregion PageOptions
 
         #region Sql
 
@@ -843,7 +833,7 @@ namespace MyNetCore.Services
             return GetPageListAsync<REntity>(options.PageInfo, out total);
         }
 
-        #endregion
+        #endregion Sql
 
         #region 视图
 
@@ -917,8 +907,8 @@ namespace MyNetCore.Services
             return GetPageListViewAsync<REntity>(baseOption.PageInfo, out total);
         }
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询分页
     }
 }

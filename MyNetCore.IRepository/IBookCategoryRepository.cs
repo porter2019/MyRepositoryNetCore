@@ -7,14 +7,6 @@
 *└──────────────────────────────────────────────────────────────┘
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FreeSql;
-using MyNetCore.Model.Entity;
-
 namespace MyNetCore.IRepository
 {
     /// <summary>
@@ -22,6 +14,5 @@ namespace MyNetCore.IRepository
     /// </summary>
     public interface IBookCategoryRepository : IBaseMyRepository<BookCategory>
     {
-
     }
 }

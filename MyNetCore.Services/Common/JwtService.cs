@@ -2,9 +2,6 @@
 using JWT.Algorithms;
 using JWT.Exceptions;
 using JWT.Serializers;
-using Microsoft.Extensions.Configuration;
-using MyNetCore.IServices;
-using System;
 
 namespace MyNetCore.Services
 {
@@ -66,7 +63,6 @@ namespace MyNetCore.Services
             }
             catch (Exception)
             {
-
             }
             return default(T);
         }

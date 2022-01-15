@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.RequestModel
+﻿namespace MyNetCore.Model.RequestModel
 {
     /// <summary>
     /// 查询系统用户分页列表所需参数
@@ -24,6 +18,7 @@ namespace MyNetCore.Model.RequestModel
         public string UserName { get; set; }
 
         private string roleId = "";
+
         /// <summary>
         /// 用户组
         /// </summary>
@@ -46,6 +41,5 @@ namespace MyNetCore.Model.RequestModel
         /// </summary>
         [PageQuery(PageQueryColumnMatchType.BetweenDate)]
         public string UpdatedDate { get; set; }
-
     }
 }

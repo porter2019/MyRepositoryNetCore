@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Dto
+﻿namespace MyNetCore.Model.Dto
 {
     /// <summary>
     /// 数据库查询用户组的权限列表
@@ -45,7 +39,6 @@ namespace MyNetCore.Model.Dto
         /// 组是否有了该权限
         /// </summary>
         public bool IsChecked { get; set; }
-
     }
 
     /// <summary>
@@ -53,7 +46,6 @@ namespace MyNetCore.Model.Dto
     /// </summary>
     public class SysRoleModuleGroupModel
     {
-
         public SysRoleModuleGroupModel(string moduleName)
         {
             this.ModuleName = moduleName;
@@ -76,7 +68,6 @@ namespace MyNetCore.Model.Dto
     /// </summary>
     public class SysRoleHandlerGroupModel
     {
-
         public SysRoleHandlerGroupModel(string handlerName)
         {
             this.HandlerName = handlerName;
@@ -97,7 +88,5 @@ namespace MyNetCore.Model.Dto
         /// 权限列表
         /// </summary>
         public List<SysRolePermit> PermitList { get; set; }
-
     }
-
 }

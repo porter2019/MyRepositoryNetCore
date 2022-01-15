@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
-namespace MyNetCore.Web
+﻿namespace MyNetCore.Web
 {
     /// <summary>
     /// WebAPI基类,所有web api都必须直接或间接继承该类
@@ -30,6 +25,5 @@ namespace MyNetCore.Web
             _hostEnvironment = _hca.HttpContext.RequestServices.GetService<IHostEnvironment>();
             //_fsql = _hca.HttpContext.RequestServices.GetService<IFreeSql>();
         }
-
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.IServices
+﻿namespace MyNetCore.IServices
 {
     /// <summary>
     /// 模板引擎

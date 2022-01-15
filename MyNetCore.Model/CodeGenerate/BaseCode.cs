@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.CodeGenerate
+﻿namespace MyNetCore.Model.CodeGenerate
 {
     /// <summary>
     /// 代码生成器所需实体基类
     /// </summary>
     public class BaseCode
     {
-        public BaseCode() { }
+        public BaseCode()
+        { }
 
         public BaseCode(string modelName)
         {
@@ -57,7 +52,6 @@ namespace MyNetCore.Model.CodeGenerate
 
                 var fristChar = ModelName.Substring(0, 1);
                 return fristChar.ToLower() + ModelName.Substring(1, ModelName.Length - 1);
-
             }
         }
 

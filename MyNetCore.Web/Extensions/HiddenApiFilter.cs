@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 
 namespace MyNetCore.Web
 {
@@ -13,7 +9,8 @@ namespace MyNetCore.Web
     /// 隐藏Swagger接口属性标识
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-    public class HiddenApiAttribute : Attribute { }
+    public class HiddenApiAttribute : Attribute
+    { }
 
     /// <summary>
     /// 自定义Swagger隐藏过滤器
@@ -24,7 +21,6 @@ namespace MyNetCore.Web
         {
             foreach (ApiDescription apiDescription in context.ApiDescriptions)
             {
-
                 if (apiDescription.TryGetMethodInfo(out MethodInfo method))
                 {
                     if (method.ReflectedType.CustomAttributes.Any(t => t.AttributeType == typeof(HiddenApiAttribute))
@@ -39,9 +35,7 @@ namespace MyNetCore.Web
                         swaggerDoc.Paths.Remove(key);
                     }
                 }
-
             }
-
         }
     }
 

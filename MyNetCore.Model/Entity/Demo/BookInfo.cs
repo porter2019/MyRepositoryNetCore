@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 书籍信息
     /// </summary>
-    [FsTable("书籍信息", ViewClassName = typeof(BookInfoView),VueModuleName = "demo")]
+    [FsTable("书籍信息", ViewClassName = typeof(BookInfoView), VueModuleName = "demo")]
     public class BookInfo : BaseEntityStandard
     {
         /// <summary>
@@ -48,13 +42,11 @@ namespace MyNetCore.Model.Entity
             }
         }
 
-
         /// <summary>
         /// 出版日期
         /// </summary>
         [FsColumn("出版日期"), ValidateRule(ValidateType = ValidateType.Date)]
         public DateTime ReleaseDate { get; set; } = DateTime.Now;
-
     }
 
     /// <summary>
@@ -72,7 +64,5 @@ namespace MyNetCore.Model.Entity
         /// 所属分类完整层级关系
         /// </summary>
         public string CategoryFullId { get; set; }
-
     }
-
 }

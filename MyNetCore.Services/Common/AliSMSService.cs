@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using MyNetCore.Common.Helper;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
-using System.Net;
+﻿using MyNetCore.Common.Helper;
 using System.IO;
+using System.Net;
+using System.Security.Cryptography;
 
 namespace MyNetCore.Services
 {
@@ -51,7 +43,6 @@ namespace MyNetCore.Services
             var sendResult = await Send(mobile, jsonData, "SMS_128965131");
 
             return await SaveSendHistoryAsync(sendResult, jsonData, guid, mobile, code);
-
         }
 
         /// <summary>
@@ -74,7 +65,6 @@ namespace MyNetCore.Services
             }
         }
 
-
         #region 私有方法
 
         /// <summary>
@@ -82,7 +72,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="mobile"></param>
         /// <returns></returns>
-        async Task<bool> CheckSendIsOftenAsync(string mobile)
+        private async Task<bool> CheckSendIsOftenAsync(string mobile)
         {
             var sendTime = await _cacheServices.GetAsync(mobile);
             if (sendTime.IsNull()) return false;
@@ -102,7 +92,7 @@ namespace MyNetCore.Services
         /// <param name="mobile">手机号</param>
         /// <param name="code">验证码</param>
         /// <returns></returns>
-        async Task<ApiResult> SaveSendHistoryAsync(ApiResult sendResult, string sendBody, string guid, string mobile, string code)
+        private async Task<ApiResult> SaveSendHistoryAsync(ApiResult sendResult, string sendBody, string guid, string mobile, string code)
         {
             if (sendResult.code != ApiCode.成功) return ApiResult.Error(sendResult.msg);
 
@@ -125,7 +115,7 @@ namespace MyNetCore.Services
             return ApiResult.OK();
         }
 
-        #endregion
+        #endregion 私有方法
 
         #region 调用发送 API
 
@@ -269,7 +259,6 @@ namespace MyNetCore.Services
             return stringBuilder.ToString().Replace("+", "%20").Replace("*", "%2A").Replace("%7E", "~");
         }
 
-
         /// <summary>
         /// HMACSHA1签名
         /// </summary>
@@ -302,7 +291,6 @@ namespace MyNetCore.Services
             return returnBytes;
         }
 
-
         /// 消息处理机制
         /// </summary>
         /// <param name="str"></param>
@@ -316,57 +304,75 @@ namespace MyNetCore.Services
                 case "OK":
                     result = "OK";
                     break;
+
                 case "isp.RAM_PERMISSION_DENY":
                     result = "RAM权限DENY";
                     break;
+
                 case "isv.OUT_OF_SERVICE":
                     result = "业务停机";
                     break;
+
                 case "isv.PRODUCT_UN_SUBSCRIPT":
                     result = "未开通云通信产品的阿里云客户";
                     break;
+
                 case "isv.PRODUCT_UNSUBSCRIBE":
                     result = "产品未开通";
                     break;
+
                 case "isv.ACCOUNT_NOT_EXISTS":
                     result = "账户不存在";
                     break;
+
                 case "isv.ACCOUNT_ABNORMAL":
                     result = "账户异常    ";
                     break;
+
                 case "isv.SMS_TEMPLATE_ILLEGAL":
                     result = "短信模板不合法";
                     break;
+
                 case "isv.SMS_SIGNATURE_ILLEGAL":
                     result = "短信签名不合法";
                     break;
+
                 case "isv.INVALID_PARAMETERS":
                     result = "参数异常";
                     break;
+
                 case "isv.MOBILE_NUMBER_ILLEGAL":
                     result = "非法手机号";
                     break;
+
                 case "isv.MOBILE_COUNT_OVER_LIMIT":
                     result = "手机号码数量超过限制";
                     break;
+
                 case "isv.TEMPLATE_MISSING_PARAMETERS":
                     result = "模板缺少变量";
                     break;
+
                 case "isv.BUSINESS_LIMIT_CONTROL":
                     result = "业务限流";
                     break;
+
                 case "isv.INVALID_JSON_PARAM":
                     result = "JSON参数不合法，只接受字符串值";
                     break;
+
                 case "isv.PARAM_LENGTH_LIMIT":
                     result = "参数超出长度限制";
                     break;
+
                 case "isv.PARAM_NOT_SUPPORT_URL":
                     result = "不支持URL";
                     break;
+
                 case "isv.AMOUNT_NOT_ENOUGH":
                     result = "账户余额不足";
                     break;
+
                 case "isv.TEMPLATE_PARAMS_ILLEGAL":
                     result = "模板变量里包含非法关键字";
                     break;
@@ -374,9 +380,7 @@ namespace MyNetCore.Services
             return result;
         }
 
-
-        #endregion
-
+        #endregion 调用发送 API
     }
 
     internal class MessageModel

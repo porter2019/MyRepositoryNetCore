@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Magicodes.ExporterAndImporter.Core;
+﻿using Magicodes.ExporterAndImporter.Core;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyNetCore.Model.Dto
@@ -50,8 +45,5 @@ namespace MyNetCore.Model.Dto
         [ImporterHeader(Name = "日期格式")]
         [Required(ErrorMessage = "日期格式不能为空")]
         public DateTime Date1 { get; set; }
-
-
-
     }
 }

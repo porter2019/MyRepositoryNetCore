@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 角色组
@@ -38,6 +32,5 @@ namespace MyNetCore.Model.Entity
         /// </summary>
         [FsColumn("状态")]
         public bool Status { get; set; } = true;
-
     }
 }

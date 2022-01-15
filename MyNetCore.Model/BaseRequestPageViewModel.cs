@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model
+﻿namespace MyNetCore.Model
 {
     /// <summary>
     /// 所有Post对象需要集成的基类
@@ -12,7 +6,6 @@ namespace MyNetCore.Model
     /// </summary>
     public class BaseRequestPageViewModel<TEntity> : BaseRequestPostViewModel where TEntity : class, new()
     {
-
         /// <summary>
         /// 分页数据
         /// </summary>
@@ -59,76 +52,90 @@ namespace MyNetCore.Model
                     case PageQueryColumnMatchType.Equal:
                         sbWhere.Append($" and {sqlColumnName} = {fileValueChar}{filedValue}{fileValueChar}");
                         break;
+
                     case PageQueryColumnMatchType.NotEqual:
                         sbWhere.Append($" and {sqlColumnName} != {fileValueChar}{filedValue}{fileValueChar}");
                         break;
+
                     case PageQueryColumnMatchType.GreaterThan:
                         sbWhere.Append($" and {sqlColumnName} > {fileValueChar}{filedValue}{fileValueChar}");
                         break;
+
                     case PageQueryColumnMatchType.GreaterThanOrEqual:
                         sbWhere.Append($" and {sqlColumnName} >= {fileValueChar}{filedValue}{fileValueChar}");
                         break;
+
                     case PageQueryColumnMatchType.LessThan:
                         sbWhere.Append($" and {sqlColumnName} < {fileValueChar}{filedValue}{fileValueChar}");
                         break;
+
                     case PageQueryColumnMatchType.LessThanOrEqual:
                         sbWhere.Append($" and {sqlColumnName} <= {fileValueChar}{filedValue}{fileValueChar}");
                         break;
+
                     case PageQueryColumnMatchType.BoolWhenTrue:
                         if (filedValue.ObjToInt() == 1)
                         {
                             sbWhere.Append($" and {sqlColumnName} = 1");
                         }
                         break;
+
                     case PageQueryColumnMatchType.IntEqualWhenGreaterZero:
                         if (filedValue.ObjToInt() > 0)
                         {
                             sbWhere.Append($" and {sqlColumnName} = {filedValue}");
                         }
                         break;
+
                     case PageQueryColumnMatchType.IntEqualWhenGreaterMinus:
                         if (filedValue.ObjToInt() > -1)
                         {
                             sbWhere.Append($" and {sqlColumnName} = {filedValue}");
                         }
                         break;
+
                     case PageQueryColumnMatchType.Like:
                         sbWhere.Append($" and {sqlColumnName} like '%{filedValue}%'");
                         break;
+
                     case PageQueryColumnMatchType.LikeLeft:
                         sbWhere.Append($" and {sqlColumnName} like '{filedValue}%'");
                         break;
+
                     case PageQueryColumnMatchType.LikeRight:
                         sbWhere.Append($" and {sqlColumnName} like '%{filedValue}'");
                         break;
+
                     case PageQueryColumnMatchType.CharIndex:
                         sbWhere.Append($" and CharIndex('{filedValue}',{sqlColumnName}) > 0");
                         break;
+
                     case PageQueryColumnMatchType.BetweenNumber:
                         var tempArr = filedValue.ToString().SplitWithSemicolon();
                         if (tempArr.Length != 2) throw new Exception("Between条件下值的格式必须使用英文分号分割");
                         sbWhere.Append($" and {sqlColumnName} between {tempArr[0]} and {tempArr[1]}");
                         break;
+
                     case PageQueryColumnMatchType.BetweenDate:
                         var tempArr2 = filedValue.ToString().SplitWithSemicolon();
                         if (tempArr2.Length != 2) throw new Exception("Between条件下值的格式必须使用英文分号分割");
                         sbWhere.Append($" and {sqlColumnName} between '{tempArr2[0]}' and '{tempArr2[1]} 23:59:59'");
                         break;
+
                     case PageQueryColumnMatchType.IntIn:
                         sbWhere.Append($" and {sqlColumnName} in ({filedValue})");
                         break;
+
                     case PageQueryColumnMatchType.IntNotIn:
                         sbWhere.Append($" and {sqlColumnName} not in({filedValue})");
                         break;
+
                     default:
                         break;
                 }
-
             }
 
             return sbWhere.ToString();
-
         }
-
     }
 }

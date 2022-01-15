@@ -1,13 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyNetCore.Web
 {
@@ -24,7 +16,6 @@ namespace MyNetCore.Web
             var hca = ServiceLocator.Instance.GetService<IHttpContextAccessor>();
             _hostEnvironment = hca.HttpContext.RequestServices.GetService<IHostEnvironment>();
             _modelMetadataProvider = hca.HttpContext.RequestServices.GetService<IModelMetadataProvider>();
-
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -36,7 +27,6 @@ namespace MyNetCore.Web
             //获取Cookie中的用户信息，并添加到上下文
 
             //controller.ViewBag.UserIsLogin = true;
-
         }
 
         #region Session
@@ -90,7 +80,7 @@ namespace MyNetCore.Web
             HttpContext.Session.Remove(key);
         }
 
-        #endregion
+        #endregion Session
 
         #region Cookie
 
@@ -174,7 +164,7 @@ namespace MyNetCore.Web
             HttpContext.Response.Cookies.Delete(key, new CookieOptions() { Domain = domain, Path = "/" });
         }
 
-        #endregion
+        #endregion Cookie
 
         //#region 统一Post控制器返回的View
 
@@ -216,8 +206,6 @@ namespace MyNetCore.Web
         //    ModelState.AddModelError("TempId", message);
         //}
 
-
         //#endregion
-
     }
 }

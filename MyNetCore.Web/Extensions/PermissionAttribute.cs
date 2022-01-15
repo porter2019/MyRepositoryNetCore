@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using System;
 
 namespace MyNetCore.Web
 {
@@ -12,7 +11,8 @@ namespace MyNetCore.Web
         /// <summary>
         /// 权限操作标识
         /// </summary>
-        public PermissionAttribute() { }
+        public PermissionAttribute()
+        { }
 
         /// <summary>
         /// 是否允许匿名访问
@@ -85,7 +85,5 @@ namespace MyNetCore.Web
             get { return _unCheckWhenDevelopment; }
             set { _unCheckWhenDevelopment = value; }
         }
-
-
     }
 }

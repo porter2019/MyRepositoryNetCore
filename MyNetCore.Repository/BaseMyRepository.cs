@@ -1,11 +1,4 @@
-﻿using FreeSql;
-using Microsoft.Extensions.Logging;
-using MyNetCore.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace MyNetCore.Repository
 {
@@ -128,7 +121,7 @@ namespace MyNetCore.Repository
             return runsql.ExecuteAffrowsAsync();
         }
 
-        #endregion
+        #endregion 修改
 
         #region 删除
 
@@ -274,7 +267,7 @@ namespace MyNetCore.Repository
             }
         }
 
-        #endregion
+        #endregion 删除
 
         #region 查询数量
 
@@ -320,7 +313,7 @@ namespace MyNetCore.Repository
             return _fsql.Select<TEntity>().Where(sql, parms).CountAsync();
         }
 
-        #endregion
+        #endregion 查询数量
 
         #region 是否存在
 
@@ -368,7 +361,7 @@ namespace MyNetCore.Repository
             return (await _fsql.Select<TEntity>().Where(where).WhereIf(condition, exp).CountAsync()) > 0;
         }
 
-        #endregion
+        #endregion 是否存在
 
         #region 查询单条数据
 
@@ -505,9 +498,9 @@ namespace MyNetCore.Repository
             return _fsql.Select<REntity>().Where(where).ToOneAsync();
         }
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询单条数据
 
         #region 查询集合
 
@@ -663,9 +656,9 @@ namespace MyNetCore.Repository
             return _fsql.Select<REntity>().Where(where, parms).ToListAsync();
         }
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询集合
 
         #region 查询分页
 
@@ -734,7 +727,8 @@ namespace MyNetCore.Repository
                         .OrderBy(options.OrderBy)
                         .ToListAsync<REntity>();
         }
-        #endregion
+
+        #endregion PageOptions
 
         #region Sql
 
@@ -804,7 +798,7 @@ namespace MyNetCore.Repository
                         .ToListAsync<REntity>();
         }
 
-        #endregion
+        #endregion Sql
 
         #region 视图
 
@@ -878,9 +872,8 @@ namespace MyNetCore.Repository
                         .ToListAsync();
         }
 
-        #endregion
+        #endregion 视图
 
-        #endregion
-
+        #endregion 查询分页
     }
 }

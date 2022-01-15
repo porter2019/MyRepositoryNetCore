@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
+﻿using Microsoft.Extensions.Hosting;
 using MyNetCore.Model.CodeGenerate;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using System.IO;
+using System.Reflection;
 
 namespace MyNetCore.Services
 {
@@ -74,7 +67,6 @@ namespace MyNetCore.Services
             if (remark.IsNull())
             {
                 templateName = "/ApiController/ApiControllerWithEntity";
-
             }
             var dict = loadEntityInfo(name, remark);
 
@@ -182,7 +174,6 @@ namespace MyNetCore.Services
                 writer.Write(content);
                 writer.Dispose();
             }
-
         }
 
         /// <summary>
@@ -212,7 +203,6 @@ namespace MyNetCore.Services
                 writer.Write(content);
                 writer.Dispose();
             }
-
         }
 
         /// <summary>
@@ -289,7 +279,6 @@ namespace MyNetCore.Services
                 if (clumn.PropertyType.Namespace == "System.Collections.Generic") return;
                 if (!clumn.CanWrite) return;//只读的不要
 
-
                 var fsColumnInfo = clumn.GetCustomAttributes<Model.FsColumnAttribute>(true); //clumn.GetCustomAttributes(typeof(Model.FsColumnAttribute), true)[0] as Model.FsColumnAttribute;
                 if (fsColumnInfo.Any())
                 {
@@ -299,7 +288,6 @@ namespace MyNetCore.Services
 
             return entityInfo;
         }
-
 
         /// <summary>
         /// 获取视图绝对路径
@@ -315,7 +303,6 @@ namespace MyNetCore.Services
             //return Path.Combine(_solutionWebDirectory, lastFullDirectory, templateFileName);
         }
 
-        #endregion
-
+        #endregion 私有方法
     }
 }

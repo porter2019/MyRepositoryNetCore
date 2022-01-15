@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.CodeGenerate
+﻿namespace MyNetCore.Model.CodeGenerate
 {
     /// <summary>
     /// 实体属性集
@@ -211,8 +204,6 @@ namespace MyNetCore.Model.CodeGenerate
                     inputHtml.Append($"<el-input type=\"text\" v-model=\"formData.{name}\" clearable placeholder=\"请输入{desc}\"></el-input>");
                 }
 
-
-
                 if (i % 2 == 0)
                 {
                     html.AppendLine("<el-row>");
@@ -253,7 +244,6 @@ namespace MyNetCore.Model.CodeGenerate
 
             foreach (var item in PropertysItems)
             {
-
                 if (item.ColumnInfo.IsPK) continue;
                 var name = item.ColumnTypeInfo.Name;
                 var desc = item.ColumnInfo.DisplayName;
@@ -318,7 +308,6 @@ namespace MyNetCore.Model.CodeGenerate
                 {
                     html.AppendLine("" + name + ": [{ required: false, message: \"请输入\", trigger: [\"blur\",\"change\"] },");
                 }
-
             }
 
             return html.ToString();
@@ -335,7 +324,6 @@ namespace MyNetCore.Model.CodeGenerate
 
             foreach (var item in PropertysItems)
             {
-
                 if (item.ColumnInfo.IsPK) continue;
                 var name = item.ColumnTypeInfo.Name;
                 var desc = item.ColumnInfo.DisplayName;
@@ -357,7 +345,6 @@ namespace MyNetCore.Model.CodeGenerate
                 {
                     continue;
                 }
-
             }
 
             return html.ToString();
@@ -394,7 +381,6 @@ namespace MyNetCore.Model.CodeGenerate
                 {
                     if (item.ColumnInfo.DbType?.ToLower() == "text")
                     {
-
                         inputHtml.Append("<div v-html=\"formData." + name + "\"></div>");
                     }
                     else
@@ -432,8 +418,6 @@ namespace MyNetCore.Model.CodeGenerate
                     inputHtml.Append("{{ formData." + name + " }}");
                 }
 
-
-
                 if (i % 2 == 0)
                 {
                     html.AppendLine("<el-row>");
@@ -462,7 +446,6 @@ namespace MyNetCore.Model.CodeGenerate
 
             return html.ToString();
         }
-
     }
 
     /// <summary>
@@ -479,8 +462,5 @@ namespace MyNetCore.Model.CodeGenerate
         /// 列属性
         /// </summary>
         public FsColumnAttribute ColumnInfo { get; set; }
-
-
     }
-
 }

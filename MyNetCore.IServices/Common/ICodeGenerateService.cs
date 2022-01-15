@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.IServices
+﻿namespace MyNetCore.IServices
 {
     /// <summary>
     /// 代码生成服务
@@ -33,6 +27,5 @@ namespace MyNetCore.IServices
         /// <param name="desc">说明，如果为空，则表示name是Entity实体，该值自动反射从实体中取得，否则生成基础前端模板</param>
         /// <returns></returns>
         Task<ApiResult> GenerateVuePageFile(string name, string desc);
-
     }
 }

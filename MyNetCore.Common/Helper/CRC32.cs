@@ -1,17 +1,16 @@
-﻿using System.Text;
-
-namespace MyNetCore
+﻿namespace MyNetCore
 {
     public class CRC32
     {
-        static ulong[] Crc32Table;
+        private static ulong[] Crc32Table;
 
-        private CRC32() { }
+        private CRC32()
+        { }
 
         /// <summary>
         /// 生成CRC32码表
         /// </summary>
-        static void GetCRC32Table()
+        private static void GetCRC32Table()
         {
             ulong Crc;
             Crc32Table = new ulong[256];
@@ -46,6 +45,5 @@ namespace MyNetCore
             }
             return (value ^ 0xffffffff).ToString();
         }
-
     }
 }

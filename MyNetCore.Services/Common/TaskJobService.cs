@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hangfire.HttpJob.Client;
-using MyNetCore.IServices;
+﻿using Hangfire.HttpJob.Client;
 using MyNetCore.Model;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyNetCore.Services
 {
@@ -71,7 +64,6 @@ namespace MyNetCore.Services
             });
 
             return result.IsSuccess ? ApiResult.OK("OK", result.JobId) : ApiResult.Error(result.ErrMessage);
-
         }
 
         /// <summary>
@@ -90,13 +82,11 @@ namespace MyNetCore.Services
             });
 
             return Task.FromResult(result.IsSuccess ? ApiResult.OK() : ApiResult.Error(result.ErrMessage));
-
         }
 
-        #endregion
+        #endregion 添加任务
 
         #region 删除任务
-
 
         /// <summary>
         /// 根据jobid删除一个一次性任务
@@ -122,19 +112,16 @@ namespace MyNetCore.Services
             return result.IsSuccess ? ApiResult.OK() : ApiResult.Error(result.ErrMessage);
         }
 
-
-        #endregion
-
+        #endregion 删除任务
 
         #region 简单封装
-
 
         /// <summary>
         /// 添加一个一次性任务
         /// </summary>
         /// <param name="job"></param>
         /// <returns>如果返回为空，则执行成功，否则返回异常消息</returns>
-        Task<AddBackgroundHangfirJobResult> AddBackgroundJobAsync([NotNull] BackgroundJob job)
+        private Task<AddBackgroundHangfirJobResult> AddBackgroundJobAsync([NotNull] BackgroundJob job)
         {
             if (job.SendFail || job.SendSuccess) job.Mail = NoticeMail.SplitWithSemicolon().ToList();
 
@@ -149,7 +136,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="jobId"></param>
         /// <returns></returns>
-        Task<HangfirJobResult> DeleteBackgroundJobAsync([NotNull] string jobId)
+        private Task<HangfirJobResult> DeleteBackgroundJobAsync([NotNull] string jobId)
         {
             return HangfireJobClient.RemoveBackgroundJobAsync(ServerUrl, jobId, new HangfireServerPostOption() { BasicUserName = BasicUserName, BasicPassword = BasicPassword });
         }
@@ -159,7 +146,7 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        HangfirJobResult AddRecurringJob([NotNull] RecurringJob job)
+        private HangfirJobResult AddRecurringJob([NotNull] RecurringJob job)
         {
             if (job.SendFail || job.SendSuccess) job.Mail = NoticeMail.SplitWithSemicolon().ToList();
 
@@ -171,11 +158,11 @@ namespace MyNetCore.Services
         /// </summary>
         /// <param name="jobName"></param>
         /// <returns></returns>
-        Task<HangfirJobResult> DeleteRecurringJobAsync([NotNull] string jobName)
+        private Task<HangfirJobResult> DeleteRecurringJobAsync([NotNull] string jobName)
         {
             return HangfireJobClient.RemoveRecurringJobAsync(ServerUrl, jobName, new HangfireServerPostOption() { BasicUserName = BasicUserName, BasicPassword = BasicPassword });
         }
 
-        #endregion
+        #endregion 简单封装
     }
 }

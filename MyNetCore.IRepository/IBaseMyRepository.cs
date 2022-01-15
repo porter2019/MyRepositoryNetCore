@@ -1,8 +1,4 @@
-﻿using FreeSql;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace MyNetCore.IRepository
 {
@@ -12,7 +8,6 @@ namespace MyNetCore.IRepository
     /// <typeparam name="TEntity"></typeparam>
     public interface IBaseMyRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, new() //BaseEntity
     {
-
         #region 修改
 
         /// <summary>
@@ -77,8 +72,7 @@ namespace MyNetCore.IRepository
         /// <returns>受影响的行数</returns>
         Task<int> UpdateEntityAsync(TEntity entity);
 
-
-        #endregion
+        #endregion 修改
 
         #region 删除
 
@@ -144,7 +138,7 @@ namespace MyNetCore.IRepository
         /// <returns></returns>
         Task<int> DeleteByWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
-        #endregion
+        #endregion 删除
 
         #region 查询数量
 
@@ -178,7 +172,7 @@ namespace MyNetCore.IRepository
         /// <returns></returns>
         Task<long> GetCountAsync(string sql, object parms = null);
 
-        #endregion
+        #endregion 查询数量
 
         #region 是否存在
 
@@ -214,7 +208,7 @@ namespace MyNetCore.IRepository
         /// <returns></returns>
         Task<bool> ExistsWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
-        #endregion
+        #endregion 是否存在
 
         #region 查询单条数据
 
@@ -312,9 +306,9 @@ namespace MyNetCore.IRepository
         /// <returns>REntity</returns>
         Task<REntity> GetModelViewAsync<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new();
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询单条数据
 
         #region 查询集合
 
@@ -395,7 +389,6 @@ namespace MyNetCore.IRepository
         /// <returns>List<TEntity></returns>
         Task<List<REntity>> GetListAsync<REntity>(string where, object parms = null);
 
-
         #region 视图
 
         /// <summary>
@@ -432,9 +425,9 @@ namespace MyNetCore.IRepository
         /// <returns>List<TEntity></returns>
         Task<List<REntity>> GetListViewAsync<REntity>(string where, object parms = null) where REntity : class, new();
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询集合
 
         #region 查询分页
 
@@ -472,7 +465,7 @@ namespace MyNetCore.IRepository
         /// <returns></returns>
         Task<List<REntity>> GetPageListAsync<REntity>(PageOptions<TEntity> options, out long total);
 
-        #endregion
+        #endregion PageOptions
 
         #region Sql
 
@@ -512,7 +505,7 @@ namespace MyNetCore.IRepository
         /// <returns></returns>
         Task<List<REntity>> GetPageListAsync<REntity>(string sql, PageOptions<TEntity> options, out long total);
 
-        #endregion
+        #endregion Sql
 
         #region 视图
 
@@ -550,9 +543,8 @@ namespace MyNetCore.IRepository
         /// <returns></returns>
         Task<List<REntity>> GetPageListViewAsync<REntity>(string sql, PageOptions<REntity> options, out long total) where REntity : class, new();
 
-        #endregion
+        #endregion 视图
 
-        #endregion
-
+        #endregion 查询分页
     }
 }

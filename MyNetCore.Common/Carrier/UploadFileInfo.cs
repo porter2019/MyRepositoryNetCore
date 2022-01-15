@@ -39,6 +39,5 @@
         /// 文件拓展名
         /// </summary>
         public string FileExt { get; set; }
-
     }
 }

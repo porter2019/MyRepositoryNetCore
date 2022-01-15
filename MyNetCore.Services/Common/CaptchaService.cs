@@ -1,15 +1,13 @@
-﻿using MyNetCore.IServices;
-using MyNetCore.Model;
-using System;
+﻿using MyNetCore.Model;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading.Tasks;
 
 /**
  * 另一种方案：https://www.cnblogs.com/flame7/p/13660752.html
  * 对应的库地址：https://github.com/sonosun/EasyVerificationCode
  */
+
 namespace MyNetCore.Services
 {
     /// <summary>
@@ -64,14 +62,14 @@ namespace MyNetCore.Services
                 //字体
                 var f = new Font(fonts[findex], 16, FontStyle.Bold);
 
-                //颜色  
+                //颜色
                 Brush b = new SolidBrush(c[cindex]);
 
                 var ii = 4;
                 if ((i + 1) % 2 == 0)
                     ii = 2;
 
-                //绘制一个验证字符  
+                //绘制一个验证字符
                 g.DrawString(captchaCode.Substring(i, 1), f, b, 17 + (i * 17), ii);
             }
 
@@ -121,6 +119,5 @@ namespace MyNetCore.Services
 
             return Task.FromResult(captcheCode);
         }
-
     }
 }

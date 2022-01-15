@@ -1,14 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Web.SetUp
+﻿namespace MyNetCore.Web.SetUp
 {
-
     public class DefaultImageMiddleware
     {
         private readonly RequestDelegate _next;
@@ -31,7 +22,6 @@ namespace MyNetCore.Web.SetUp
                 //var contentType = context.Request.Headers["accept"].ToString().ToLower();
                 //if (contentType.StartsWith("image"))
                 //{
-                    
                 //}
             }
         }
@@ -43,7 +33,7 @@ namespace MyNetCore.Web.SetUp
                 FileStream fs = File.OpenRead(DefaultImagePath);
                 byte[] bytes = new byte[fs.Length];
                 await fs.ReadAsync(bytes, 0, bytes.Length);
-                //this header is use for browser cache, format like: "Mon, 15 May 2017 07:03:37 GMT". 
+                //this header is use for browser cache, format like: "Mon, 15 May 2017 07:03:37 GMT".
                 //context.Response.Headers.Append("Last-Modified", $"{File.GetLastWriteTimeUtc(path).ToString("ddd, dd MMM yyyy HH:mm:ss")} GMT");
                 //context.Response.StatusCode = 200;
                 await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
@@ -53,9 +43,7 @@ namespace MyNetCore.Web.SetUp
                 await context.Response.WriteAsync(ex.Message);
             }
         }
-
     }
-
 
     public static class DefaultImageMiddlewareExtensions
     {

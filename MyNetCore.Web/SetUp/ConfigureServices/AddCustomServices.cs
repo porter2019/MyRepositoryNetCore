@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using MyNetCore.IServices;
-using MyNetCore.Services;
+﻿using System.Reflection;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -92,9 +85,11 @@ namespace MyNetCore.Web.SetUp
                         case ServiceLifetime.Singleton://单例
                             services.AddSingleton(instanceType);
                             break;
+
                         case ServiceLifetime.Scoped: //同一请求上下文都是一个对象
                             services.AddScoped(instanceType);
                             break;
+
                         case ServiceLifetime.Transient: //瞬时单例，每次访问都是新的对象
                             services.AddTransient(instanceType);
                             break;
@@ -110,9 +105,11 @@ namespace MyNetCore.Web.SetUp
                             case ServiceLifetime.Singleton://单例
                                 services.AddSingleton(interfaceType, instanceType);
                                 break;
+
                             case ServiceLifetime.Scoped: //同一请求上下文都是一个对象
                                 services.AddScoped(interfaceType, instanceType);
                                 break;
+
                             case ServiceLifetime.Transient: //瞬时单例，每次访问都是新的对象
                                 services.AddTransient(interfaceType, instanceType);
                                 break;
@@ -120,8 +117,6 @@ namespace MyNetCore.Web.SetUp
                     }
                 }
             }
-
         }
-
     }
 }

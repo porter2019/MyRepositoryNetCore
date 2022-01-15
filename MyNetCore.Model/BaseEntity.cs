@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MyNetCore.Model
 {
@@ -110,8 +103,7 @@ namespace MyNetCore.Model
         /// </summary>
         public List<Entity.CommonAttach> Attachs { get; set; } = new List<Entity.CommonAttach>();
 
-        #endregion
-
+        #endregion 只读属性
     }
 
     /// <summary>
@@ -153,7 +145,5 @@ namespace MyNetCore.Model
         {
             return MemberwiseClone() as TEntity;
         }
-
     }
-
 }

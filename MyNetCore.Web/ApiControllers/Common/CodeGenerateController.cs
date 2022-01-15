@@ -1,16 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-
-namespace MyNetCore.Web.ApiControllers
+﻿namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 代码生成器
@@ -34,7 +22,6 @@ namespace MyNetCore.Web.ApiControllers
         public async Task<ApiResult> GenerateFourLayer(string modelName)
         {
             return await _codeGenerateServices.GenerateIIRSCodeFile(modelName);
-
         }
 
         /// <summary>
@@ -47,7 +34,6 @@ namespace MyNetCore.Web.ApiControllers
         public async Task<ApiResult> GenerateApiController(string name, string? desc)
         {
             return await _codeGenerateServices.GenerateApiControllerFile(name, desc);
-
         }
 
         /// <summary>
@@ -60,9 +46,6 @@ namespace MyNetCore.Web.ApiControllers
         public Task<ApiResult> GenerateVueFiles(string name, string? desc)
         {
             return _codeGenerateServices.GenerateVuePageFile(name, desc);
-
-
         }
-
     }
 }

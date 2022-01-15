@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 验证码发送记录表
@@ -71,8 +63,7 @@ namespace MyNetCore.Model.Entity
         /// 忽略
         /// </summary>
         [JsonIgnore]
-        new static List<CommonAttach> Attachs => null;
-
+        private new static List<CommonAttach> Attachs => null;
     }
 
     /// <summary>
@@ -86,5 +77,4 @@ namespace MyNetCore.Model.Entity
         [Description("手机号")]
         CellPhone,
     }
-
 }

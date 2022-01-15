@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -77,7 +72,6 @@ namespace MyNetCore.Web.SetUp
                 options.ValueLengthLimit = int.MaxValue;
                 options.MultipartBodyLengthLimit = int.MaxValue;
             });
-
         }
     }
 }

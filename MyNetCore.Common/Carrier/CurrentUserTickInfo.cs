@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore
+﻿namespace MyNetCore
 {
     /// <summary>
     /// Http请求上下文中的用户信息
@@ -30,6 +24,5 @@ namespace MyNetCore
         /// 过期时间
         /// </summary>
         public DateTime ExpireTime { get; set; }
-
     }
 }

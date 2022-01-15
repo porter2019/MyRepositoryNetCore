@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using MyNetCore.IServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyNetCore.Services
 {
@@ -45,7 +40,7 @@ namespace MyNetCore.Services
             return await Task.Run(() => _cache.TryGetValue(key, out _));
         }
 
-        #endregion
+        #endregion 是否存在
 
         #region 添加缓存
 
@@ -179,7 +174,6 @@ namespace MyNetCore.Services
                     .SetAbsoluteExpiration(expiressAbsoulte));
                 return Exists(key);
             });
-
         }
 
         /// <summary>
@@ -241,7 +235,7 @@ namespace MyNetCore.Services
             });
         }
 
-        #endregion
+        #endregion 添加缓存
 
         #region 删除缓存
 
@@ -298,7 +292,7 @@ namespace MyNetCore.Services
             await Task.Run(() => keys.ToList().ForEach(item => _cache.Remove(item)));
         }
 
-        #endregion
+        #endregion 删除缓存
 
         #region 获取缓存
 
@@ -405,7 +399,7 @@ namespace MyNetCore.Services
             });
         }
 
-        #endregion
+        #endregion 获取缓存
 
         #region 修改缓存
 
@@ -425,7 +419,6 @@ namespace MyNetCore.Services
                 if (!Remove(key)) return false;
             }
             return Add(key, value);
-
         }
 
         /// <summary>
@@ -444,7 +437,6 @@ namespace MyNetCore.Services
                 if (!Remove(key)) return await Task.Run(() => false);
             }
             return await AddAsync(key, value);
-
         }
 
         /// <summary>
@@ -465,7 +457,6 @@ namespace MyNetCore.Services
                 if (!Remove(key)) return false;
             }
             return Add(key, value, expiresSliding, expiressAbsoulte);
-
         }
 
         /// <summary>
@@ -526,10 +517,9 @@ namespace MyNetCore.Services
                 if (!Remove(key)) return await Task.Run(() => false);
             }
             return await AddAsync(key, value, expiresIn, isSliding);
-
         }
 
-        #endregion
+        #endregion 修改缓存
 
         public void Dispose()
         {
@@ -537,6 +527,5 @@ namespace MyNetCore.Services
                 _cache.Dispose();
             GC.SuppressFinalize(this);
         }
-
     }
 }

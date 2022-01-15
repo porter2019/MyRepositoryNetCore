@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Redis;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using MyNetCore.IServices;
-using MyNetCore.Services;
-using System;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -37,9 +32,6 @@ namespace MyNetCore.Web.SetUp
                 });
                 services.AddSingleton<ICacheService, MemoryCacheService>();
             }
-
-
-
         }
     }
 }

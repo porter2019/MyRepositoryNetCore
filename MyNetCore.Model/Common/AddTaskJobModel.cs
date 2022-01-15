@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model
+﻿namespace MyNetCore.Model
 {
     /// <summary>
     /// Http TaskJob添加所需参数
@@ -118,7 +112,5 @@ namespace MyNetCore.Model
         /// <code>更多参考：https://www.cnblogs.com/yanghj010/p/10875151.html</code>
         /// </summary>
         public string Corn { get; set; }
-
     }
-
 }

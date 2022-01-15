@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore
+﻿namespace MyNetCore
 {
     /// <summary>
     /// 接口返回对象
@@ -62,7 +56,6 @@ namespace MyNetCore
         /// <returns></returns>
         public static ApiResult OK(object data)
         {
-
             return new ApiResult()
             {
                 code = ApiCode.成功,
@@ -79,7 +72,6 @@ namespace MyNetCore
         /// <returns></returns>
         public static ApiResult OK(object data, List<ApiEnumProp> enums)
         {
-
             return new ApiResult()
             {
                 code = ApiCode.成功,
@@ -329,8 +321,6 @@ namespace MyNetCore
                 msg = "用户未登录"
             };
         }
-
-
     }
 
     /// <summary>
@@ -340,7 +330,6 @@ namespace MyNetCore
     {
         public ApiEnumProp()
         {
-
         }
 
         public ApiEnumProp(string name, List<ApiEnumOptions> options)
@@ -382,39 +371,45 @@ namespace MyNetCore
         /// 成功
         /// </summary>
         成功 = 200,
+
         /// <summary>
         /// 验证失败
         /// </summary>
         验证失败 = 203,
+
         /// <summary>
         /// 失败
         /// </summary>
         失败 = 400,
+
         /// <summary>
         /// 系统异常
         /// </summary>
         系统异常 = 500,
+
         /// <summary>
         /// 未登录
         /// </summary>
         未登录 = 401,
+
         /// <summary>
         /// 没有权限
         /// </summary>
         没有权限 = 403,
+
         /// <summary>
         /// 无效凭证
         /// </summary>
         无效凭证 = 412,
+
         /// <summary>
         /// 不存在
         /// </summary>
         不存在 = 404,
+
         /// <summary>
         /// 未实现
         /// </summary>
         未实现 = 410,
-
     };
-
 }

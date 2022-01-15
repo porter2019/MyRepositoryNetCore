@@ -8,18 +8,6 @@
 *└──────────────────────────────────────────────────────────────┘
 */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-
 namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
@@ -112,6 +100,5 @@ namespace MyNetCore.Web.ApiControllers
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }
-
     }
 }

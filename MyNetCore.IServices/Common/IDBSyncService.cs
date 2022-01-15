@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.IServices
+﻿namespace MyNetCore.IServices
 {
     /// <summary>
     /// 数据库同步相关服务
@@ -28,6 +22,5 @@ namespace MyNetCore.IServices
         /// <param name="folder">视图所在根目录</param>
         /// <returns></returns>
         ApiResult SqlViewSync(IFreeSql fsql, string folder);
-
     }
 }

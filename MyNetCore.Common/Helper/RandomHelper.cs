@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Common.Helper
+﻿namespace MyNetCore.Common.Helper
 {
     /// <summary>
     /// 随机数工具类
@@ -54,6 +48,5 @@ namespace MyNetCore.Common.Helper
             }
             return newRandom.ToString();
         }
-
     }
 }

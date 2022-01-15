@@ -8,36 +8,24 @@
 *└──────────────────────────────────────────────────────────────┘
 */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-
 namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 书籍信息管理
     /// </summary>
 	[PermissionHandler("演示", "书籍信息", "bookInfo", 10)]
-	public class BookInfoController : BaseOpenApiController
+    public class BookInfoController : BaseOpenApiController
     {
-		private readonly ILogger<BookInfoController> _logger;
-		private readonly IBookInfoService _bookInfoServices;
-		
-		public BookInfoController(ILogger<BookInfoController> logger, IBookInfoService bookInfoServices)
+        private readonly ILogger<BookInfoController> _logger;
+        private readonly IBookInfoService _bookInfoServices;
+
+        public BookInfoController(ILogger<BookInfoController> logger, IBookInfoService bookInfoServices)
         {
             _logger = logger;
-			_bookInfoServices = bookInfoServices;
+            _bookInfoServices = bookInfoServices;
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// 查询分页
         /// </summary>
         /// <param name="model"></param>
@@ -92,6 +80,5 @@ namespace MyNetCore.Web.ApiControllers
 
             return ApiResult.OK($"受影响的行数:{affrows}");
         }
-		
     }
 }

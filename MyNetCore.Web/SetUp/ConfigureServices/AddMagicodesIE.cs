@@ -1,7 +1,5 @@
-﻿using System;
-using Magicodes.ExporterAndImporter.Core;
+﻿using Magicodes.ExporterAndImporter.Core;
 using Magicodes.ExporterAndImporter.Excel;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -22,7 +20,6 @@ namespace MyNetCore.Web.SetUp
             services.AddScoped<IExporter, ExcelExporter>();
             //导入
             services.AddScoped<IImporter, ExcelImporter>();
-
         }
     }
 }

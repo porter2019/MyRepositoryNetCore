@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace MyNetCore
 {
-
     /// <summary>
     /// 指定服务生命周期，默认Scoped
     /// </summary>
@@ -43,7 +37,6 @@ namespace MyNetCore
             this._Lifetime = serviceLifetime;
             this._IsEnabled = IsEnabled;
         }
-
 
         /// <summary>
         /// 是否允许匿名访问

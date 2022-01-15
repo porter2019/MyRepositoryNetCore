@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.EntitySecondary
+﻿namespace MyNetCore.Model.EntitySecondary
 {
     /// <summary>
     /// 演示表
@@ -23,6 +17,5 @@ namespace MyNetCore.Model.EntitySecondary
         /// </summary>
         [FsColumn("标题", 255)]
         public string Title { get; set; }
-
     }
 }

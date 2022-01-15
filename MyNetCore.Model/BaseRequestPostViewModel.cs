@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model
+﻿namespace MyNetCore.Model
 {
     /// <summary>
     /// 所有Post对象需要继承的基类

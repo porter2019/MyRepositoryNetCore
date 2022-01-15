@@ -1,9 +1,4 @@
 ﻿using FreeSql.DataAnnotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyNetCore.Model.Entity
 {
@@ -78,6 +73,5 @@ namespace MyNetCore.Model.Entity
         /// </summary>
         [Navigate(nameof(ParentId))]
         public List<BookCategory> Childs { get; set; }
-
     }
 }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 功能
     /// </summary>
     [FsTable("功能")]
-    public class SysHandler:BaseEntity
+    public class SysHandler : BaseEntity
     {
         /// <summary>
         /// 功能Id

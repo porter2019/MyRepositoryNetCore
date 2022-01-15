@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Web
+﻿namespace MyNetCore.Web
 {
     /// <summary>
     /// API控制器基类
@@ -13,7 +7,6 @@ namespace MyNetCore.Web
     [Route("api/open/[controller]")]
     public class BaseOpenApiController : BaseApiController
     {
-
         /// <summary>
         /// 上下文Cookie中的用户信息
         /// <code>数据在OpenApiActionFilterAttribute中填充</code>
@@ -22,7 +15,6 @@ namespace MyNetCore.Web
 
         public BaseOpenApiController()
         {
-            
         }
 
         /// <summary>
@@ -44,6 +36,5 @@ namespace MyNetCore.Web
             //if (intersectLs.Count() == 0) return false;
             return true;
         }
-
     }
 }

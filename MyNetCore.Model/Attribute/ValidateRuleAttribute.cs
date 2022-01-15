@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MyNetCore
 {
@@ -36,7 +32,6 @@ namespace MyNetCore
         /// 针对DTO
         /// </summary>
         public string DisplayName { get; set; }
-
 
         /// <summary>
         /// 数据类别
@@ -110,7 +105,6 @@ namespace MyNetCore
                     var tempLength = LengthRange.ObjToInt(0);
                     if (tempLength <= 0)
                     {
-
                         return new ValidationResult($"{valDisplayName}LengthRange属性值有误", new[] { valName });
                     }
                     else
@@ -121,49 +115,61 @@ namespace MyNetCore
                 }
             }
 
-
             switch (ValidateType)
             {
                 case ValidateType.None:
                     break;
+
                 case ValidateType.Email:
                     if (!Common.Helper.ValidateHelper.IsEmail(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的邮箱", new[] { valName });
                     break;
+
                 case ValidateType.Date:
                     inputText = inputText.Split(' ')[0].Replace("/", "-");
                     if (!Common.Helper.ValidateHelper.IsDate(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的日期", new[] { valName });
                     break;
+
                 case ValidateType.DateYear:
                     if (!Common.Helper.ValidateHelper.IsDateYear(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的年份", new[] { valName });
                     break;
+
                 case ValidateType.DateMonth:
                     if (!Common.Helper.ValidateHelper.IsDateMonth(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的月份", new[] { valName });
                     break;
+
                 case ValidateType.DateTime:
                     inputText = inputText.Replace("/", "-").Replace(" 0:", " 00:");
                     if (!Common.Helper.ValidateHelper.IsDateTime(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的时间日期", new[] { valName });
                     break;
+
                 case ValidateType.Number:
                     if (!Common.Helper.ValidateHelper.IsNumeric(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的数字", new[] { valName });
                     break;
+
                 case ValidateType.Money:
                     if (!Common.Helper.ValidateHelper.IsMoney(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的非负金额", new[] { valName });
                     break;
+
                 case ValidateType.MoneyIncloudMinus:
                     if (!Common.Helper.ValidateHelper.IsMoneyIncloudMinus(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的金额", new[] { valName });
                     break;
+
                 case ValidateType.IdNo:
                     if (!Common.Helper.ValidateHelper.IsIdCard(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的身份证号码", new[] { valName });
                     break;
+
                 case ValidateType.CellPhone:
                     if (!Common.Helper.ValidateHelper.IsCellPhone(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的手机号", new[] { valName });
                     break;
+
                 case ValidateType.WebURL:
                     if (!Common.Helper.ValidateHelper.IsWebUrl(inputText)) return new ValidationResult($"{valDisplayName}内容不是合法的网址", new[] { valName });
                     break;
+
                 case ValidateType.AccountName:
                     if (!Common.Helper.ValidateHelper.IsAccountName(inputText)) return new ValidationResult($"{valDisplayName}只能由数字、字母、下划线组成", new[] { valName });
                     break;
+
                 default:
                     break;
             }
@@ -177,7 +183,6 @@ namespace MyNetCore
 
             return ValidationResult.Success;
         }
-
     }
 
     /// <summary>
@@ -189,50 +194,62 @@ namespace MyNetCore
         /// 无
         /// </summary>
         None,
+
         /// <summary>
         /// 邮箱
         /// </summary>
         Email,
+
         /// <summary>
         /// 日期 2019-12-12
         /// </summary>
         Date,
+
         /// <summary>
         /// 日期 年 2019
         /// </summary>
         DateYear,
+
         /// <summary>
         /// 日期 月 05
         /// </summary>
         DateMonth,
+
         /// <summary>
         /// 日期时间 2019-12-12 12:12:12
         /// </summary>
         DateTime,
+
         /// <summary>
         /// 数字
         /// </summary>
         Number,
+
         /// <summary>
         /// 金额，非负保留4位小数点
         /// </summary>
         Money,
+
         /// <summary>
         /// 金额，包含负数保留4位小数点
         /// </summary>
         MoneyIncloudMinus,
+
         /// <summary>
         /// 身份证号
         /// </summary>
         IdNo,
+
         /// <summary>
         /// 手机号
         /// </summary>
         CellPhone,
+
         /// <summary>
         /// 网页地址
         /// </summary>
         WebURL,
+
         /// <summary>
         /// 网站账户名，字母数字下划线组成
         /// </summary>

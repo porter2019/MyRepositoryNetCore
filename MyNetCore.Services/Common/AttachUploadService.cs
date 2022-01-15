@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using MyNetCore.IServices;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
 using System.IO;
 
 namespace MyNetCore.Services
@@ -80,7 +73,6 @@ namespace MyNetCore.Services
                     FileName = file.FileName,//md5CR32 + fileExt,
                     FileWebPath = domain + finalFilePath
                 });
-
             }
 
             return fileList;

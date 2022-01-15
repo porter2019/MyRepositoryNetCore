@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.RequestModel
+﻿namespace MyNetCore.Model.RequestModel
 {
     /// <summary>
     /// 用户登录所需参数
@@ -22,9 +16,8 @@ namespace MyNetCore.Model.RequestModel
         public string Password { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool Remember { get; set; }
-
     }
 }

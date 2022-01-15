@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model
+﻿namespace MyNetCore.Model
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class PageQueryAttribute : Attribute
     {
-        public PageQueryAttribute() { }
+        public PageQueryAttribute()
+        { }
 
         /// <summary>
         /// 只指定匹配类型
@@ -39,7 +34,6 @@ namespace MyNetCore.Model
         /// 匹配类型
         /// </summary>
         public PageQueryColumnMatchType OperatoryType { get; set; }
-
     }
 
     /// <summary>
@@ -126,10 +120,10 @@ namespace MyNetCore.Model
         /// Int类型的in查询，值必须英文逗号分隔
         /// </summary>
         IntIn,
+
         /// <summary>
         /// Int类型的not in查询，值必须英文逗号分割
         /// </summary>
         IntNotIn,
     }
-
 }

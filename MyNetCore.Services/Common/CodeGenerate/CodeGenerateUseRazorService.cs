@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MyNetCore.Model.CodeGenerate;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using MyNetCore.Model.CodeGenerate;
-using Microsoft.Extensions.Configuration;
 
 namespace MyNetCore.Services
 {
@@ -65,7 +58,6 @@ namespace MyNetCore.Services
             if (remark.IsNull())
             {
                 templateName = "ApiControllerWithEntityTemplate";
-
             }
             var model = loadEntityInfo(name, remark);
             var html = await _templateEngine.ParseAsync(GetViewTemplateRelativePath(templateName), model);
@@ -82,7 +74,6 @@ namespace MyNetCore.Services
         /// <returns></returns>
         public async Task<ApiResult> GenerateVuePageFile(string name, string desc)
         {
-
             var remark = desc;
             var routeTemplateName = "Route";
             var apiTemplateName = "Api";
@@ -150,7 +141,6 @@ namespace MyNetCore.Services
                 writer.Write(content);
                 writer.Dispose();
             }
-
         }
 
         /// <summary>
@@ -180,7 +170,6 @@ namespace MyNetCore.Services
                 writer.Write(content);
                 writer.Dispose();
             }
-
         }
 
         /// <summary>
@@ -251,7 +240,6 @@ namespace MyNetCore.Services
                 if (clumn.PropertyType.Namespace == "System.Collections.Generic") return;
                 if (!clumn.CanWrite) return;//只读的不要
 
-
                 var fsColumnInfo = clumn.GetCustomAttributes<Model.FsColumnAttribute>(true); //clumn.GetCustomAttributes(typeof(Model.FsColumnAttribute), true)[0] as Model.FsColumnAttribute;
                 if (fsColumnInfo.Any())
                 {
@@ -261,8 +249,6 @@ namespace MyNetCore.Services
 
             return entityInfo;
         }
-
-
 
         /// <summary>
         /// 获取视图相对路径
@@ -274,7 +260,6 @@ namespace MyNetCore.Services
             return "/Views/CodeGenerateTemplate/" + lastPath + ".cshtml";
         }
 
-        #endregion
-
+        #endregion 私有方法
     }
 }

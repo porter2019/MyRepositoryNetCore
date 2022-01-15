@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.StaticFiles;
+﻿using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -39,7 +33,6 @@ namespace MyNetCore.Web.SetUp
                 ContentTypeProvider = unknownFileOption,
                 FileProvider = new PhysicalFileProvider(staticDirectory)
             });
-
         }
     }
 }

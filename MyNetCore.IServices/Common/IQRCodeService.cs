@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.IServices
+﻿namespace MyNetCore.IServices
 {
     /// <summary>
     /// 二维码生成服务
@@ -25,6 +19,5 @@ namespace MyNetCore.IServices
         /// <param name="iconPath">图片物理路径地址，获取wwwroot下_hostEnvironment.ContentRootPath</param>
         /// <returns></returns>
         Task<byte[]> GenerateQRCode(string content, string iconPath);
-
     }
 }

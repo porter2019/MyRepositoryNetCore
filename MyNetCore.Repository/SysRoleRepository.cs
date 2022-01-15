@@ -1,21 +1,11 @@
 ﻿/**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：系统用户组仓储实现                                                    
-*│　作    者：litdev                                              
-*│　版    本：1.0   模板代码自动生成                                              
-*│　创建时间：2021-03-04 09:04:26                            
+*│　描    述：系统用户组仓储实现
+*│　作    者：litdev
+*│　版    本：1.0   模板代码自动生成
+*│　创建时间：2021-03-04 09:04:26
 *└──────────────────────────────────────────────────────────────┘
 */
-
-using FreeSql;
-using MyNetCore.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.Model.Entity;
-using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Repository
 {
@@ -24,10 +14,8 @@ namespace MyNetCore.Repository
     /// </summary>
     public class SysRoleRepository : BaseMyRepository<SysRole, int>, ISysRoleRepository
     {
-
         public SysRoleRepository(ILogger<SysRoleRepository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-
         }
 
         /// <summary>
@@ -68,7 +56,6 @@ namespace MyNetCore.Repository
             }
 
             return resultList;
-
         }
 
         /// <summary>
@@ -114,12 +101,11 @@ namespace MyNetCore.Repository
         /// <returns></returns>
         public Task<List<string>> GetPermissionsByRoleIds(string roleIds)
         {
-            string sql = string.Format(@"select DISTINCT (c.AliasName + '.' + b.AliasName) as auth from 
-                                            SysRolePermit as a left join SysPermit as b on a.PermitId = b.PermitId and a.IsDeleted = 0 and a.RoleId in({0}) 
+            string sql = string.Format(@"select DISTINCT (c.AliasName + '.' + b.AliasName) as auth from
+                                            SysRolePermit as a left join SysPermit as b on a.PermitId = b.PermitId and a.IsDeleted = 0 and a.RoleId in({0})
                                             left join SysHandler as c on b.HandlerId = c.HandlerId and c.IsDeleted=0", roleIds);
 
             return _fsql.Ado.QueryAsync<string>(sql);
         }
-
     }
 }

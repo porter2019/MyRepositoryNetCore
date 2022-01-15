@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Web.SetUp
+﻿namespace MyNetCore.Web.SetUp
 {
     public static class UseAppLaunch
     {
@@ -27,11 +19,9 @@ namespace MyNetCore.Web.SetUp
 
             var freeSql = services.GetService<IFreeSql>();
 
-
             lifeTime.ApplicationStarted.Register(() =>
             {
                 logger.Info("网站启动..");
-
             });
 
             lifeTime.ApplicationStopping.Register(() =>

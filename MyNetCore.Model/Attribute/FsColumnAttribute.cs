@@ -1,9 +1,4 @@
 ﻿using FreeSql.DataAnnotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyNetCore.Model
 {
@@ -66,6 +61,7 @@ namespace MyNetCore.Model
         /// 必须这样写，不然内存溢出
         /// </summary>
         private bool _IsPK;
+
         /// <summary>
         /// 是否主键(为True时同时自增)
         /// </summary>

@@ -1,22 +1,11 @@
 ﻿/**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：书籍信息业务逻辑接口                                                    
-*│　作    者：杨习友                                          
-*│　版    本：1.0 使用Razor引擎自动生成                                              
-*│　创建时间：2021-04-06 20:19:48                            
+*│　描    述：书籍信息业务逻辑接口
+*│　作    者：杨习友
+*│　版    本：1.0 使用Razor引擎自动生成
+*│　创建时间：2021-04-06 20:19:48
 *└──────────────────────────────────────────────────────────────┘
 */
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using MyNetCore.IRepository;
-using MyNetCore.Repository;
-using MyNetCore.Model.Entity;
-using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -30,9 +19,9 @@ namespace MyNetCore.Services
         private readonly ICommonAttachService _commonAttachServices;
         private readonly IFreeSql _fsq;
 
-        public BookInfoService(ILogger<BookInfoService> logger, 
-            IBookInfoRepository bookInfoRepository, 
-            IFreeSql<DBFlagMain> fsq, 
+        public BookInfoService(ILogger<BookInfoService> logger,
+            IBookInfoRepository bookInfoRepository,
+            IFreeSql<DBFlagMain> fsq,
             ICommonAttachService commonAttachServices) : base(bookInfoRepository, logger)
         {
             _bookInfoRepository = bookInfoRepository;
@@ -55,7 +44,6 @@ namespace MyNetCore.Services
             entity.Attachs = await _commonAttachServices.GetAttachListAsync(id, typeof(BookInfo));
 
             return entity;
-
         }
 
         /// <summary>
@@ -72,7 +60,6 @@ namespace MyNetCore.Services
 
                 var attachRepo = uow.GetRepository<CommonAttach>();
                 attachRepo.UnitOfWork = uow;
-
 
                 var newEntity = await bookInfoRepo.InsertOrUpdateAsync(entity);
                 var refModel = typeof(BookInfo).FullName;
@@ -98,7 +85,5 @@ namespace MyNetCore.Services
 
             return entity;
         }
-
-
     }
 }

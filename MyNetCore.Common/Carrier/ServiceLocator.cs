@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MyNetCore
+﻿namespace MyNetCore
 {
     /// <summary>
     /// 所有注入的对象

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace MyNetCore.Common.Helper
@@ -18,7 +17,6 @@ namespace MyNetCore.Common.Helper
         {
             return Regex.IsMatch(s, @"^[a-zA-Z0-9_]*$");
         }
-
 
         /// <summary>
         /// 隐藏手机号中间四位为*
@@ -411,6 +409,5 @@ namespace MyNetCore.Common.Helper
         {
             return IsNumericRule(numericRuleStr, ",");
         }
-
     }
 }

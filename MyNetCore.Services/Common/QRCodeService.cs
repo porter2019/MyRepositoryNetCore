@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using MyNetCore.IServices;
-using System.Threading.Tasks;
 
 /**
  * https://github.com/codebude/QRCoder
@@ -33,7 +31,6 @@ namespace MyNetCore.Services
             using MemoryStream stream = new MemoryStream();
             bitmapImg.Save(stream, ImageFormat.Jpeg);
             return Task.FromResult(stream.GetBuffer());
-
         }
 
         /// <summary>

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MyNetCore
@@ -19,7 +14,7 @@ namespace MyNetCore
         #region Object
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -35,7 +30,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -51,7 +46,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <param name="errorValue"></param>
@@ -67,7 +62,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -82,7 +77,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -97,7 +92,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <param name="errorValue"></param>
@@ -113,7 +108,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -124,7 +119,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <param name="errorValue"></param>
@@ -136,7 +131,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -151,7 +146,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <param name="errorValue"></param>
@@ -247,7 +242,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -262,7 +257,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <param name="errorValue"></param>
@@ -278,7 +273,7 @@ namespace MyNetCore
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thisValue"></param>
         /// <returns></returns>
@@ -336,7 +331,7 @@ namespace MyNetCore
             return false;
         }
 
-        #endregion
+        #endregion Object
 
         #region String
 
@@ -372,18 +367,23 @@ namespace MyNetCore
                 case "当天":
                     searchRange = DateTime.Now.ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
                     break;
+
                 case "近三天":
                     searchRange = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
                     break;
+
                 case "近一周":
                     searchRange = DateTime.Now.AddDays(-6).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
                     break;
+
                 case "近十天":
                     searchRange = DateTime.Now.AddDays(-9).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
                     break;
+
                 case "近一个月":
                     searchRange = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
                     break;
+
                 case "近三个月":
                     searchRange = DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd") + ";" + DateTime.Now.ToString("yyyy-MM-dd");
                     break;
@@ -606,7 +606,6 @@ namespace MyNetCore
                         break;
                     }
                 }
-
             }
 
             return sb.ToString();
@@ -658,7 +657,6 @@ namespace MyNetCore
                 return sourceStr.Split(splitStr[0], StringSplitOptions.RemoveEmptyEntries);
             else
                 return Regex.Split(sourceStr, Regex.Escape(splitStr), RegexOptions.IgnoreCase);
-
         }
 
         /// <summary>
@@ -712,7 +710,7 @@ namespace MyNetCore
             }
         }
 
-        #endregion
+        #endregion String
 
         #region Decimal
 
@@ -740,7 +738,7 @@ namespace MyNetCore
             return toRound - toRound % num;
         }
 
-        #endregion
+        #endregion Decimal
 
         #region Int32
 
@@ -755,7 +753,7 @@ namespace MyNetCore
             return startTime.AddSeconds(timeStamp);
         }
 
-        #endregion
+        #endregion Int32
 
         #region long
 
@@ -770,7 +768,7 @@ namespace MyNetCore
             return startTime.AddMilliseconds(timeStamp);
         }
 
-        #endregion
+        #endregion long
 
         #region TimeSpan
 
@@ -814,7 +812,7 @@ namespace MyNetCore
             return startTime.Add(ts);
         }
 
-        #endregion
+        #endregion TimeSpan
 
         #region DateTime
 
@@ -925,8 +923,7 @@ namespace MyNetCore
             return dt.ToString("ss mm HH dd MM ? yyyy");
         }
 
-
-        #endregion
+        #endregion DateTime
 
         #region StringBuilder
 
@@ -958,7 +955,7 @@ namespace MyNetCore
             return str;
         }
 
-        #endregion
+        #endregion StringBuilder
 
         #region Array
 
@@ -991,7 +988,7 @@ namespace MyNetCore
             return array.ConvertIntArray().ToList();
         }
 
-        #endregion
+        #endregion Array
 
         #region List<T>
 
@@ -1041,7 +1038,7 @@ namespace MyNetCore
             return list != null;
         }
 
-        #endregion
+        #endregion List<T>
 
         #region HTML
 
@@ -1108,7 +1105,7 @@ namespace MyNetCore
             return str;
         }
 
-        #endregion
+        #endregion HTML
 
         #region 字符串加密
 
@@ -1145,7 +1142,6 @@ namespace MyNetCore
             return EncryptBase64Encode(toEncrypt, Encoding.UTF8);
         }
 
-
         /// <summary>
         /// Base64解密
         /// </summary>
@@ -1177,8 +1173,7 @@ namespace MyNetCore
             return EncryptBase64Decode(toDecrypt, Encoding.UTF8);
         }
 
-
-        #endregion
+        #endregion Base64加密
 
         #region MD5加密
 
@@ -1197,7 +1192,7 @@ namespace MyNetCore
             return sb.ToString();
         }
 
-        #endregion
+        #endregion MD5加密
 
         #region SHA256加密
 
@@ -1213,9 +1208,9 @@ namespace MyNetCore
             return BitConverter.ToString(value).Replace("-", "").ToLower();
         }
 
-        #endregion
+        #endregion SHA256加密
 
-        #endregion
+        #endregion 字符串加密
 
         #region 枚举
 
@@ -1240,7 +1235,6 @@ namespace MyNetCore
             }
             catch (Exception)
             {
-
                 return "";
             }
         }
@@ -1271,7 +1265,6 @@ namespace MyNetCore
         /// <returns>枚举名称列表</returns>
         public static List<string> GetEnumNamesList(this Type enumType)
         {
-
             return Enum.GetNames(enumType).ToList();
         }
 
@@ -1350,7 +1343,7 @@ namespace MyNetCore
             return null;
         }
 
-        #endregion
+        #endregion 枚举
 
         #region Http上下文
 
@@ -1365,6 +1358,6 @@ namespace MyNetCore
             return heads[key].FirstOrDefault()?.ToString() ?? "";
         }
 
-        #endregion
+        #endregion Http上下文
     }
 }

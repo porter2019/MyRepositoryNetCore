@@ -1,24 +1,12 @@
-﻿using FreeSql;
-using MyNetCore.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.Model.Entity;
-using Microsoft.Extensions.Logging;
-
-namespace MyNetCore.Repository
+﻿namespace MyNetCore.Repository
 {
     /// <summary>
     /// 系统用户仓储实现
     /// </summary>
     public class SysUserRepository : BaseMyRepository<SysUser, int>, ISysUserRepository
     {
-
         public SysUserRepository(ILogger<SysUserRepository> logger, IFreeSql<DBFlagMain> fsql) : base(fsql, logger)
         {
-
         }
 
         /// <summary>

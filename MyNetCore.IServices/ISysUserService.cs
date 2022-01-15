@@ -1,18 +1,10 @@
-﻿using MyNetCore.Model.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.IServices
+﻿namespace MyNetCore.IServices
 {
     /// <summary>
     /// 系统用户业务类
     /// </summary>
     public interface ISysUserService : IBaseService<SysUser>
     {
-
         /// <summary>
         /// 判断登录名是否存在
         /// </summary>

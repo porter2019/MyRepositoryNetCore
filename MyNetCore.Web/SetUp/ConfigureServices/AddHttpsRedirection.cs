@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-
-namespace MyNetCore.Web.SetUp
+﻿namespace MyNetCore.Web.SetUp
 {
     public static class AddHttpsRedirection
     {
@@ -24,7 +19,6 @@ namespace MyNetCore.Web.SetUp
                     options.HttpsPort = config.GetValue<int>("Service:Port");
                 });
             }
-
         }
     }
 }

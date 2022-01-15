@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
 namespace MyNetCore
 {
@@ -79,7 +76,6 @@ namespace MyNetCore
         {
             string[] image_exts = { "jpg", "jpeg", "gif", "png", "bmp" };
             return image_exts.Contains(ext.ToLower());
-
         }
 
         /// <summary>
@@ -281,6 +277,5 @@ namespace MyNetCore
             }
             return "";
         }
-
     }
 }

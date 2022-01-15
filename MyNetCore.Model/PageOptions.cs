@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace MyNetCore
 {
@@ -13,6 +8,7 @@ namespace MyNetCore
     public class PageOptions<TEntity> //where TEntity : class//Model.BaseEntity
     {
         private int _pageIndex = 1;
+
         /// <summary>
         /// 当前页数
         /// </summary>
@@ -29,6 +25,7 @@ namespace MyNetCore
         }
 
         private int _pageSize = 10;
+
         /// <summary>
         /// 每页数据量
         /// </summary>
@@ -99,6 +96,5 @@ namespace MyNetCore
                 _orderBy = value;
             }
         }
-
     }
 }

@@ -1,6 +1,4 @@
 ﻿using MyNetCore.Model;
-using System;
-using System.Threading.Tasks;
 
 namespace MyNetCore.IServices
 {
@@ -32,10 +30,9 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<ApiResult> AddRecurringCornJob(AddTaskJobModel model);
 
-        #endregion
+        #endregion 添加任务
 
         #region 删除任务
-
 
         /// <summary>
         /// 根据jobid删除一个一次性任务
@@ -51,8 +48,6 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<ApiResult> RemoveRecurringJobAsync(string jobName);
 
-
-        #endregion
-
+        #endregion 删除任务
     }
 }

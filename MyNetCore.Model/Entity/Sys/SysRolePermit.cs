@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 用户组权限
@@ -29,6 +23,5 @@ namespace MyNetCore.Model.Entity
         /// </summary>
         [FsColumn("权限Id", true)]
         public int PermitId { get; set; }
-
     }
 }

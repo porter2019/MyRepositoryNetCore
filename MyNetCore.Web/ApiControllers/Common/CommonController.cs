@@ -1,13 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-
-namespace MyNetCore.Web.ApiControllers
+﻿namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 通用接口
@@ -40,7 +31,7 @@ namespace MyNetCore.Web.ApiControllers
             return ApiResult.OK(saveResult);
         }
 
-        #endregion
+        #endregion 文件上传
 
         #region 验证码相关
 
@@ -77,7 +68,6 @@ namespace MyNetCore.Web.ApiControllers
             return _SMSServices.ValidateCodeAsync(guid, code);
         }
 
-        #endregion
-
+        #endregion 验证码相关
     }
 }

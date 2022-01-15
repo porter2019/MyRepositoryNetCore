@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MyNetCore.Web
 {
@@ -40,7 +33,6 @@ namespace MyNetCore.Web
             {
                 _logger.LogError(context.Exception, "发生异常");
             }
-
 
             //开发环境抛出全部异常
             //if (_hostEnvironment.IsDevelopment()) return;

@@ -25,7 +25,7 @@
             logger.Info(message);
         }
 
-        void TxtToFile(string message)
+        private void TxtToFile(string message)
         {
             //if (string.IsNullOrWhiteSpace(message)) return;
             //string file_name = "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";

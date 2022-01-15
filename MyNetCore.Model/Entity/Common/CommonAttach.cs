@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 附件表
@@ -99,7 +93,5 @@ namespace MyNetCore.Model.Entity
                 return FileWebPath;
             }
         }
-
-
     }
 }

@@ -8,19 +8,7 @@
 *└──────────────────────────────────────────────────────────────┘
 */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
 using Magicodes.ExporterAndImporter.Core;
-using System.IO;
 
 namespace MyNetCore.Web.ApiControllers
 {
@@ -73,7 +61,6 @@ namespace MyNetCore.Web.ApiControllers
             var result = await _importer.GenerateTemplate<Model.Dto.ExcelImportDemo>(filePath);
             var fileByte = await System.IO.File.ReadAllBytesAsync(result.FileName);
             return File(fileByte, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "测试导入模板.xlsx");
-
         }
 
         /// <summary>
@@ -96,8 +83,6 @@ namespace MyNetCore.Web.ApiControllers
 
                 return ApiResult.OK($"识别{data.Count}条数据");
             }
-
         }
-
     }
 }

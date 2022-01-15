@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MyNetCore.Web
+﻿namespace MyNetCore.Web
 {
     /// <summary>
     /// 需要权限控制的控制器加上此属性
@@ -23,7 +21,6 @@ namespace MyNetCore.Web
             this.OrderNo = orderNo;
         }
 
-
         /// <summary>
         /// 模块名称(相当于功能所属组)
         /// </summary>
@@ -43,6 +40,5 @@ namespace MyNetCore.Web
         /// 排序数字，降序排列，数字越大越靠前
         /// </summary>
         public int OrderNo { get; set; } = 0;
-
     }
 }

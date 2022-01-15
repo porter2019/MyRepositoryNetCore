@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.IServices
+﻿namespace MyNetCore.IServices
 {
-
     /// <summary>
     /// SMS短信验证码服务
     /// </summary>
     public interface ISMSService : IBatchDIServicesTag
     {
-
         /// <summary>
         /// 发送测试验证码
         /// </summary>
@@ -29,6 +21,5 @@ namespace MyNetCore.IServices
         /// <param name="code"></param>
         /// <returns></returns>
         Task<ApiResult> ValidateCodeAsync(string guid, string code);
-
     }
 }

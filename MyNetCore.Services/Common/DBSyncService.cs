@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using MyNetCore.IServices;
 
 namespace MyNetCore.Services
 {
@@ -121,7 +114,6 @@ namespace MyNetCore.Services
 
                         fsql.Ado.ExecuteNonQuery(execSql);
                     }
-
                     catch (Exception e)
                     {
                         _logger.LogError($"执行ViewSql文件出错，文件：{sqlFilePath}，错误信息：{e.Message}");
@@ -132,8 +124,6 @@ namespace MyNetCore.Services
             }
 
             return ApiResult.OK();
-
         }
-
     }
 }

@@ -1,12 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Redis;
-using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
 using Newtonsoft.Json;
+using StackExchange.Redis;
 
 namespace MyNetCore.Services
 {
@@ -55,7 +49,7 @@ namespace MyNetCore.Services
             return _cache.KeyExistsAsync(GetKeyForRedis(key));
         }
 
-        #endregion
+        #endregion 是否存在
 
         #region 添加缓存
 
@@ -203,7 +197,7 @@ namespace MyNetCore.Services
             return _cache.StringSetAsync(GetKeyForRedis(key), Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value)), expiresIn);
         }
 
-        #endregion
+        #endregion 添加缓存
 
         #region 删除缓存
 
@@ -251,7 +245,7 @@ namespace MyNetCore.Services
             await Task.Run(() => keys.ToList().ForEach(item => RemoveAsync(item)));
         }
 
-        #endregion
+        #endregion 删除缓存
 
         #region 获取缓存
 
@@ -377,7 +371,7 @@ namespace MyNetCore.Services
             throw new Exception("未实现");
         }
 
-        #endregion
+        #endregion 获取缓存
 
         #region 修改缓存
 
@@ -480,7 +474,7 @@ namespace MyNetCore.Services
             throw new Exception("未实现");
         }
 
-        #endregion
+        #endregion 修改缓存
 
         /// <summary>
         /// 组合Key值和实例名，就是Key值转为 实例名+Key
@@ -498,6 +492,5 @@ namespace MyNetCore.Services
                 _connection.Dispose();
             GC.SuppressFinalize(this);
         }
-
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.ResponseModel
+﻿namespace MyNetCore.Model.ResponseModel
 {
     /// <summary>
     /// 登录后返回的用户信息
@@ -30,6 +24,5 @@ namespace MyNetCore.Model.ResponseModel
         /// 过期时间，Unix时间戳，精度到秒，前端直接let a = Date.parse(new Date()) / 1000; 然后判断a 《  FailureTime就行了
         /// </summary>
         public int FailureTime { get; set; }
-
     }
 }

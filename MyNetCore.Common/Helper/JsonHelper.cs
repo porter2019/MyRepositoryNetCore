@@ -1,5 +1,4 @@
-﻿using System;
-using System.Buffers;
+﻿using System.Buffers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -10,7 +9,6 @@ namespace MyNetCore
     /// </summary>
     public static class JsonHelper
     {
-
         /// <summary>
         /// 序列化对象为json字符串
         /// </summary>
@@ -70,7 +68,6 @@ namespace MyNetCore
                 return default;
             }
         }
-
     }
 
     /// <summary>

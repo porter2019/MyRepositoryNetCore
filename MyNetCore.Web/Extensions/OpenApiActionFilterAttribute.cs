@@ -1,13 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MyNetCore.Web
 {
@@ -47,7 +38,7 @@ namespace MyNetCore.Web
             if (!isApiController) return;
             var controllerActionDescriptor = context.ActionDescriptor as Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor;
 
-            #endregion
+            #endregion 是否是API控制器
 
             #region 是否可以匿名访问
 
@@ -60,12 +51,11 @@ namespace MyNetCore.Web
                 if (permissionAttributes.Anonymous) return;
                 //开发环境下跳过权限验证
                 if (permissionAttributes.UnCheckWhenDevelopment && _hostEnvironment.IsDevelopment()) return;
-
             }
 
             //if (anonymous) return;
 
-            #endregion
+            #endregion 是否可以匿名访问
 
             #region 将用户信息附加到上下文中
 
@@ -121,7 +111,7 @@ namespace MyNetCore.Web
                 return;
             }
 
-            #endregion
+            #endregion 将用户信息附加到上下文中
 
             #region 验证权限
 
@@ -159,7 +149,7 @@ namespace MyNetCore.Web
             //    }
             //}
 
-            #endregion
+            #endregion 验证权限
 
             #region 自动填充请求实体中的用户信息
 
@@ -194,14 +184,11 @@ namespace MyNetCore.Web
                 reqModel.CurrentUserName = controller.CurrentUserInfo.UserName;
             }
 
-            #endregion
-
+            #endregion 自动填充请求实体中的用户信息
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-
         }
-
     }
 }

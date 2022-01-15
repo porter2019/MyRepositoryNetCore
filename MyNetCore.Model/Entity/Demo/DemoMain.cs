@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 演示主体
@@ -18,7 +11,6 @@ namespace MyNetCore.Model.Entity
         /// </summary>
         [FsColumn("主键id", IsPK = true, Position = 1)]
         public int MainId { get; set; }
-
 
         /// <summary>
         /// 标题
@@ -127,7 +119,6 @@ namespace MyNetCore.Model.Entity
         /// 明细
         /// </summary>
         public List<DemoMainItem> Items { get; set; } = new List<DemoMainItem>();
-
     }
 
     /// <summary>
@@ -195,15 +186,16 @@ namespace MyNetCore.Model.Entity
         /// </summary>
         [FsColumn("备注", false, 200), ValidateRule(LengthRange = "0-200")]
         public string Remark { get; set; }
-
     }
 
     public enum DemoMainSex
     {
         [Description("未知")]
         未知,
+
         [Description("男")]
         男,
+
         [Description("女")]
         女,
     }

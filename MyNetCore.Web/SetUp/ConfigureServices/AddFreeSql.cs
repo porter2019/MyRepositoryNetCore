@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -62,18 +58,16 @@ namespace MyNetCore.Web.SetUp
                     var logTxt = string.Format(logTemplate, "Main", e.CurdType, e.EntityType.FullName, e.ElapsedMilliseconds, e.Sql);
                     if (stringBuilder.Length > 0)
                         logTxt += "，参数：" + stringBuilder.ToString();
-                    logTxt += "，返回值：" + JsonConvert.SerializeObject(e.ExecuteResult);
+                    logTxt += "，返回值：" + JsonHelper.Serialize(e.ExecuteResult);
                     logger.Info(logTxt);
                 };
                 freeSql.GlobalFilter.Apply<ISoftDelete>("SoftDelete", a => a.IsDeleted == false);
 
                 //必须定义为单例模式
                 services.AddSingleton(freeSql);
-
             }
 
-            #endregion
-
+            #endregion 注入主数据库
 
             //#region 注入次数据库
 
@@ -131,9 +125,7 @@ namespace MyNetCore.Web.SetUp
 
             //批量注入Repository层
             services.BatchRegisterServices(new Assembly[] { Assembly.Load($"{services.GetProjectMainName()}.Repository") }, typeof(Repository.BaseMyRepository<,>));
-
         }
-
     }
 
     /// <summary>
@@ -143,6 +135,4 @@ namespace MyNetCore.Web.SetUp
     {
         bool IsDeleted { get; set; }
     }
-
-
 }

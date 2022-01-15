@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 模块
@@ -12,11 +6,11 @@ namespace MyNetCore.Model.Entity
     [FsTable("模块")]
     public class SysModule : BaseEntity
     {
-        public SysModule() { }
+        public SysModule()
+        { }
 
         public SysModule(string moduleName)
         {
-
             this.ModuleName = moduleName;
         }
 

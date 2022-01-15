@@ -8,25 +8,13 @@
 *└──────────────────────────────────────────────────────────────┘
 */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-
 namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
     /// 计划任务示例
     /// </summary>
     [HiddenApi]
-	public class TaskJobController : BaseOpenApiController
+    public class TaskJobController : BaseOpenApiController
     {
         private readonly ILogger<TaskJobController> _logger;
         private ITaskJobService _taskJobServices;
@@ -91,6 +79,5 @@ namespace MyNetCore.Web.ApiControllers
         {
             return _taskJobServices.RemoveRecurringJobAsync(jobName);
         }
-
     }
 }

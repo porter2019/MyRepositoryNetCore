@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Model.Entity
+﻿namespace MyNetCore.Model.Entity
 {
     /// <summary>
     /// 系统用户
@@ -38,7 +32,6 @@ namespace MyNetCore.Model.Entity
         /// </summary>
         [FsColumn("用户状态")]
         public bool Status { get; set; } = true;
-
     }
 
     /// <summary>
@@ -54,6 +47,7 @@ namespace MyNetCore.Model.Entity
         public string RoleInfo { get; set; }
 
         private int[] roleIdArray;
+
         /// <summary>
         /// 组id，用于前端还原显示
         /// </summary>
@@ -80,6 +74,5 @@ namespace MyNetCore.Model.Entity
                 roleIdArray = value;
             }
         }
-
     }
 }

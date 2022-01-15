@@ -1,16 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-using System.IO;
+﻿using System.Reflection;
 
 namespace MyNetCore.Web.ApiControllers
 {
@@ -219,7 +207,6 @@ namespace MyNetCore.Web.ApiControllers
                 var moduleEntity = dbModuleList.Where(p => p.ModuleName == moduleName).FirstOrDefault();
                 if (moduleEntity == null) continue;
 
-
                 var newHandler = new Model.Entity.SysHandler()
                 {
                     ModuleId = moduleEntity.ModuleId,
@@ -239,7 +226,6 @@ namespace MyNetCore.Web.ApiControllers
                 }
                 else
                 {
-
                     handerId = entityHandler.HandlerId;
                     newHandler.HandlerId = entityHandler.HandlerId;
                     newHandler.Version = entityHandler.Version;
@@ -304,7 +290,6 @@ namespace MyNetCore.Web.ApiControllers
             return ApiResult.OK("同步完毕");
         }
 
-
         /// <summary>
         /// 获取缓存
         /// </summary>
@@ -338,6 +323,5 @@ namespace MyNetCore.Web.ApiControllers
         {
             return ApiResult.OK(_cache.Remove(key));
         }
-
     }
 }

@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MyNetCore.Web.SetUp
+﻿namespace MyNetCore.Web.SetUp
 {
     /// <summary>
     /// 请求出错处理
@@ -38,7 +30,6 @@ namespace MyNetCore.Web.SetUp
                 {
                     context.Response.StatusCode = 200;
                     await context.Response.WriteAsync(JsonHelper.Serialize(ApiResult.Anonymous()), System.Text.Encoding.UTF8);
-
                 }
             }
             else
@@ -48,7 +39,6 @@ namespace MyNetCore.Web.SetUp
                     await context.Response.WriteAsync("404 Not Found", System.Text.Encoding.UTF8);
                 }
             }
-
         }
     }
 

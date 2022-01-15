@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using System;
-using System.IO;
+﻿using Microsoft.OpenApi.Models;
 
 namespace MyNetCore.Web.SetUp
 {
@@ -57,7 +53,6 @@ namespace MyNetCore.Web.SetUp
                 var xmlList = new[] { $"{projectMainName}.Web.xml", $"{projectMainName}.Model.xml" };
                 for (int i = 0; i < xmlList.Length; i++)
                 {
-
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlList[i]);
                     if (File.Exists(xmlPath)) c.IncludeXmlComments(xmlPath, i == 0);
                 }

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace MyNetCore.IServices
+﻿namespace MyNetCore.IServices
 {
     /// <summary>
     /// 缓存服务
     /// </summary>
     public interface ICacheService
     {
-
         #region 是否存在
 
         /// <summary>
@@ -26,7 +21,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<bool> ExistsAsync(string key);
 
-        #endregion
+        #endregion 是否存在
 
         #region 添加缓存
 
@@ -122,7 +117,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<bool> AddAsync(string key, object value, TimeSpan expiresIn, bool isSliding = false);
 
-        #endregion
+        #endregion 添加缓存
 
         #region 删除缓存
 
@@ -154,7 +149,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task RemoveAllAsync(IEnumerable<string> keys);
 
-        #endregion
+        #endregion 删除缓存
 
         #region 获取缓存
 
@@ -214,7 +209,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<IDictionary<string, object>> GetAllAsync(IEnumerable<string> keys);
 
-        #endregion
+        #endregion 获取缓存
 
         #region 修改缓存
 
@@ -274,7 +269,6 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<bool> ReplaceAsync(string key, object value, TimeSpan expiresIn, bool isSliding = false);
 
-        #endregion
-
+        #endregion 修改缓存
     }
 }

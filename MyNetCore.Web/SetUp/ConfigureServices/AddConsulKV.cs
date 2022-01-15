@@ -39,7 +39,6 @@ namespace MyNetCore.Web.SetUp
                 options.OnLoadException = exceptionContext => { exceptionContext.Ignore = true; };
                 options.ConsulConfigurationOptions = cco => { cco.Address = new Uri(consulServerUrl); };
             });
-
         }
     }
 }

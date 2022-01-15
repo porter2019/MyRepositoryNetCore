@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace MyNetCore.Common.Helper
 {
@@ -12,7 +7,6 @@ namespace MyNetCore.Common.Helper
     /// </summary>
     public static class DLLXmlHelper
     {
-
         /// <summary>
         /// 从xml读取所有的方法备注信息
         /// </summary>
@@ -29,7 +23,6 @@ namespace MyNetCore.Common.Helper
 
             foreach (var member in memberList)
             {
-
                 var name = member.Attribute("name").Value;
                 if (name.IsNull()) continue;
                 DLLXmlMemberInfo entity = new DLLXmlMemberInfo();
@@ -50,14 +43,10 @@ namespace MyNetCore.Common.Helper
                         list.Add(entity);
                     }
                 }
-
             }
 
             return list;
         }
-
-
-
     }
 
     /// <summary>
@@ -79,7 +68,5 @@ namespace MyNetCore.Common.Helper
         /// 接口备注
         /// </summary>
         public string Remarks { get; set; }
-
     }
-
 }

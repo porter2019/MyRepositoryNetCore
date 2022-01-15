@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace MyNetCore.IServices
 {
@@ -13,7 +8,6 @@ namespace MyNetCore.IServices
     /// <typeparam name="TEntity"></typeparam>
     public interface IBaseService<TEntity> where TEntity : class, new() //Model.BaseEntity
     {
-
         #region 添加
 
         /// <summary>
@@ -58,7 +52,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<TEntity> InsertOrUpdateAsync(TEntity entity);
 
-        #endregion
+        #endregion 添加
 
         #region 修改
 
@@ -124,8 +118,7 @@ namespace MyNetCore.IServices
         /// <returns>受影响的行数</returns>
         Task<int> UpdateEntityAsync(TEntity entity);
 
-
-        #endregion
+        #endregion 修改
 
         #region 删除
 
@@ -191,7 +184,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<int> DeleteByWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
-        #endregion
+        #endregion 删除
 
         #region 查询数量
 
@@ -225,7 +218,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<long> GetCountAsync(string sql, object parms = null);
 
-        #endregion
+        #endregion 查询数量
 
         #region 是否存在
 
@@ -261,7 +254,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<bool> ExistsWhereIfAsync(Expression<Func<TEntity, bool>> where, bool condition, Expression<Func<TEntity, bool>> exp);
 
-        #endregion
+        #endregion 是否存在
 
         #region 查询单条数据
 
@@ -351,9 +344,9 @@ namespace MyNetCore.IServices
         /// <returns>REntity</returns>
         Task<REntity> GetModelViewAsync<REntity>(Expression<Func<REntity, bool>> where) where REntity : class, new();
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询单条数据
 
         #region 查询集合
 
@@ -461,9 +454,9 @@ namespace MyNetCore.IServices
         /// <returns>List<TEntity></returns>
         Task<List<REntity>> GetListViewAsync<REntity>(string where, object parms = null) where REntity : class, new();
 
-        #endregion
+        #endregion 视图
 
-        #endregion
+        #endregion 查询集合
 
         #region 查询分页
 
@@ -501,7 +494,6 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<List<TEntity>> GetPageListBasicAsync(Model.BaseRequestPageViewModel<TEntity> baseOption, out long total);
 
-
         /// <summary>
         /// 分页查询，返回DTO对象
         /// </summary>
@@ -534,7 +526,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<List<REntity>> GetPageListBasicAsync<REntity>(Model.BaseRequestPageViewModel<TEntity> options, out long total);
 
-        #endregion
+        #endregion PageOptions
 
         #region Sql
 
@@ -610,7 +602,7 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<List<REntity>> GetPageListBasicAsync<REntity>(string sql, Model.BaseRequestPageViewModel<TEntity> options, out long total);
 
-        #endregion
+        #endregion Sql
 
         #region 视图
 
@@ -664,10 +656,8 @@ namespace MyNetCore.IServices
         /// <returns></returns>
         Task<List<REntity>> GetPageListViewBasicAsync<REntity>(Model.BaseRequestPageViewModel<REntity> baseOption, out long total) where REntity : class, new();
 
+        #endregion 视图
 
-        #endregion
-
-        #endregion
-
+        #endregion 查询分页
     }
 }

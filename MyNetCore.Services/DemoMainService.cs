@@ -1,22 +1,11 @@
 ﻿/**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：演示主体业务逻辑接口                                                    
-*│　作    者：杨习友                                          
-*│　版    本：1.0 使用Razor引擎自动生成                                              
-*│　创建时间：2021-03-28 15:32:02                            
+*│　描    述：演示主体业务逻辑接口
+*│　作    者：杨习友
+*│　版    本：1.0 使用Razor引擎自动生成
+*│　创建时间：2021-03-28 15:32:02
 *└──────────────────────────────────────────────────────────────┘
 */
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetCore.IServices;
-using MyNetCore.IRepository;
-using MyNetCore.Repository;
-using MyNetCore.Model.Entity;
-using Microsoft.Extensions.Logging;
 
 namespace MyNetCore.Services
 {
@@ -30,9 +19,9 @@ namespace MyNetCore.Services
         private readonly ICommonAttachService _commonAttachServices;
         private readonly IFreeSql _fsq;
 
-        public DemoMainService(ILogger<DemoMainService> logger, 
-            IDemoMainRepository demoMainRepository, 
-            IFreeSql<DBFlagMain> fsq, 
+        public DemoMainService(ILogger<DemoMainService> logger,
+            IDemoMainRepository demoMainRepository,
+            IFreeSql<DBFlagMain> fsq,
             ICommonAttachService commonAttachServices) : base(demoMainRepository, logger)
         {
             _demoMainRepository = demoMainRepository;
@@ -57,7 +46,6 @@ namespace MyNetCore.Services
             entity.Attachs = await _commonAttachServices.GetAttachListAsync(id, typeof(DemoMain));
 
             return entity;
-
         }
 
         /// <summary>
