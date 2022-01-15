@@ -1,4 +1,7 @@
 ﻿#pragma warning disable CS1587 // XML 注释没有放在有效语言元素上
+
+
+
 /**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：经典父子分类接口控制器
@@ -7,7 +10,6 @@
 *│　创建时间：2021-04-04 17:31:33
 *└──────────────────────────────────────────────────────────────┘
 */
-
 namespace MyNetCore.Web.ApiControllers
 {
     /// <summary>
@@ -32,7 +34,7 @@ namespace MyNetCore.Web.ApiControllers
         /// <returns></returns>
         [HttpGet, Route("get/list/tree")]
         [Permission("查看", "show")]
-        public async Task<ApiResult> GetTreeList(string? title)
+        public async Task<ApiResult> GetTreeList(string title)
         {
             var data = await _bookCategoryServices.GetTreeListAsync(title);
 

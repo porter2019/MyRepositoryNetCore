@@ -25,9 +25,9 @@ namespace MyNetCore.Services
             var generator = new QRCodeGenerator();
 
             var codeData = generator.CreateQrCode(content, QRCodeGenerator.ECCLevel.M, true);
-            QRCode qrcode = new QRCode(codeData);
+            QRCode qrCode = new QRCode(codeData);
 
-            var bitmapImg = qrcode.GetGraphic(10, Color.Black, Color.White, true);
+            var bitmapImg = qrCode.GetGraphic(10, Color.Black, Color.White, true);
             using MemoryStream stream = new MemoryStream();
             bitmapImg.Save(stream, ImageFormat.Jpeg);
             return Task.FromResult(stream.GetBuffer());

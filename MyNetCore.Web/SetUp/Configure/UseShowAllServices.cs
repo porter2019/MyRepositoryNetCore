@@ -1,4 +1,6 @@
-﻿namespace MyNetCore.Web.SetUp
+﻿using Microsoft.Extensions.Hosting;
+
+namespace MyNetCore.Web.SetUp
 {
     public static class UseShowAllServices
     {

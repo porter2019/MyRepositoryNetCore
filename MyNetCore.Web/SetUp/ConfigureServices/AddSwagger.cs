@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.IO;
 
 namespace MyNetCore.Web.SetUp
 {

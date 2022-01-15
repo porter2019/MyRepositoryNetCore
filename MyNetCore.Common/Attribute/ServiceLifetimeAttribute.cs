@@ -29,13 +29,13 @@ namespace MyNetCore
         public ServiceLifetimeAttribute(bool isEnabled)
         {
             this._Lifetime = ServiceLifetime.Scoped;
-            this._IsEnabled = IsEnabled;
+            this._IsEnabled = isEnabled;
         }
 
         public ServiceLifetimeAttribute(ServiceLifetime serviceLifetime, bool isEnabled)
         {
             this._Lifetime = serviceLifetime;
-            this._IsEnabled = IsEnabled;
+            this._IsEnabled = isEnabled;
         }
 
         /// <summary>

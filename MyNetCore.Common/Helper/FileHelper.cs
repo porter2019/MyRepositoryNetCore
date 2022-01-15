@@ -27,7 +27,7 @@ namespace MyNetCore
             try
             {
                 FileStream file = new FileStream(IsAbsolute(filePath) ? filePath : MapPath(filePath), FileMode.Open);
-                System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+                System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
                 byte[] retVal = md5.ComputeHash(file);
                 file.Close();
 

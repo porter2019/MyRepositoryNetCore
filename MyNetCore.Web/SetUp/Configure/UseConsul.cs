@@ -1,4 +1,5 @@
 ﻿using Consul;
+using Microsoft.Extensions.Hosting;
 
 namespace MyNetCore.Web.SetUp
 {

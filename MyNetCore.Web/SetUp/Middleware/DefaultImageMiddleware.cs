@@ -1,4 +1,6 @@
-﻿namespace MyNetCore.Web.SetUp
+﻿using System.IO;
+
+namespace MyNetCore.Web.SetUp
 {
     public class DefaultImageMiddleware
     {

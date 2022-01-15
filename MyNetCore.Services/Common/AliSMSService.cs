@@ -14,12 +14,18 @@ namespace MyNetCore.Services
         private readonly ICacheService _cacheServices;
         private readonly IValidateCodeHistoryService _validateCodeHistoryServices;
         private readonly ILogger _logger;
+        private readonly IHttpService _httpService;
         private readonly IConfiguration _config;
         private readonly bool _apiEnabled;
 
-        public AliSMSService(ICacheService cacheServices, IValidateCodeHistoryService validateCodeHistoryServices, ILogger<AliSMSService> logger, IConfiguration config)
+        public AliSMSService(ICacheService cacheServices, 
+            IValidateCodeHistoryService validateCodeHistoryServices, 
+            ILogger<AliSMSService> logger, 
+            IHttpService httpService,
+            IConfiguration config)
         {
             _logger = logger;
+            _httpService = httpService;
             _cacheServices = cacheServices;
             _validateCodeHistoryServices = validateCodeHistoryServices;
             _logger = logger;
@@ -40,7 +46,7 @@ namespace MyNetCore.Services
 
             var jsonData = JsonHelper.Serialize(new { code = code });
 
-            var sendResult = await Send(mobile, jsonData, "SMS_128965131");
+            var sendResult = await SendAsync(mobile, jsonData, "SMS_128965131");
 
             return await SaveSendHistoryAsync(sendResult, jsonData, guid, mobile, code);
         }
@@ -126,7 +132,7 @@ namespace MyNetCore.Services
         /// <param name="jsonData">Json数据</param>
         /// <param name="templateCode">templateCode</param>
         /// <returns></returns>
-        private async Task<ApiResult> Send(string mobile, string jsonData, string templateCode)
+        private async Task<ApiResult> SendAsync(string mobile, string jsonData, string templateCode)
         {
             if (!ValidateHelper.IsCellPhone(mobile)) return ApiResult.ValidateFail();
 
@@ -197,42 +203,11 @@ namespace MyNetCore.Services
 
             //最终打印出合法GET请求的URL
             string url = string.Format("http://{0}/?Signature={1}{2}", EndPoint, signture, builder);
-            string result = await GetHtmlFormUrl(url);
+            var result = await _httpService.GetAsync(url);
+            if (result.IsNull()) _logger.LogError($"【阿里云SMS】手机号:{mobile}，模板内容：{jsonData}，返回结果为空");
             _logger.LogInformation($"【阿里云SMS】手机号:{mobile}，模板内容：{jsonData}，返回结果：{result}");
             if (result == "OK") return ApiResult.OK("OK", jsonData);
             else return ApiResult.ValidateFail(result, jsonData);
-        }
-
-        /// <summary>
-        /// 短信接口C#调用方法
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        private async Task<string> GetHtmlFormUrl(string url)
-        {
-            string strRet = null;
-            if (url == null || url.Trim().ToString() == "")
-            {
-                return strRet;
-            }
-            string targeturl = url.Trim().ToString();
-            try
-            {
-                HttpWebRequest hr = (HttpWebRequest)WebRequest.Create(targeturl);
-                hr.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
-                hr.Method = "GET";
-                hr.Timeout = 30 * 60 * 1000;
-                WebResponse hs = await hr.GetResponseAsync();
-                Stream sr = hs.GetResponseStream();
-                StreamReader ser = new(sr, Encoding.UTF8);
-
-                strRet = MessageHandle(ser.ReadToEnd());
-            }
-            catch (Exception ex)
-            {
-                strRet = "短信发送失败！" + ex.Message;
-            }
-            return strRet;
         }
 
         /// <summary>

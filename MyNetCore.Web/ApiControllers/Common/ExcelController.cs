@@ -9,6 +9,7 @@
 */
 
 using Magicodes.ExporterAndImporter.Core;
+using System.IO;
 
 namespace MyNetCore.Web.ApiControllers
 {

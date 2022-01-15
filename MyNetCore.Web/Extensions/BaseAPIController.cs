@@ -1,4 +1,6 @@
-﻿namespace MyNetCore.Web
+﻿using Microsoft.Extensions.Hosting;
+
+namespace MyNetCore.Web
 {
     /// <summary>
     /// WebAPI基类,所有web api都必须直接或间接继承该类

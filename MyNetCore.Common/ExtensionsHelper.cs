@@ -1184,7 +1184,7 @@ namespace MyNetCore
         /// <returns></returns>
         public static string EncryptMD5Encode(this string toEncrypt)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
+            MD5 md5 = MD5.Create();
             byte[] hashByte = md5.ComputeHash(Encoding.UTF8.GetBytes(toEncrypt));
             StringBuilder sb = new StringBuilder();
             foreach (byte item in hashByte)
@@ -1203,7 +1203,7 @@ namespace MyNetCore
         /// <returns></returns>
         public static string EncryptSHA256Encode(this string toEncrypt)
         {
-            SHA256Managed sHA256Managed = new SHA256Managed();
+            SHA256 sHA256Managed = SHA256.Create();
             byte[] value = sHA256Managed.ComputeHash(Encoding.UTF8.GetBytes(toEncrypt));
             return BitConverter.ToString(value).Replace("-", "").ToLower();
         }
