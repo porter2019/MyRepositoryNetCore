@@ -8,18 +8,6 @@
 *└──────────────────────────────────────────────────────────────┘
 */
 
-using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using {{ ProjectName }}.IServices;
-using {{ ProjectName }}.IRepository;
-using {{ ProjectName }}.Repository;
-using {{ ProjectName }}.Model.Entity;
-
-
 namespace {{ ProjectName }}.Services
 {
     /// <summary>
